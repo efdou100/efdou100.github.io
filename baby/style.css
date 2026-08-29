@@ -1,0 +1,40 @@
+:root {
+  --ink: #1c1a23;
+  --ink-dim: #5b5666;
+  --paper: #fdfcfb;
+  --line: #e6e2ec;
+  --accent: #6B5FA3;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#f2efe9; --ink-dim:#9a9891; --paper:#0e0f11; --line:#26272b; --accent:#a99ce0; }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 32px 20px 96px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+               "Malgun Gothic", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  word-break: keep-all;      /* 한글이 낱말 가운데서 잘리지 않게 */
+  overflow-wrap: break-word;
+}
+main { max-width: 720px; margin: 0 auto; }
+h1 { font-size: 26px; line-height: 1.4; margin: 0 0 4px; letter-spacing: -0.02em; }
+h2 { font-size: 19px; margin: 40px 0 12px; padding-top: 20px; border-top: 1px solid var(--line); letter-spacing: -0.01em; }
+h3 { font-size: 16px; margin: 24px 0 8px; color: var(--ink); }
+p, li { color: var(--ink); }
+.meta { color: var(--ink-dim); font-size: 14px; margin: 0 0 32px; }
+.lead { color: var(--ink-dim); }
+a { color: var(--accent); }
+ul { padding-left: 20px; }
+li { margin: 4px 0; }
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 420px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: color-mix(in srgb, var(--accent) 8%, transparent); font-weight: 600; }
+footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-dim); font-size: 14px; }
+nav { margin-bottom: 28px; font-size: 14px; }
+nav a { margin-right: 14px; }
