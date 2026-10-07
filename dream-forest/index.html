@@ -104,7 +104,9 @@
     <ul class="how">
       <li><b>드래그</b>좌우로 끌면 달려요</li>
       <li><b>톡 · 위로 튕기기</b>점프</li>
-      <li><b>손 떼기</b>멈추면 시간이 느려지고 화살을 자동으로 쏴요</li>
+      <li><b>손 떼기</b>멈추면 가장 가까운 적을 자동으로 쏴요</li>
+      <li><b>피하기</b>적이 빨갛게 번쩍이면 공격 신호! 움직여서 피해요</li>
+      <li><b>집중</b>적이 남긴 빛 구슬로 게이지를 채우면, 멈출 때 시간이 느려지고 연사해요</li>
       <li><b>스킬</b>방을 깰 때마다 하나씩. 퍼즐 푸는 방법도 바뀌어요</li>
     </ul>
     <p class="keys">키보드: ← → 이동 · ↑ 또는 Space 점프 · 아무 키도 안 누르면 사격</p>
@@ -117,6 +119,7 @@
   <div class="panel">
     <p class="eyebrow" id="pickEyebrow">Stage clear</p>
     <h2>스킬을 하나 고르세요</h2>
+    <p class="note" id="pickStats"></p>
     <div class="cards" id="cards"></div>
   </div>
 </div>
@@ -142,9 +145,9 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ───────────── 맵 ─────────────
    # 돌  W 나무(태우기·관통)  ~ 물  b 물 위 숨은 다리(수정으로 생김)
    f 폭포(얼리면 발판)  S 수정 스위치  h 숨은 발판  = 얇은 발판(아래에서 통과)
-   @ 시작  P 포털  s 슬라임  v 박쥐  K 킹 슬라임 */
+   @ 시작  P 포털  s 슬라임  m 포자버섯  v 박쥐  K 킹 슬라임 */
 const ROOMS = [
-  { name: '숲 입구', type: 'combat', intro: '적을 모두 쓰러뜨리면 포털이 열려요', map: [
+  { name: '숲 입구', type: 'combat', waves: 2, intro: '적을 모두 쓰러뜨리면 포털이 열려요', map: [
     '########################################',
     '#......................................#',
     '#......................................#',
@@ -155,7 +158,7 @@ const ROOMS = [
     '#.....................======...........#',
     '#.........=====........................#',
     '#......................................#',
-    '#..@...........s.........s......s....P.#',
+    '#..@...........s.........m......s....P.#',
     '########################################',
     '########################################',
     '########################################',
@@ -176,7 +179,7 @@ const ROOMS = [
     '#############~~~~~~~~###############',
     '####################################',
   ]},
-  { name: '버섯 언덕', type: 'combat', intro: '높은 곳의 적도 멈추면 알아서 조준해요', map: [
+  { name: '버섯 언덕', type: 'combat', waves: 2, intro: '빨갛게 번쩍이면 공격 신호! 움직여서 피해요', map: [
     '############################################',
     '#..........................................#',
     '#..........................................#',
@@ -184,10 +187,10 @@ const ROOMS = [
     '#.............................v............#',
     '#.............v.............s..............#',
     '#.........................=====............#',
-    '#...................s......................#',
+    '#...................m......................#',
     '#.......=====.....#####.............====...#',
     '#.................#####....................#',
-    '#..@........s.....#####......s......s....P.#',
+    '#..@........s.....#####......m......s....P.#',
     '############################################',
     '############################################',
     '############################################',
@@ -259,13 +262,15 @@ const SKILLS = {
 const ELEMENTS = ['fire', 'frost', 'pierce', 'stake'];
 
 /* ───────────── 상태 ───────────── */
-const state = { stage: 1, skills: {}, multi: 0, haste: 0, diag: 0, heart: 0, maxHp: 5, hp: 5 };
+const state = { stage: 1, skills: {}, multi: 0, haste: 0, diag: 0, heart: 0, maxHp: 5, hp: 5,
+  focus: 0, combo: 0, comboT: 0, bestCombo: 0, kills: 0, tips: {} };
 let best = 1;
 try { best = Math.max(1, parseInt(localStorage.getItem('df-best') || '1', 10) || 1); } catch (e) { /* 저장 불가 환경 */ }
 
 let mode = 'title';
 let room = null, player = null;
-let enemies = [], arrows = [], spores = [], particles = [];
+let enemies = [], arrows = [], spores = [], particles = [], orbs = [], texts = [];
+let hitstop = 0, comboPop = 0, lastOrbSfx = 0;
 let worldScale = 1, shake = 0, time = 0;
 let banner = { text: '', sub: '', t: 0 };
 let flash = { text: '', t: 0 };
@@ -303,6 +308,10 @@ const SFX = {
   kill: ['square', 620, 180, 0.12, 0.04], thud: ['sine', 110, 40, 0.3, 0.16],
   splash: ['triangle', 320, 90, 0.22, 0.06], pick: ['sine', 660, 990, 0.18, 0.07],
   stake: ['square', 180, 260, 0.05, 0.04],
+  crit: ['square', 1000, 300, 0.09, 0.05], orb: ['sine', 1200, 1800, 0.05, 0.02],
+  focus: ['sine', 300, 900, 0.5, 0.09], puff: ['triangle', 520, 200, 0.12, 0.04],
+  tele: ['square', 760, 700, 0.08, 0.02], leap: ['triangle', 200, 420, 0.12, 0.04],
+  wave: ['sine', 440, 880, 0.3, 0.07], boom: ['sawtooth', 160, 40, 0.3, 0.07],
 };
 function sfx(name) {
   if (muted || !actx) return;
@@ -397,20 +406,20 @@ function loadRoom() {
     def: R, loop, sc: 1 + 0.45 * loop,
     grid: R.map.map(r => r.split('')), w: R.map[0].length, h: R.map.length,
     switchOn: false, burning: new Map(), stakes: [], t: 0, start: { x: 0, y: 0 }, portal: null,
-    hintIdx: 0, cleared: false,
+    hintIdx: 0, cleared: false, spawns: [], wave: 1, waveDelay: 0, kills: 0, announced: false,
+    waves: (R.waves || 1) + (R.type === 'combat' ? Math.min(2, loop) : 0),
   };
-  enemies = []; arrows = []; spores = []; particles = [];
+  enemies = []; arrows = []; spores = []; particles = []; orbs = []; texts = [];
+  state.combo = 0; state.comboT = 0; hitstop = 0;
   for (let y = 0; y < room.h; y++) for (let x = 0; x < room.w; x++) {
     const c = room.grid[y][x];
     if (c === '@') { room.start = { x: x * T + (T - 26) / 2, y: (y + 1) * T - 36 }; room.grid[y][x] = '.'; }
     else if (c === 'P') { room.portal = { x: x * T + 2, y: (y - 1) * T + 4, w: 36, h: 76 }; room.grid[y][x] = '.'; }
-    else if (c === 's') { enemies.push(makeSlime(x * T + 3, (y + 1) * T - 26, room.sc)); room.grid[y][x] = '.'; }
-    else if (c === 'v') { enemies.push(makeBat(x * T + 5, y * T + 10, room.sc)); room.grid[y][x] = '.'; }
-    else if (c === 'K') { enemies.push(makeBoss(x * T + T / 2 - 56, (y + 1) * T - 84, room.sc)); room.grid[y][x] = '.'; }
+    else if ('smvK'.includes(c)) { room.spawns.push({ c, x, y }); enemies.push(spawnEnemy(c, x, y, room.sc)); room.grid[y][x] = '.'; }
   }
   player = {
     x: room.start.x, y: room.start.y, w: 26, h: 36, vx: 0, vy: 0, kx: 0,
-    face: 1, onGround: false, coyote: 0, cool: 0.2, bowT: 0, inv: 0, run: 0, moving: false,
+    face: 1, onGround: false, coyote: 0, cool: 0.2, bowT: 0, inv: 0, run: 0, moving: false, focusT: 0,
   };
   cam.x = clampCamX(player.x + player.w / 2 - VW / 2); cam.y = clampCamY(player.y - VH * 0.55); cam.look = 0;
   const depth = loop > 0 ? ` · 깊이 ${loop + 1}` : '';
@@ -421,7 +430,7 @@ function loadRoom() {
 function portalOpen() {
   if (!room.portal) return false;
   if (room.def.type === 'puzzle') return true;
-  return enemies.length === 0;
+  return enemies.length === 0 && room.wave >= room.waves;
 }
 
 function respawnInRoom() {
@@ -430,20 +439,24 @@ function respawnInRoom() {
 }
 
 /* ───────────── 적 ───────────── */
+const ENEMY_COLOR = { slime: '#8fe08f', mush: '#ff9a6a', bat: '#b48cff', boss: '#ff8fc0' };
+function baseEnemy(kind, x, y, w, h, hp) {
+  return { kind, x, y, w, h, vx: 0, vy: 0, kx: 0, hp, max: hp, slow: 0, burn: 0, burnTick: 0, flash: 0,
+    chill: 0, frozen: 0, stun: 0, onGround: false, t: Math.random() * 6, state: 'idle', tele: 0,
+    cd: 1 + Math.random() * 1.5, dir: Math.random() < 0.5 ? -1 : 1 };
+}
 function makeSlime(x, y, sc, small) {
-  const hp = (small ? 2 : 3) * sc;
-  return { kind: 'slime', x, y, w: 34, h: 26, vx: 0, vy: 0, dir: Math.random() < 0.5 ? -1 : 1,
-    hp, max: hp, speed: 55 + Math.random() * 25, hopT: 1 + Math.random() * 2,
-    slow: 0, burn: 0, burnTick: 0, flash: 0, onGround: false, t: Math.random() * 6 };
+  const e = baseEnemy('slime', x, y, 34, 26, (small ? 2 : 3) * sc);
+  e.state = 'walk'; e.speed = 55 + Math.random() * 25; return e;
 }
-function makeBat(x, y, sc) {
-  const hp = 2 * sc;
-  return { kind: 'bat', x, y, w: 30, h: 20, hp, max: hp, slow: 0, burn: 0, burnTick: 0, flash: 0, t: Math.random() * 6 };
-}
-function makeBoss(x, y, sc) {
-  const hp = 60 * sc;
-  return { kind: 'boss', x, y, w: 112, h: 84, vx: 0, vy: 0, hp, max: hp, phase: 'idle', wait: 1.8, jumps: 0,
-    slow: 0, burn: 0, burnTick: 0, flash: 0, onGround: false, t: 0 };
+function makeMush(x, y, sc) { return baseEnemy('mush', x, y, 30, 32, 4 * sc); }
+function makeBat(x, y, sc) { const e = baseEnemy('bat', x, y, 30, 20, 2 * sc); e.state = 'hover'; return e; }
+function makeBoss(x, y, sc) { const e = baseEnemy('boss', x, y, 112, 84, 60 * sc); e.wait = 1.8; e.jumps = 0; return e; }
+function spawnEnemy(c, tx, ty, sc) {
+  if (c === 's') return makeSlime(tx * T + 3, (ty + 1) * T - 26, sc);
+  if (c === 'm') return makeMush(tx * T + 5, (ty + 1) * T - 32, sc);
+  if (c === 'v') return makeBat(tx * T + 5, ty * T + 10, sc);
+  return makeBoss(tx * T + T / 2 - 56, (ty + 1) * T - 84, sc);
 }
 
 /* ───────────── 물리 ───────────── */
@@ -474,6 +487,11 @@ function moveY(e, dy, useStakes) {
         e.y = s.y - e.h; e.vy = 0; e.onGround = true; return;
       }
     }
+    if (useStakes) for (const s of enemies) {
+      if (s.frozen > 0 && e.x + e.w > s.x && e.x < s.x + s.w && prevBottom <= s.y + 0.5 && e.y + e.h >= s.y) {
+        e.y = s.y - e.h; e.vy = 0; e.onGround = true; return;
+      }
+    }
   } else if (dy < 0) {
     const ty = Math.floor(e.y / T);
     for (let tx = l; tx <= r; tx++) if (solidKind(tile(tx, ty)) === 2) { e.y = (ty + 1) * T; e.vy = 0; return; }
@@ -492,7 +510,7 @@ function lineClear(x0, y0, x1, y1) {
 }
 
 /* ───────────── 플레이어 ───────────── */
-const fireInterval = () => 0.42 / (1 + 0.25 * state.haste);
+const fireInterval = () => 0.4 / (1 + 0.25 * state.haste) * (player && player.focusT > 0 ? 0.45 : 1);
 
 function updatePlayer(dt) {
   const p = player, dir = inputDir();
@@ -519,6 +537,11 @@ function updatePlayer(dt) {
   }
 
   p.cool -= dt; p.bowT -= dt; p.inv -= dt;
+  if (p.focusT > 0) p.focusT -= dt;
+  else if (state.focus >= 100 && !p.moving && enemies.length) {
+    p.focusT = 3.5; state.focus = 0; shake = Math.max(shake, 0.15); sfx('focus');
+    showFlash('집중! 시간이 느려지고 연사해요');
+  }
   if (!p.moving && p.cool <= 0) { shoot(); p.cool = fireInterval(); }
   if (p.moving) room.moved = true;
 
@@ -528,7 +551,9 @@ function updatePlayer(dt) {
 function hurtPlayer(fromX) {
   const p = player;
   if (p.inv > 0 || mode !== 'play') return;
-  state.hp -= 1; p.inv = 1.1;
+  state.hp -= 1; p.inv = 1.1; hitstop = 0.08;
+  if (state.combo >= 5) showFlash(`${state.combo} 콤보 끊김`);
+  state.combo = 0;
   p.vy = -420; p.kx = (p.x + p.w / 2 < fromX ? -1 : 1) * 320;
   shake = 0.25; sfx('hurt');
   burst(p.x + p.w / 2, p.y + p.h / 2, '#ff6b6b', 12, 200);
@@ -578,13 +603,37 @@ function addStake(a, tx, ty) {
   sfx('stake');
 }
 function damageEnemy(e, a) {
-  const dmg = has('stake') ? 1.3 : 1;
-  e.hp -= dmg; e.flash = 0.1;
+  let dmg = (has('stake') ? 1.3 : 1) * (player.focusT > 0 ? 1.5 : 1);
+  if (e.frozen > 0) dmg *= 1.6;
+  const crit = Math.random() < 0.12;
+  if (crit) dmg *= 2;
+  e.hp -= dmg; e.flash = 0.08;
+  dmgText(e.x + e.w / 2, e.y, dmg, crit);
   if (has('fire')) e.burn = 2.4;
-  if (has('frost')) e.slow = 2.4;
-  if (e.kind !== 'boss') { const s = Math.sign(a.vx) || 1; if (e.kind === 'slime') e.vy = Math.min(e.vy, -160); e.x += s * 6; }
-  sfx('hit');
-  burst(a.x, a.y, arrowColor(), 6, 160);
+  if (has('frost')) {
+    e.slow = e.kind === 'boss' ? 1.2 : 2.4;
+    if (e.kind !== 'boss' && e.frozen <= 0 && ++e.chill >= 3) {
+      e.frozen = 2.8; e.chill = 0; e.state = e.kind === 'slime' ? 'walk' : e.kind === 'bat' ? 'hover' : 'idle'; e.kx = 0;
+      sfx('freeze'); burst(e.x + e.w / 2, e.y + e.h / 2, '#dff8ff', 12, 180);
+      tip('freeze', '❄️ 꽁꽁 언 적은 밟고 올라설 수 있어요');
+    }
+  }
+  if (e.kind !== 'boss' && e.frozen <= 0) {
+    const s = Math.sign(a.vx) || 1;
+    e.kx = s * (has('stake') ? 300 : 170);
+    if (has('stake')) e.stun = 0.35;
+  }
+  hitstop = Math.max(hitstop, crit ? 0.05 : 0.02);
+  sfx(crit ? 'crit' : 'hit');
+  burst(a.x, a.y, crit ? '#ffd23f' : arrowColor(), crit ? 12 : 6, crit ? 240 : 160);
+}
+function dmgText(x, y, v, crit, color) {
+  texts.push({ x: x + (Math.random() - 0.5) * 18, y: y - 4, vy: crit ? -150 : -100, life: crit ? 0.9 : 0.65,
+    text: String(Math.round(v * 10)) + (crit ? '!' : ''), crit, color: color || (crit ? '#ffd23f' : '#ffffff') });
+}
+function tip(key, text) {
+  if (state.tips[key]) return;
+  state.tips[key] = true; flash = { text, t: 3.4 };
 }
 function updateArrows(dt) {
   for (const a of arrows) {
@@ -660,66 +709,168 @@ function updateStakes(dt) {
 }
 
 /* ───────────── 적 업데이트 ───────────── */
+function gravityStep(e, dt) { e.vy = Math.min(e.vy + G * dt, MAXFALL); moveY(e, e.vy * dt, false); }
 function updateEnemies(dt) {
   const p = player, pcx = p.x + p.w / 2, pcy = p.y + p.h / 2;
   for (const e of enemies) {
-    e.flash -= dt; e.slow -= dt;
-    const edt = dt * worldScale * (e.slow > 0 ? 0.5 : 1);
-    e.t += edt;
+    e.flash -= dt; e.slow -= dt; e.stun -= dt;
     if (e.burn > 0) {
       e.burn -= dt; e.burnTick -= dt;
-      if (e.burnTick <= 0) { e.burnTick = 0.6; e.hp -= 0.5; e.flash = 0.06; }
+      if (e.burnTick <= 0) { e.burnTick = 0.6; e.hp -= 0.5; e.flash = 0.06; dmgText(e.x + e.w / 2, e.y, 0.5, false, '#ffb15c'); }
       if (Math.random() < 0.4) particles.push(part(e.x + Math.random() * e.w, e.y + Math.random() * e.h * 0.5, 0, -60, '#ff9a3c', 0.35, 3, -60));
     }
-    if (e.kind === 'slime') updateSlime(e, edt, pcx, pcy);
+    if (e.frozen > 0) {
+      e.frozen -= dt;
+      if (e.frozen <= 0) { burst(e.x + e.w / 2, e.y + e.h / 2, '#dff8ff', 12, 200); sfx('freeze'); e.cd = 0.8; }
+      continue;
+    }
+    const edt = dt * worldScale * (e.slow > 0 ? 0.55 : 1);
+    e.t += edt;
+    if (e.kx) {
+      if (e.kind === 'bat') e.x += e.kx * edt; else moveX(e, e.kx * edt);
+      e.kx *= Math.pow(0.002, edt); if (Math.abs(e.kx) < 8) e.kx = 0;
+    }
+    if (e.stun > 0) { if (e.kind !== 'bat') gravityStep(e, edt); }
+    else if (e.kind === 'slime') updateSlime(e, edt, pcx, pcy);
+    else if (e.kind === 'mush') updateMush(e, edt, pcx, pcy);
     else if (e.kind === 'bat') updateBat(e, edt, pcx, pcy);
-    else updateBoss(e, edt, pcx, pcy);
+    else updateBoss(e, edt, pcx);
     if (e.hp > 0 && overlap(p, e, 5)) hurtPlayer(e.x + e.w / 2);
   }
-  const before = enemies.length;
-  enemies = enemies.filter(e => {
-    if (e.hp > 0) return true;
-    burst(e.x + e.w / 2, e.y + e.h / 2, e.kind === 'bat' ? '#b48cff' : e.kind === 'boss' ? '#ff8fc0' : '#8fe08f', e.kind === 'boss' ? 60 : 16, e.kind === 'boss' ? 420 : 220);
-    sfx(e.kind === 'boss' ? 'thud' : 'kill');
-    if (e.kind === 'boss') { shake = 0.6; spores = []; enemies.forEach(o => { o.hp = 0; }); }
-    return false;
-  });
+  const dead = enemies.filter(e => e.hp <= 0);
   enemies = enemies.filter(e => e.hp > 0);
-  if (before > 0 && enemies.length === 0 && room.def.type !== 'puzzle') { showFlash('포털이 열렸어요!'); sfx('portal'); }
+  for (const e of dead) onKill(e);
+  if (room.def.type !== 'puzzle' && enemies.length === 0) {
+    if (room.wave < room.waves) { room.waveDelay += dt; if (room.waveDelay > 0.9) spawnWave(); }
+    else if (!room.announced) { room.announced = true; showFlash('포털이 열렸어요!'); sfx('portal'); }
+  }
+}
+function onKill(e) {
+  const cx = e.x + e.w / 2, cy = e.y + e.h / 2, boss = e.kind === 'boss';
+  burst(cx, cy, ENEMY_COLOR[e.kind], boss ? 60 : 18, boss ? 420 : 240);
+  burst(cx, cy, '#ffffff', boss ? 20 : 6, boss ? 300 : 160);
+  sfx(boss ? 'thud' : 'kill');
+  hitstop = Math.max(hitstop, boss ? 0.35 : 0.05);
+  shake = Math.max(shake, boss ? 0.7 : 0.12);
+  room.kills++; state.kills++;
+  state.combo++; state.comboT = 2.6; comboPop = 1;
+  state.bestCombo = Math.max(state.bestCombo, state.combo);
+  if ([10, 25, 50, 100].includes(state.combo)) { showFlash(`${state.combo} 콤보!`); sfx('wave'); }
+  const n = boss ? 30 : e.kind === 'mush' ? 5 : 3;
+  for (let i = 0; i < n; i++) orbs.push({ x: cx, y: cy, vx: (Math.random() - 0.5) * 320, vy: -150 - Math.random() * 250, t: 0, dead: false });
+  if (e.burn > 0 && has('fire')) {
+    burst(cx, cy, '#ff8a3d', 24, 320); sfx('boom'); shake = Math.max(shake, 0.2);
+    for (const o of enemies) {
+      if (Math.hypot(o.x + o.w / 2 - cx, o.y + o.h / 2 - cy) < 100) {
+        o.hp -= 1.5; o.burn = 2.4; o.flash = 0.1; dmgText(o.x + o.w / 2, o.y, 1.5, false, '#ff8a3d');
+      }
+    }
+    const tx = Math.floor(cx / T), ty = Math.floor(cy / T);
+    for (let yy = -1; yy <= 1; yy++) for (let xx = -1; xx <= 1; xx++) ignite(tx + xx, ty + yy, 0.3);
+    tip('boom', '🔥 불붙은 적은 쓰러질 때 터지며 옆으로 번져요');
+  }
+  if (boss) { spores = []; for (const o of enemies) o.hp = 0; }
+}
+function groundRow(tx) { for (let ty = 1; ty < room.h; ty++) if (solidKind(tile(tx, ty)) === 2) return ty; return -1; }
+function spawnWave() {
+  room.wave++; room.waveDelay = 0;
+  const p = player, kinds = room.spawns.filter(sp => sp.c !== 'K').map(sp => sp.c);
+  const count = kinds.length + 2 * (room.wave - 1);
+  for (let i = 0; i < count; i++) {
+    let c = kinds[i % kinds.length] || 's';
+    if (c === 's' && Math.random() < 0.4) c = 'm';
+    const side = i % 2 ? 1 : -1;
+    const tx = Math.max(1, Math.min(room.w - 2, Math.floor((p.x + side * (230 + Math.random() * 280)) / T)));
+    let ty;
+    if (c === 'v') ty = 2 + Math.floor(Math.random() * 4);
+    else { const g = groundRow(tx); if (g < 1) continue; ty = g - 1; }
+    const e = spawnEnemy(c, tx, ty, room.sc);
+    e.cd = 1.2 + Math.random(); e.dir = -side; enemies.push(e);
+    burst(e.x + e.w / 2, e.y + e.h / 2, '#c9a6ff', 14, 200);
+  }
+  if (!enemies.length) enemies.push(makeBat(clampCamX(p.x) + VW / 2, 80, room.sc));
+  showFlash(`웨이브 ${room.wave} / ${room.waves} · 몰려와요!`); sfx('wave');
 }
 function updateSlime(e, dt, pcx, pcy) {
-  const ex = e.x + e.w / 2;
-  if (e.onGround && Math.abs(pcx - ex) < 280 && Math.abs(pcy - (e.y + e.h / 2)) < 70) e.dir = Math.sign(pcx - ex) || e.dir;
+  const ex = e.x + e.w / 2, dx = pcx - ex, dy = pcy - (e.y + e.h / 2);
+  e.cd -= dt;
+  if (e.state === 'charge') {
+    e.tele -= dt;
+    if (e.tele <= 0 && e.onGround) {
+      e.state = 'leap'; e.leapT = 0; e.vy = -560; e.vx = (Math.sign(dx) || e.dir) * 290; e.dir = Math.sign(e.vx); sfx('leap');
+    }
+    gravityStep(e, dt); return;
+  }
+  if (e.state === 'leap') {
+    e.leapT += dt;
+    if (moveX(e, e.vx * dt)) e.vx = -e.vx * 0.3;
+    gravityStep(e, dt);
+    if (e.onGround && e.leapT > 0.12) { e.state = 'walk'; e.cd = 1.5 + Math.random() * 1.2; }
+    return;
+  }
+  if (e.onGround && e.cd <= 0 && Math.abs(dx) < 250 && Math.abs(dy) < 90) {
+    e.state = 'charge'; e.tele = 0.55; e.dir = Math.sign(dx) || e.dir; sfx('tele');
+    gravityStep(e, dt); return;
+  }
+  if (e.onGround && Math.abs(dx) < 320 && Math.abs(dy) < 70) e.dir = Math.sign(dx) || e.dir;
   if (e.onGround) {
     const ahead = e.dir > 0 ? e.x + e.w + 2 : e.x - 2, atx = Math.floor(ahead / T);
     if (solidKind(tile(atx, Math.floor((e.y + e.h / 2) / T))) === 2 || solidKind(tile(atx, Math.floor((e.y + e.h + 2) / T))) === 0) e.dir *= -1;
   }
   if (moveX(e, e.dir * e.speed * dt)) e.dir *= -1;
-  e.hopT -= dt;
-  if (e.hopT <= 0 && e.onGround) { e.vy = -430; e.hopT = 1.4 + Math.random() * 2; }
-  e.vy = Math.min(e.vy + G * dt, MAXFALL);
-  moveY(e, e.vy * dt, false);
+  gravityStep(e, dt);
+}
+function updateMush(e, dt, pcx, pcy) {
+  gravityStep(e, dt); e.cd -= dt;
+  const cx = e.x + e.w / 2, cy = e.y + 8, dx = pcx - cx, dy = pcy - cy, d = Math.hypot(dx, dy);
+  if (e.state === 'charge') {
+    e.tele -= dt;
+    if (e.tele <= 0) {
+      const a = Math.atan2(dy, dx);
+      for (const k of [-0.2, 0, 0.2]) spores.push({ x: cx, y: cy, vx: Math.cos(a + k) * 250, vy: Math.sin(a + k) * 250, r: 7, life: 3, g: 0 });
+      e.state = 'idle'; e.cd = 2.2 + Math.random() * 0.8; sfx('puff');
+    }
+  } else if (e.cd <= 0 && d < 560 && lineClear(cx, cy, pcx, pcy)) { e.state = 'charge'; e.tele = 0.75; sfx('tele'); }
 }
 function updateBat(e, dt, pcx, pcy) {
-  const dx = pcx - (e.x + e.w / 2), dy = pcy - (e.y + e.h / 2), d = Math.hypot(dx, dy) || 1;
-  if (d < 470) { e.x += dx / d * 95 * dt; e.y += dy / d * 95 * dt + Math.sin(e.t * 5) * 40 * dt; }
-  else e.y += Math.sin(e.t * 3) * 24 * dt;
+  const cx = e.x + e.w / 2, cy = e.y + e.h / 2, dx = pcx - cx, dy = pcy - cy, d = Math.hypot(dx, dy) || 1;
+  e.cd -= dt;
+  if (e.state === 'aim') {
+    e.tele -= dt;
+    if (e.tele <= 0) {
+      const ax = e.lx - cx, ay = e.ly - cy, ad = Math.hypot(ax, ay) || 1;
+      e.vx = ax / ad * 540; e.vy = ay / ad * 540; e.state = 'dash'; e.dashT = 0.55; sfx('leap');
+    }
+    return;
+  }
+  if (e.state === 'dash') {
+    e.x += e.vx * dt; e.y += e.vy * dt; e.dashT -= dt;
+    if (e.dashT <= 0 || solidKind(tile(Math.floor(cx / T), Math.floor(cy / T))) === 2) { e.state = 'hover'; e.cd = 1.4 + Math.random(); }
+    return;
+  }
+  if (d < 480) {
+    const want = d > 200 ? 1 : d < 140 ? -0.6 : 0;
+    e.x += dx / d * 95 * want * dt;
+    e.y += Math.sign(dy - 90) * 55 * dt + Math.sin(e.t * 5) * 40 * dt;
+    if (e.cd <= 0 && d < 340) { e.state = 'aim'; e.tele = 0.65; e.lx = pcx; e.ly = pcy; sfx('tele'); }
+  } else e.y += Math.sin(e.t * 3) * 24 * dt;
 }
 function updateBoss(e, dt, pcx) {
   const half = e.hp < e.max / 2;
-  if (e.phase === 'idle') {
-    e.wait -= dt;
-    e.vy = Math.min(e.vy + G * dt, MAXFALL); moveY(e, e.vy * dt, false);
+  if (e.state !== 'air') {
+    e.wait -= dt; gravityStep(e, dt);
     if (e.wait <= 0 && e.onGround) {
-      e.phase = 'air'; e.vy = -980;
-      const dx = pcx - (e.x + e.w / 2); e.vx = Math.max(-320, Math.min(320, dx * 1.05));
+      const air = 2 * 980 / G, dx = pcx - (e.x + e.w / 2);
+      e.state = 'air'; e.vy = -980; e.vx = Math.max(-380, Math.min(380, dx / air));
+      e.landX = Math.max(T + e.w / 2, Math.min(room.w * T - T - e.w / 2, e.x + e.w / 2 + e.vx * air));
+      e.floorY = e.y + e.h; sfx('leap');
     }
   } else {
-    moveX(e, e.vx * dt);
-    e.vy = Math.min(e.vy + G * dt, MAXFALL); moveY(e, e.vy * dt, false);
+    if (moveX(e, e.vx * dt)) e.vx = 0;
+    gravityStep(e, dt);
     if (e.onGround) {
-      e.phase = 'idle'; e.wait = half ? 0.85 : 1.35; e.jumps++;
-      shake = 0.3; sfx('thud');
+      e.state = 'idle'; e.wait = half ? 0.95 : 1.4; e.jumps++;
+      shake = 0.35; sfx('thud');
       const cx = e.x + e.w / 2, cy = e.y + e.h - 10, n = half ? 9 : 7;
       for (let i = 0; i < n; i++) {
         const a = -Math.PI + (Math.PI * (i + 0.5)) / n;
@@ -736,12 +887,32 @@ function updateBoss(e, dt, pcx) {
 function updateSpores(dt) {
   const sdt = dt * worldScale;
   for (const s of spores) {
-    s.life -= sdt; s.vy += 420 * sdt; s.x += s.vx * sdt; s.y += s.vy * sdt;
+    s.life -= sdt; s.vy += (s.g ?? 420) * sdt; s.x += s.vx * sdt; s.y += s.vy * sdt;
     if (solidKind(tile(Math.floor(s.x / T), Math.floor(s.y / T))) === 2) s.life = 0;
     const p = player;
     if (s.life > 0 && s.x > p.x - s.r + 4 && s.x < p.x + p.w + s.r - 4 && s.y > p.y - s.r + 4 && s.y < p.y + p.h + s.r - 4) { s.life = 0; hurtPlayer(s.x); }
   }
   spores = spores.filter(s => s.life > 0);
+}
+function updateOrbs(dt) {
+  const p = player, px = p.x + p.w / 2, py = p.y + p.h / 2;
+  for (const o of orbs) {
+    o.t += dt;
+    if (o.t < 0.35) { o.vy += 900 * dt; o.x += o.vx * dt; o.y += o.vy * dt; continue; }
+    const dx = px - o.x, dy = py - o.y, d = Math.hypot(dx, dy) || 1, sp = 260 + o.t * 900;
+    o.x += dx / d * Math.min(d, sp * dt); o.y += dy / d * Math.min(d, sp * dt);
+    if (d < 16) {
+      o.dead = true;
+      const was = state.focus; state.focus = Math.min(100, state.focus + 4);
+      if (was < 100 && state.focus >= 100) { sfx('focus'); tip('focus', '집중 게이지가 찼어요! 멈추면 시간이 느려지고 연사해요'); }
+      if (time - lastOrbSfx > 0.05) { sfx('orb'); lastOrbSfx = time; }
+    }
+  }
+  orbs = orbs.filter(o => !o.dead);
+}
+function updateTexts(dt) {
+  for (const t of texts) { t.life -= dt; t.y += t.vy * dt; t.vy += 160 * dt; }
+  texts = texts.filter(t => t.life > 0);
 }
 
 /* ───────────── 파티클 ───────────── */
@@ -779,6 +950,9 @@ function openPick() {
   const { R } = roomDef(state.stage);
   document.getElementById('pickEyebrow').textContent =
     R.type === 'boss' ? `Stage ${state.stage} · 킹 슬라임 처치! 이제부터 끝없는 숲` : `Stage ${state.stage} · ${R.name} 클리어`;
+  document.getElementById('pickStats').textContent = R.type === 'puzzle'
+    ? '퍼즐 해결! 다음 퍼즐은 또 다른 스킬로 풀 수 있어요.'
+    : `이번 방 처치 ${room.kills} · 최고 콤보 ${state.bestCombo} · 지금까지 처치 ${state.kills}`;
   const wrap = document.getElementById('cards');
   wrap.innerHTML = '';
   for (const k of offerSkills()) {
@@ -1018,12 +1192,26 @@ function drawPlayer() {
     ctx.beginPath(); ctx.ellipse(cx, y + p.h + 2, 16, 4, 0, 0, Math.PI * 2); ctx.stroke(); ctx.lineWidth = 1;
   }
 }
+function drawBang(x, y) {
+  ctx.font = '24px Jua, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(20,10,10,0.8)'; ctx.strokeText('!', x, y);
+  ctx.fillStyle = '#ff5a4f'; ctx.fillText('!', x, y); ctx.lineWidth = 1;
+}
 function drawEnemy(e) {
-  const tint = e.flash > 0 ? '#ffffff' : null;
+  const white = e.flash > 0, blink = Math.floor(time * 20) % 2 === 0;
   if (e.kind === 'slime' || e.kind === 'boss') {
-    const big = e.kind === 'boss', sq = e.onGround ? 1 + Math.sin(e.t * 8) * 0.05 : 0.9;
+    const big = e.kind === 'boss';
+    const charging = e.state === 'charge' || (big && e.state !== 'air' && e.wait < 0.45 && e.onGround);
+    let sq = e.onGround ? 1 + Math.sin(e.t * 8) * 0.05 : 0.9;
+    if (charging) sq = 0.72 + Math.sin(time * 40) * 0.03;
+    if (big && e.state === 'air') {
+      const r = e.w / 2 * (0.6 + 0.4 * Math.min(1, Math.max(0, (e.y + e.h) / e.floorY)));
+      ctx.fillStyle = `rgba(255,70,70,${0.25 + 0.15 * Math.sin(time * 18)})`;
+      ctx.beginPath(); ctx.ellipse(e.landX, e.floorY - 3, r, 9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,90,80,0.8)'; ctx.lineWidth = 2; ctx.stroke(); ctx.lineWidth = 1;
+    }
     const w = e.w * (2 - sq) * 0.5 + e.w * 0.5, h = e.h * sq, x = e.x + (e.w - w) / 2, y = e.y + e.h - h;
-    ctx.fillStyle = tint || (e.slow > 0 ? '#9ad7f0' : big ? '#e46aa0' : '#7ad37a');
+    ctx.fillStyle = white ? '#ffffff' : (charging && blink ? '#ff7a6a' : e.slow > 0 ? '#9ad7f0' : big ? '#e46aa0' : '#7ad37a');
     ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x, y + h * 0.55);
     ctx.quadraticCurveTo(x, y, x + w / 2, y); ctx.quadraticCurveTo(x + w, y, x + w, y + h * 0.55); ctx.lineTo(x + w, y + h); ctx.closePath(); ctx.fill();
     ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.ellipse(x + w * 0.3, y + h * 0.3, w * 0.1, h * 0.12, -0.5, 0, Math.PI * 2); ctx.fill();
@@ -1035,18 +1223,56 @@ function drawEnemy(e) {
       ctx.beginPath(); ctx.moveTo(x + w * 0.3, y + 6); ctx.lineTo(x + w * 0.33, y - 16); ctx.lineTo(x + w * 0.42, y - 4); ctx.lineTo(x + w * 0.5, y - 20);
       ctx.lineTo(x + w * 0.58, y - 4); ctx.lineTo(x + w * 0.67, y - 16); ctx.lineTo(x + w * 0.7, y + 6); ctx.closePath(); ctx.fill();
     }
+    if (charging) drawBang(e.x + e.w / 2, y - (big ? 34 : 14));
+  } else if (e.kind === 'mush') {
+    const charging = e.state === 'charge', k = charging ? 1 + 0.4 * (1 - e.tele / 0.75) : 1;
+    const cx = e.x + e.w / 2, by = e.y + e.h;
+    if (charging) { ctx.fillStyle = 'rgba(255,110,90,0.28)'; ctx.beginPath(); ctx.arc(cx, by - 18, 26 * k, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = white ? '#ffffff' : '#efe2c4'; rr(cx - 7, by - 17, 14, 17, 4); ctx.fill();
+    ctx.fillStyle = '#1b2422'; ctx.fillRect(cx - 4, by - 11, 2, 3); ctx.fillRect(cx + 2, by - 11, 2, 3);
+    ctx.fillStyle = white ? '#ffffff' : (charging && blink ? '#ff7a6a' : e.slow > 0 ? '#9ad7f0' : '#e8644a');
+    ctx.beginPath(); ctx.ellipse(cx, by - 16, 17 * k, 14 * k, 0, Math.PI, 0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,240,220,0.85)';
+    ctx.beginPath(); ctx.arc(cx - 7 * k, by - 22 * k, 3 * k, 0, Math.PI * 2); ctx.arc(cx + 5 * k, by - 26 * k, 2.5 * k, 0, Math.PI * 2); ctx.arc(cx + 9 * k, by - 19 * k, 2 * k, 0, Math.PI * 2); ctx.fill();
+    if (charging) drawBang(cx, by - 16 - 22 * k);
   } else {
     const flap = Math.sin(e.t * 18) * 8, cx = e.x + e.w / 2, cy = e.y + e.h / 2;
-    ctx.fillStyle = tint || (e.slow > 0 ? '#9ad7f0' : '#7a5aa8');
+    if (e.state === 'aim') {
+      const ex = cx + (e.lx - cx) * 1.6, ey = cy + (e.ly - cy) * 1.6;
+      ctx.strokeStyle = `rgba(255,80,70,${blink ? 0.85 : 0.45})`; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ex, ey); ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 1;
+    }
+    ctx.fillStyle = white ? '#ffffff' : (e.state === 'aim' && blink ? '#ff7a6a' : e.slow > 0 ? '#9ad7f0' : '#7a5aa8');
     ctx.beginPath(); ctx.moveTo(cx - 4, cy); ctx.lineTo(cx - 18, cy - 6 - flap); ctx.lineTo(cx - 12, cy + 4); ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.moveTo(cx + 4, cy); ctx.lineTo(cx + 18, cy - 6 - flap); ctx.lineTo(cx + 12, cy + 4); ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#ffde6a'; ctx.fillRect(cx - 4, cy - 2, 2, 2); ctx.fillRect(cx + 2, cy - 2, 2, 2);
+    if (e.state === 'aim') drawBang(cx, cy - 22);
+  }
+  if (e.frozen > 0 && !(e.frozen < 0.7 && blink)) {
+    ctx.fillStyle = 'rgba(190,235,255,0.72)'; rr(e.x - 3, e.y - 3, e.w + 6, e.h + 6, 6); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillRect(e.x + 2, e.y, e.w * 0.5, 3); ctx.fillRect(e.x + 2, e.y + 4, 3, e.h * 0.4);
   }
   if (e.kind !== 'boss' && e.hp < e.max) {
     ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(e.x, e.y - 8, e.w, 4);
     ctx.fillStyle = '#ff7a7a'; ctx.fillRect(e.x, e.y - 8, e.w * Math.max(0, e.hp / e.max), 4);
   }
+}
+function drawOrbs() {
+  for (const o of orbs) {
+    ctx.fillStyle = 'rgba(255,226,122,0.25)'; ctx.beginPath(); ctx.arc(o.x, o.y, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ffe27a'; ctx.beginPath(); ctx.arc(o.x, o.y, 3.5, 0, Math.PI * 2); ctx.fill();
+  }
+}
+function drawTexts() {
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (const t of texts) {
+    ctx.globalAlpha = Math.min(1, t.life * 3);
+    ctx.font = `${t.crit ? 24 : 16}px Jua, sans-serif`;
+    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(10,16,18,0.85)'; ctx.strokeText(t.text, t.x, t.y);
+    ctx.fillStyle = t.color; ctx.fillText(t.text, t.x, t.y);
+  }
+  ctx.globalAlpha = 1; ctx.lineWidth = 1;
 }
 function drawArrows() {
   const col = arrowColor();
@@ -1091,7 +1317,7 @@ function currentHint() {
   const R = room.def;
   if (R.type === 'combat' && state.stage === 1) {
     if (room.t < 9 || !room.moved || !room.jumped)
-      return lastInput === 'keys' ? '← → 이동 · ↑ 점프 · 키를 놓으면 시간이 느려지고 자동 사격' : '좌우로 끌어 이동 · 톡 치면 점프 · 손을 떼면 시간이 느려지고 자동 사격';
+      return lastInput === 'keys' ? '← → 이동 · ↑ 점프 · 키를 놓으면 자동 사격 · 빨갛게 번쩍이면 피하기' : '좌우로 끌어 이동 · 톡 치면 점프 · 손을 떼면 자동 사격 · 빨갛게 번쩍이면 피하기';
     return null;
   }
   if (R.type === 'puzzle') {
@@ -1107,13 +1333,23 @@ function currentHint() {
 }
 function drawHUD() {
   for (let i = 0; i < state.maxHp; i++) heart(30 + i * 26, 20, 20, i < state.hp);
+  const full = state.focus >= 100, fx = 20, fy = 50, fw = 150;
+  ctx.fillStyle = 'rgba(8,16,18,0.6)'; rr(fx, fy, fw, 10, 5); ctx.fill();
+  const fv = player.focusT > 0 ? player.focusT / 3.5 : state.focus / 100;
+  if (fv > 0) {
+    ctx.fillStyle = player.focusT > 0 ? '#8fb8ff' : full ? `rgba(255,226,122,${0.75 + 0.25 * Math.sin(time * 8)})` : '#e8b84f';
+    rr(fx, fy, Math.max(10, fw * fv), 10, 5); ctx.fill();
+  }
+  ctx.font = '13px Jua, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = full ? '#ffe27a' : '#9fb5a9';
+  ctx.fillText(player.focusT > 0 ? '집중 중' : full ? '집중 가득! 멈추면 발동' : '집중', fx + fw + 8, fy + 5);
   let ix = 20;
   ctx.font = '20px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
   for (const k of [...ELEMENTS, 'multi', 'haste', 'diag']) {
     const lv = skillLevel(k); if (!lv) continue;
-    ctx.fillStyle = 'rgba(8,16,18,0.55)'; rr(ix - 2, 50, 30, 28, 8); ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.font = '18px sans-serif'; ctx.fillText(SKILLS[k].icon, ix + 2, 65);
-    if (lv > 1) { ctx.font = '12px Jua, sans-serif'; ctx.fillStyle = '#f5b85c'; ctx.fillText(lv, ix + 22, 74); }
+    ctx.fillStyle = 'rgba(8,16,18,0.55)'; rr(ix - 2, 68, 30, 28, 8); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = '18px sans-serif'; ctx.fillText(SKILLS[k].icon, ix + 2, 83);
+    if (lv > 1) { ctx.font = '12px Jua, sans-serif'; ctx.fillStyle = '#f5b85c'; ctx.fillText(lv, ix + 22, 92); }
     ix += 34;
   }
   const { loop } = roomDef(state.stage);
@@ -1121,8 +1357,20 @@ function drawHUD() {
   const boss = enemies.find(e => e.kind === 'boss');
   if (boss) {
     ctx.fillStyle = 'rgba(8,16,18,0.7)'; rr(VW / 2 - 160, 52, 320, 12, 6); ctx.fill();
-    ctx.fillStyle = '#e46aa0'; rr(VW / 2 - 160, 52, 320 * Math.max(0, boss.hp / boss.max), 12, 6); ctx.fill();
+    ctx.fillStyle = '#e46aa0'; rr(VW / 2 - 160, 52, Math.max(12, 320 * Math.max(0, boss.hp / boss.max)), 12, 6); ctx.fill();
   }
+  if (state.combo >= 2) {
+    const s = 1 + comboPop * 0.35;
+    ctx.save(); ctx.translate(VW - 80, 112); ctx.scale(s, s);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '13px Jua, sans-serif'; ctx.fillStyle = '#9fb5a9'; ctx.fillText('COMBO', 0, -22);
+    ctx.font = '40px Jua, sans-serif'; ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(10,16,18,0.85)'; ctx.strokeText(state.combo, 0, 6);
+    ctx.fillStyle = state.combo >= 25 ? '#ff8fc0' : state.combo >= 10 ? '#ffd23f' : '#ecf3e6'; ctx.fillText(state.combo, 0, 6);
+    ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-30, 30, 60, 3);
+    ctx.fillStyle = '#ffd23f'; ctx.fillRect(-30, 30, 60 * Math.max(0, state.comboT / 2.6), 3);
+    ctx.restore(); ctx.lineWidth = 1;
+  }
+  if (room.def.type !== 'puzzle' && room.waves > 1 && enemies.length) pill(`웨이브 ${room.wave}/${room.waves} · 남은 적 ${enemies.length}`, VW / 2, 64, 14, '#9fb5a9');
   const hint = currentHint();
   if (hint) pill(hint, VW / 2, VH - 34, 17, '#ecf3e6');
   if (flash.t > 0) { ctx.globalAlpha = Math.min(1, flash.t * 2); pill(flash.text, VW / 2, VH - 80, 18, '#f5b85c'); ctx.globalAlpha = 1; }
@@ -1153,9 +1401,9 @@ function render() {
   ctx.save(); ctx.translate(-Math.round(cam.x) + sx, -Math.round(cam.y) + sy);
   drawTiles(); drawPortal(); drawStakes();
   for (const e of enemies) drawEnemy(e);
-  drawPlayer(); drawArrows(); drawSpores(); drawParticles();
+  drawPlayer(); drawArrows(); drawSpores(); drawOrbs(); drawParticles(); drawTexts();
   ctx.restore();
-  if (worldScale < 0.98 && enemies.length) {
+  if (worldScale < 0.98) {
     const g = ctx.createRadialGradient(VW / 2, VH / 2, VH * 0.35, VW / 2, VH / 2, VH * 0.9);
     g.addColorStop(0, 'rgba(90,140,255,0)'); g.addColorStop(1, `rgba(90,140,255,${(1 - worldScale) * 0.45})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
@@ -1166,20 +1414,24 @@ function render() {
 /* ───────────── 루프 ───────────── */
 function update(dt) {
   room.t += dt;
-  const target = player.moving ? 1 : 0.45;
+  const target = player.focusT > 0 ? 0.35 : 1;
   worldScale += (target - worldScale) * Math.min(1, dt * 10);
+  state.comboT -= dt; if (state.comboT <= 0) state.combo = 0;
+  comboPop = Math.max(0, comboPop - dt * 5);
   updatePlayer(dt);
   if (mode !== 'play') return;
   updateArrows(dt); updateBurning(dt); updateStakes(dt);
-  updateEnemies(dt); updateSpores(dt); updateParticles(dt); updateCamera(dt);
+  updateEnemies(dt); updateSpores(dt); updateOrbs(dt); updateTexts(dt); updateParticles(dt); updateCamera(dt);
   if (player.y > room.h * T + 200) respawnInRoom();
   shake = Math.max(0, shake - dt); banner.t -= dt; flash.t -= dt;
 }
 let last = performance.now();
 function frame(now) {
   const dt = Math.min(1 / 30, (now - last) / 1000); last = now; time += dt;
-  if (mode === 'play' && room) update(dt);
-  else if (room) { updateParticles(dt); }
+  if (mode === 'play' && room) {
+    if (hitstop > 0) { hitstop -= dt; shake = Math.max(0, shake - dt * 0.5); }
+    else update(dt);
+  } else if (room) { updateParticles(dt); }
   render();
   requestAnimationFrame(frame);
 }
