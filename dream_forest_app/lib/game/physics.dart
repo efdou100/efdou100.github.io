@@ -118,8 +118,7 @@ void moveY(Geometry g, Body b, double dy, {bool oneWay = true, bool platforms = 
   }
 }
 
-bool overlaps(Body a, Body b, [double pad = 0]) =>
-    a.x + pad < b.x + b.w && a.x + a.w - pad > b.x && a.y + pad < b.y + b.h && a.y + a.h - pad > b.y;
+bool overlaps(Body a, Body b, [double pad = 0]) => a.x + pad < b.x + b.w && a.x + a.w - pad > b.x && a.y + pad < b.y + b.h && a.y + a.h - pad > b.y;
 
 /// 두 점 사이에 꽉 막힌 타일이 없는지.
 bool lineClear(Geometry g, double x0, double y0, double x1, double y1) {

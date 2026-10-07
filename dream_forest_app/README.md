@@ -1,17 +1,63 @@
-# dream_forest
+# 꿈의 숲 (Dream Forest)
 
-A new Flutter project.
+2D 횡스크롤 로그라이크 액션. 손가락 하나로 달리고, 멈추면 자동으로 쏘고, 방을 깨며 스킬을 골라 강해져요.
+Flutter + Flame, **이미지 파일 없이 모든 그래픽을 벡터(Canvas)로 그려요.**
 
-## Getting Started
+## 실행
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run                 # 연결된 안드로이드/iOS 기기
+flutter run -d chrome       # 웹에서 빠르게 확인
+flutter test                # 방 도달 가능성 검사 + 물리 테스트
+```
 
-A few resources to get you started if this is your first Flutter project:
+가로 화면 전용이에요(안드로이드 `sensorLandscape`, iOS 가로 방향만).
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## 조작
+- 좌우로 끌기: 이동 / 위로 튕기기·톡: 점프 / 아래로 튕기기: 발판 아래로
+- 이동하던 손가락을 누른 채 다른 손가락으로 톡: 점프 (왼손 이동 + 오른손 점프)
+- 손을 떼면 멈춰서 가장 가까운 적을 자동으로 쏴요
+- 키보드: ← → 이동, ↑/Space 점프, ↓ 발판 아래로, Esc 일시정지
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 게임 구조
+- **스테이지 10개 + 끝없는 숲**: 스테이지는 방 3~5개. 구성이 고정이라 반복하며 익혀요. 끝없는 숲은 매번 섞여요.
+- **별 3개**: 클리어 / 체력 절반 이상 / 꿈 조각 모두 (꿈 조각은 여러 번 도전해서 모아도 돼요)
+- **로그라이크 성장**: 경험치로 레벨업할 때마다 스킬 3장 중 1장. 스킬 17종은 모두 전투용이라 길이 막히는 일이 없어요.
+- **영구 성장**: 코인으로 캠프에서 공격력·체력·공격 속도·치명타 강화 (도전에 실패해도 코인은 남아요)
+- **발판 난이도**: 1단계 계단·작은 구멍·스프링 버섯 → 2단계 움직이는 발판·무너지는 발판 → 3단계 가시덩굴 타이밍·수정 다리(쏘면 7.5초 동안 생김)·세로 등반
+- **적 7종**: 슬라임(웅크렸다 덮침), 분열 슬라임, 포자버섯(부풀었다 3발), 박쥐(조준선 뒤 돌진), 도깨비불(유도탄), 보스 킹 슬라임(착지 지점 표시 + 땅을 타는 충격파), 보스 꿈의 군주(포자 비·돌진·소환·회전탄)
+- 모든 공격은 빨간 **!** 표시와 함께 미리 알려줘요.
+
+## 손맛 연출
+히트스톱, 화면 흔들림(트라우마 방식), 치명타·처치 때 살짝 확대, 마지막 한 마리 슬로모션, 데미지 숫자 팝, 넉백, 말랑한 찌그러짐, 착지·달리기 먼지, 스카프 물리, 활시위 당김, 콤보, 진동.
+
+## 폴더
+```
+lib/
+  main.dart                  앱 시작 (가로 고정, 저장 불러오기, 효과음 준비)
+  app/                       팔레트·저장(SharedPreferences)·효과음
+  screens/                   타이틀, 스테이지 지도, 캠프, 게임 화면(레벨업·일시정지·결과)
+  widgets/ui_kit.dart        움직이는 숲 배경, 빛나는 버튼, 유리 패널, 스킬 카드, 별
+  game/
+    dream_game.dart          게임 본체 (전투·웨이브·레벨업·카메라·연출)
+    motor.dart, physics.dart 이동·충돌 (화면과 분리 → 테스트에서 그대로 시뮬레이션)
+    skills.dart, stages.dart 스킬 17종, 스테이지 구성
+    entities/                플레이어·적 AI·화살·아이템
+    render/                  배경·타일·캐릭터·HUD·스킬 아이콘 (전부 벡터)
+    rooms/                   방 파서, 방 템플릿(생성 파일)
+tool/
+  gen_rooms.py               방 설계 → lib/game/rooms/room_templates.dart 생성
+  gen_sfx.py                 효과음 합성 → assets/audio/*.wav
+test/reachability_test.dart  모든 방(좌우 반전 포함)에서 포털·꿈 조각에 닿을 수 있는지 실제 이동 코드로 검사
+```
+
+## 방 추가하기
+1. `tool/gen_rooms.py` 에 좌표로 방을 그려요 (기호 설명은 파일 맨 위).
+2. `python3 tool/gen_rooms.py`
+3. `lib/game/stages.dart` 에 방 id 를 넣어요 (`~` 를 붙이면 좌우 반전).
+4. `flutter test` 로 그 방이 끝까지 갈 수 있는지 확인해요.
+
+## 손맛 조정
+대부분의 수치는 `lib/game/constants.dart` (점프 높이, 달리기 속도, 화살 속도, 공격 간격 등).
+점프 높이를 바꾸면 `flutter test` 로 모든 방이 여전히 깰 수 있는지 꼭 확인하세요.

@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/painting.dart';
 
@@ -12,17 +11,21 @@ class Particle {
   Color color;
   PShape shape;
   bool glow;
-  Particle(this.x, this.y, this.vx, this.vy,
-      {required this.life,
-      required this.size,
-      required this.color,
-      this.gravity = 0,
-      this.drag = 0,
-      this.shape = PShape.circle,
-      this.rot = 0,
-      this.vr = 0,
-      this.glow = false})
-      : max = life;
+  Particle(
+    this.x,
+    this.y,
+    this.vx,
+    this.vy, {
+    required this.life,
+    required this.size,
+    required this.color,
+    this.gravity = 0,
+    this.drag = 0,
+    this.shape = PShape.circle,
+    this.rot = 0,
+    this.vr = 0,
+    this.glow = false,
+  }) : max = life;
 }
 
 class FloatText {
@@ -56,13 +59,37 @@ class Fx {
     particles.add(p);
   }
 
-  void burst(double x, double y, Color color,
-      {int n = 12, double speed = 220, double size = 4, double life = 0.5, double gravity = 600, PShape shape = PShape.circle, bool glow = false}) {
+  void burst(
+    double x,
+    double y,
+    Color color, {
+    int n = 12,
+    double speed = 220,
+    double size = 4,
+    double life = 0.5,
+    double gravity = 600,
+    PShape shape = PShape.circle,
+    bool glow = false,
+  }) {
     for (var i = 0; i < n; i++) {
       final a = rng.nextDouble() * math.pi * 2, v = speed * rand(0.3, 1);
-      add(Particle(x, y, math.cos(a) * v, math.sin(a) * v,
-          life: life * rand(0.6, 1.2), size: size * rand(0.6, 1.3), color: color, gravity: gravity, drag: 2.2, shape: shape,
-          rot: rng.nextDouble() * 6, vr: rand(-10, 10), glow: glow));
+      add(
+        Particle(
+          x,
+          y,
+          math.cos(a) * v,
+          math.sin(a) * v,
+          life: life * rand(0.6, 1.2),
+          size: size * rand(0.6, 1.3),
+          color: color,
+          gravity: gravity,
+          drag: 2.2,
+          shape: shape,
+          rot: rng.nextDouble() * 6,
+          vr: rand(-10, 10),
+          glow: glow,
+        ),
+      );
     }
   }
 
@@ -70,23 +97,46 @@ class Fx {
   void sparks(double x, double y, double angle, Color color, {int n = 8, double spread = 0.9, double speed = 420}) {
     for (var i = 0; i < n; i++) {
       final a = angle + rand(-spread, spread), v = speed * rand(0.4, 1);
-      add(Particle(x, y, math.cos(a) * v, math.sin(a) * v,
-          life: rand(0.12, 0.26), size: rand(2, 3.5), color: color, drag: 6, shape: PShape.spark, glow: true));
+      add(Particle(x, y, math.cos(a) * v, math.sin(a) * v, life: rand(0.12, 0.26), size: rand(2, 3.5), color: color, drag: 6, shape: PShape.spark, glow: true));
     }
   }
 
   void dust(double x, double y, {int n = 6, double dir = 0, double power = 1}) {
     for (var i = 0; i < n; i++) {
-      add(Particle(x + rand(-8, 8), y - 2, (dir * 80 + rand(-90, 90)) * power, -rand(20, 90) * power,
-          life: rand(0.3, 0.55), size: rand(4, 8) * power, color: const Color(0xFFCFE3C9), drag: 4, gravity: -30));
+      add(
+        Particle(
+          x + rand(-8, 8),
+          y - 2,
+          (dir * 80 + rand(-90, 90)) * power,
+          -rand(20, 90) * power,
+          life: rand(0.3, 0.55),
+          size: rand(4, 8) * power,
+          color: const Color(0xFFCFE3C9),
+          drag: 4,
+          gravity: -30,
+        ),
+      );
     }
   }
 
   void leaves(double x, double y, {int n = 6}) {
     for (var i = 0; i < n; i++) {
-      add(Particle(x, y, rand(-140, 140), rand(-260, -60),
-          life: rand(0.7, 1.2), size: rand(4, 7), color: i.isEven ? Palette.moss : Palette.grass, gravity: 380, drag: 2.5,
-          shape: PShape.leaf, rot: rand(0, 6), vr: rand(-8, 8)));
+      add(
+        Particle(
+          x,
+          y,
+          rand(-140, 140),
+          rand(-260, -60),
+          life: rand(0.7, 1.2),
+          size: rand(4, 7),
+          color: i.isEven ? Palette.moss : Palette.grass,
+          gravity: 380,
+          drag: 2.5,
+          shape: PShape.leaf,
+          rot: rand(0, 6),
+          vr: rand(-8, 8),
+        ),
+      );
     }
   }
 
@@ -94,8 +144,7 @@ class Fx {
     rings.add(Ring(x, y, from, to, life, color, width));
   }
 
-  void text(double x, double y, String s,
-      {Color color = Palette.ink, double size = 18, bool crit = false, double life = 0.75}) {
+  void text(double x, double y, String s, {Color color = Palette.ink, double size = 18, bool crit = false, double life = 0.75}) {
     final tp = TextPainter(
       text: TextSpan(
         text: s,
@@ -103,7 +152,10 @@ class Fx {
           fontFamily: kDisplayFont,
           fontSize: size,
           color: color,
-          shadows: const [Shadow(color: Color(0xE60A1012), blurRadius: 0, offset: Offset(0, 2)), Shadow(color: Color(0xCC0A1012), blurRadius: 4)],
+          shadows: const [
+            Shadow(color: Color(0xE60A1012), blurRadius: 0, offset: Offset(0, 2)),
+            Shadow(color: Color(0xCC0A1012), blurRadius: 4),
+          ],
         ),
       ),
       textDirection: TextDirection.ltr,

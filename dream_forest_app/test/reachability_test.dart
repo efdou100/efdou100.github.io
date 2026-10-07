@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// 실제 이동 코드(PlayerMotor)로 여러 입력 조합을 시뮬레이션해서
 /// 시작 지점에서 포털과 모든 꿈 조각에 닿을 수 있는지 확인해요.
-class _Result {
+class ExploreResult {
   bool portal = false;
   final Set<int> shards = {};
 }
@@ -47,7 +47,7 @@ bool _hazard(Room room, Body b) {
   return false;
 }
 
-void _touch(Room room, Body b, _Result res) {
+void _touch(Room room, Body b, ExploreResult res) {
   if (b.x < room.portalX + Room.portalW && b.x + b.w > room.portalX && b.y < room.portalY + Room.portalH && b.y + b.h > room.portalY) {
     res.portal = true;
   }
@@ -57,8 +57,8 @@ void _touch(Room room, Body b, _Result res) {
   }
 }
 
-_Result explore(Room room) {
-  final res = _Result();
+ExploreResult explore(Room room) {
+  final res = ExploreResult();
   final seen = <int>{};
   final queue = <(double, double)>[];
   int key(double x, double y) => ((y / 4).round() << 16) ^ (x / 6).round();
@@ -128,19 +128,26 @@ void main() {
   }
 
   test('검사기가 막힌 방을 실제로 잡아낸다', () {
-    const blocked = RoomTemplate(id: 'blocked', type: RoomType.platform, tier: 1, waves: 0, hints: [], rows: [
-      '##########',
-      '#........#',
-      '#........#',
-      '#........#',
-      '#....#...#',
-      '#....#...#',
-      '#....#...#',
-      '#....#...#',
-      '#....#...#',
-      '#.@..#.P.#',
-      '##########',
-    ]);
+    const blocked = RoomTemplate(
+      id: 'blocked',
+      type: RoomType.platform,
+      tier: 1,
+      waves: 0,
+      hints: [],
+      rows: [
+        '##########',
+        '#........#',
+        '#........#',
+        '#........#',
+        '#....#...#',
+        '#....#...#',
+        '#....#...#',
+        '#....#...#',
+        '#....#...#',
+        '#.@..#.P.#',
+        '##########',
+      ],
+    );
     expect(explore(Room(blocked).asStaticForTest()).portal, isFalse);
   });
 

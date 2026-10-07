@@ -9,8 +9,29 @@ class Sfx {
   static final Sfx instance = Sfx._();
 
   static const names = [
-    'shoot', 'hit', 'crit', 'kill', 'jump', 'land', 'spring', 'coin', 'xp', 'levelup', 'hurt', 'portal', 'crumble',
-    'bridge', 'tele', 'boom', 'thud', 'select', 'chest', 'shield', 'freeze', 'zap', 'focus',
+    'shoot',
+    'hit',
+    'crit',
+    'kill',
+    'jump',
+    'land',
+    'spring',
+    'coin',
+    'xp',
+    'levelup',
+    'hurt',
+    'portal',
+    'crumble',
+    'bridge',
+    'tele',
+    'boom',
+    'thud',
+    'select',
+    'chest',
+    'shield',
+    'freeze',
+    'zap',
+    'focus',
   ];
   static const _pooled = {'shoot': 4, 'hit': 4, 'xp': 3, 'coin': 3, 'kill': 3};
   static const _volume = {'shoot': 0.35, 'hit': 0.5, 'xp': 0.35, 'coin': 0.5, 'tele': 0.4, 'land': 0.5};

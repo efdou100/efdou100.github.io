@@ -15,14 +15,7 @@ class RoomTemplate {
   final List<RoomHint> hints;
   final List<String> rows;
 
-  const RoomTemplate({
-    required this.id,
-    required this.type,
-    required this.tier,
-    required this.waves,
-    required this.hints,
-    required this.rows,
-  });
+  const RoomTemplate({required this.id, required this.type, required this.tier, required this.waves, required this.hints, required this.rows});
 
   int get width => rows.first.length;
   int get height => rows.length;

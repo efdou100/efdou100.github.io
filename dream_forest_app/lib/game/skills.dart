@@ -87,7 +87,11 @@ class RunStats {
   List<SkillDef> offer(math.Random rng, {int count = 3}) {
     final pool = kSkills.where(canTake).toList();
     final picked = <SkillDef>[];
-    double weight(SkillDef s) => switch (s.rarity) { Rarity.common => 10, Rarity.rare => 6, Rarity.epic => 3 };
+    double weight(SkillDef s) => switch (s.rarity) {
+      Rarity.common => 10,
+      Rarity.rare => 6,
+      Rarity.epic => 3,
+    };
     while (picked.length < count && pool.isNotEmpty) {
       final total = pool.fold<double>(0, (a, s) => a + weight(s));
       var r = rng.nextDouble() * total;
@@ -103,11 +107,10 @@ class RunStats {
     return picked;
   }
 
-  static BaseStats baseFromUpgrades({required int attack, required int hp, required int speed, required int crit}) =>
-      BaseStats(
-        damage: Combat.baseDamage * (1 + 0.08 * attack),
-        maxHp: Combat.baseHp * (1 + 0.1 * hp),
-        fireInterval: Combat.baseFireInterval / (1 + 0.05 * speed),
-        crit: Combat.baseCrit + 0.02 * crit,
-      );
+  static BaseStats baseFromUpgrades({required int attack, required int hp, required int speed, required int crit}) => BaseStats(
+    damage: Combat.baseDamage * (1 + 0.08 * attack),
+    maxHp: Combat.baseHp * (1 + 0.1 * hp),
+    fireInterval: Combat.baseFireInterval / (1 + 0.05 * speed),
+    crit: Combat.baseCrit + 0.02 * crit,
+  );
 }

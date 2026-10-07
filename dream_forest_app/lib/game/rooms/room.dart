@@ -10,6 +10,7 @@ class Cell {
 
 class Spawn {
   final String kind;
+
   /// 바닥 가운데 기준 월드 좌표
   final double x, y;
   const Spawn(this.kind, this.x, this.y);
@@ -27,9 +28,9 @@ class MovingPlatform extends Platform {
   final double period;
   double t;
   MovingPlatform({required this.ax, required this.ay, required this.bx, required this.by, required double w, required this.vertical})
-      : period = math.max(1.6, math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)) / 95),
-        t = 0,
-        super(ax, ay, w, 16);
+    : period = math.max(1.6, math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)) / 95),
+      t = 0,
+      super(ax, ay, w, 16);
 
   void update(double dt) {
     t += dt;
@@ -160,8 +161,7 @@ class Room implements Geometry {
         right++;
       }
       final y = cy * kTile;
-      movers.add(MovingPlatform(
-          ax: cx * kTile, ay: y, bx: (cx + (right > 0 ? right : -left)) * kTile, by: y, w: pw, vertical: false));
+      movers.add(MovingPlatform(ax: cx * kTile, ay: y, bx: (cx + (right > 0 ? right : -left)) * kTile, by: y, w: pw, vertical: false));
     } else {
       var up = 0, down = 0;
       for (var col = cx; col < cx + n; col++) {
@@ -176,8 +176,7 @@ class Room implements Geometry {
         down = math.max(down, d);
       }
       final x = cx * kTile;
-      movers.add(MovingPlatform(
-          ax: x, ay: cy * kTile, bx: x, by: (cy + (up > 0 ? -up : down)) * kTile, w: pw, vertical: true));
+      movers.add(MovingPlatform(ax: x, ay: cy * kTile, bx: x, by: (cy + (up > 0 ? -up : down)) * kTile, w: pw, vertical: true));
     }
   }
 

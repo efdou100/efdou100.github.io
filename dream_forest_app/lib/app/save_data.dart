@@ -39,8 +39,7 @@ class SaveData {
       }
       final rawShards = p.getString('shards');
       if (rawShards != null) {
-        (jsonDecode(rawShards) as Map<String, dynamic>)
-            .forEach((k, v) => shardsFound[int.parse(k)] = (v as List).map((e) => e as int).toSet());
+        (jsonDecode(rawShards) as Map<String, dynamic>).forEach((k, v) => shardsFound[int.parse(k)] = (v as List).map((e) => e as int).toSet());
       }
       for (final u in kUpgrades) {
         upgrades[u.id] = p.getInt('upg_${u.id}') ?? 0;
@@ -90,12 +89,8 @@ class SaveData {
     return true;
   }
 
-  BaseStats get baseStats => RunStats.baseFromUpgrades(
-        attack: upgrades['attack'] ?? 0,
-        hp: upgrades['hp'] ?? 0,
-        speed: upgrades['speed'] ?? 0,
-        crit: upgrades['crit'] ?? 0,
-      );
+  BaseStats get baseStats =>
+      RunStats.baseFromUpgrades(attack: upgrades['attack'] ?? 0, hp: upgrades['hp'] ?? 0, speed: upgrades['speed'] ?? 0, crit: upgrades['crit'] ?? 0);
 
   void recordRun({required int stage, required int starCount, required int earnedCoins, required Set<int> shards, int? endlessDepth}) {
     coins += earnedCoins;

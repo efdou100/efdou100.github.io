@@ -25,14 +25,12 @@ class StageDef {
 RoomTemplate _t(String id) => kRoomTemplates.firstWhere((t) => t.id == id);
 
 StageDef _stage(int n, String name, String sub, List<String> ids) => StageDef(
-      number: n,
-      name: name,
-      subtitle: sub,
-      power: 1 + 0.16 * (n - 1),
-      rooms: [
-        for (final id in ids) StageRoom(_t(id.replaceAll('~', '')), id.endsWith('~')),
-      ],
-    );
+  number: n,
+  name: name,
+  subtitle: sub,
+  power: 1 + 0.16 * (n - 1),
+  rooms: [for (final id in ids) StageRoom(_t(id.replaceAll('~', '')), id.endsWith('~'))],
+);
 
 /// 1장: 잠든 숲. '~' 가 붙은 방은 좌우를 뒤집어서 써요.
 final List<StageDef> kStages = [
