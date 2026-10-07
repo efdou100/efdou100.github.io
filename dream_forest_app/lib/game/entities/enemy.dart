@@ -28,6 +28,18 @@ const Map<EnemyKind, EnemySpec> kEnemySpecs = {
   EnemyKind.lord: EnemySpec(1150, 84, 116, 24, 60, 1, Color(0xFFB993FF), flying: true),
 };
 
+/// 교체 이미지 id (`assets/images/monster/{id}.png`). docs/asset_manifest.json 의 몬스터 목록과 같아요.
+String enemyArtId(EnemyKind k) => switch (k) {
+  EnemyKind.slime => 'slime',
+  EnemyKind.splitter => 'slime_split',
+  EnemyKind.splitling => 'slime_mini',
+  EnemyKind.mushroom => 'mush_spore',
+  EnemyKind.bat => 'bat',
+  EnemyKind.wisp => 'wisp',
+  EnemyKind.king => 'boss_king_slime',
+  EnemyKind.lord => 'boss_dream_lord',
+};
+
 EnemyKind? enemyKindFromChar(String c) => switch (c) {
   's' => EnemyKind.slime,
   'x' => EnemyKind.splitter,
@@ -49,6 +61,7 @@ abstract class EnemyHost {
   void sound(String name);
   void shakeCam(double trauma);
   int countEnemies(EnemyKind kind);
+  void wallSplat(Enemy e, double speed);
 }
 
 class Enemy {
@@ -114,10 +127,10 @@ class Enemy {
     cd -= dt;
     hitCd -= dt;
     if (kx != 0) {
-      if (spec.flying) {
-        body.x += kx * dt;
-      } else {
-        moveX(h.room, body, kx * dt);
+      final hitWall = spec.flying ? _flyKnock(h, kx * dt) : moveX(h.room, body, kx * dt);
+      if (hitWall && kx.abs() > 150) {
+        h.wallSplat(this, kx.abs());
+        kx = -kx * 0.25;
       }
       kx *= math.exp(-9 * dt);
       if (kx.abs() < 6) kx = 0;
@@ -141,6 +154,16 @@ class Enemy {
       case EnemyKind.lord:
         _lord(h, dt, rng);
     }
+  }
+
+  bool _flyKnock(EnemyHost h, double dx) {
+    body.x += dx;
+    final cx = cellOf(dx > 0 ? body.right : body.x);
+    if (h.room.kindAt(cx, cellOf(body.cy)) == 2) {
+      body.x -= dx;
+      return true;
+    }
+    return false;
   }
 
   void _gravity(EnemyHost h, double dt) {

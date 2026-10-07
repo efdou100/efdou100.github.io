@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../app/save_data.dart';
+import '../app/sfx.dart';
 import '../app/theme.dart';
 import '../game/stages.dart';
 import '../widgets/ui_kit.dart';
@@ -63,6 +64,7 @@ class _WorldMapScreenState extends State<WorldMapScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     final save = SaveData.instance;
+    Sfx.instance.music('map');
     return Scaffold(
       body: ForestBackdrop(
         dim: 0.25,

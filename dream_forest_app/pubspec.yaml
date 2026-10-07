@@ -60,8 +60,21 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # 교체용 에셋 폴더 (docs/ASSET_PIPELINE.md). 파일을 넣기만 하면 자동으로 쓰여요.
   assets:
-    - assets/audio/
+    - assets/audio/default/
+    - assets/audio/sfx/
+    - assets/audio/bgm/
+    - assets/images/player/
+    - assets/images/monster/
+    - assets/images/skill/
+    - assets/images/item/
+    - assets/images/equip/
+    - assets/images/ui/
+    - assets/images/bg/
+    - assets/images/tile/
+    - assets/images/fx/
+    - assets/images/codex/
 
   fonts:
     - family: Jua

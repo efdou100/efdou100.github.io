@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app/art.dart';
 import 'app/save_data.dart';
 import 'app/sfx.dart';
 import 'app/theme.dart';
@@ -11,6 +12,7 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await SaveData.instance.load();
+  await Art.instance.scan();
   Sfx.instance.init();
   runApp(const DreamForestApp());
 }

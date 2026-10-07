@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
 
+import '../../app/art.dart';
 import '../../app/theme.dart';
 import '../constants.dart';
 import '../rooms/room.dart';
@@ -14,7 +15,11 @@ int _hash(int x, int y) {
 }
 
 /// 땅·발판처럼 움직이지 않는 타일은 방마다 한 번 그려서 Picture 로 저장해요.
-ui.Picture bakeStaticTiles(Room room) {
+ui.Picture bakeStaticTiles(Room room, {int chapter = 1}) {
+  // 교체 이미지: tile/ch{n}_ground (흙 속), tile/ch{n}_ground_top (풀 덮인 윗면), tile/ch{n}_plank (나무 발판)
+  final groundArt = Art.instance.image('tile/ch${chapter}_ground');
+  final topArt = Art.instance.image('tile/ch${chapter}_ground_top');
+  final plankArt = Art.instance.image('tile/ch${chapter}_plank');
   final rec = ui.PictureRecorder();
   final c = Canvas(rec);
   final p = Paint();
@@ -25,6 +30,15 @@ ui.Picture bakeStaticTiles(Room room) {
   for (var y = 0; y < room.h; y++) {
     for (var x = 0; x < room.w; x++) {
       if (room.cells[y][x] != Cell.solid) continue;
+      if (groundArt != null) {
+        final surface = y == 0 || room.cells[y - 1][x] != Cell.solid;
+        if (surface && topArt != null) {
+          drawArt(c, topArt, Rect.fromLTWH(x * t - 0.5, y * t - 10, t + 1, t + 10.5));
+        } else {
+          drawArt(c, groundArt, Rect.fromLTWH(x * t - 0.5, y * t - 0.5, t + 1, t + 1));
+        }
+        continue;
+      }
       var depth = 0;
       while (depth < 5 && y - depth - 1 >= 0 && room.cells[y - depth - 1][x] == Cell.solid) {
         depth++;
@@ -82,8 +96,8 @@ ui.Picture bakeStaticTiles(Room room) {
     }
   }
 
-  // 2) 풀 덮개: 위가 열린 땅 위로 둥근 잔디 띠 + 풀잎 + 작은 꽃
-  for (var y = 0; y < room.h; y++) {
+  // 2) 풀 덮개: 위가 열린 땅 위로 둥근 잔디 띠 + 풀잎 + 작은 꽃 (윗면 이미지가 있으면 생략)
+  for (var y = 0; y < (topArt != null && groundArt != null ? 0 : room.h); y++) {
     var x = 0;
     while (x < room.w) {
       final surface = room.cells[y][x] == Cell.solid && (y == 0 || room.cells[y - 1][x] != Cell.solid);
@@ -148,7 +162,13 @@ ui.Picture bakeStaticTiles(Room room) {
       while (x < room.w && room.cells[y][x] == Cell.oneWay) {
         x++;
       }
-      paintPlank(c, x0 * t, y * t, (x - x0) * t, const Color(0xFFA9773F), const Color(0xFF6C4423));
+      if (plankArt != null) {
+        for (var px = x0; px < x; px++) {
+          drawArt(c, plankArt, Rect.fromLTWH(px * t, y * t - 2, t, 18));
+        }
+      } else {
+        paintPlank(c, x0 * t, y * t, (x - x0) * t, const Color(0xFFA9773F), const Color(0xFF6C4423));
+      }
     }
   }
 
@@ -212,8 +232,14 @@ void paintPlank(Canvas c, double x, double y, double w, Color wood, Color dark, 
 }
 
 /// 시간에 따라 바뀌는 타일: 부서지는 발판, 수정 다리, 가시덩굴, 스프링 버섯, 수정.
-void paintDynamicTiles(Canvas c, Room room, double time, Rect view) {
+void paintDynamicTiles(Canvas c, Room room, double time, Rect view, {int chapter = 1}) {
   const t = kTile;
+  final art = Art.instance;
+  final crumbleArt = art.image('tile/ch${chapter}_crumble');
+  final bridgeArt = art.image('tile/ch${chapter}_bridge');
+  final thornArt = art.image('tile/ch${chapter}_thorn');
+  final springArt = art.image('tile/ch${chapter}_spring');
+  final crystalArt = art.image('tile/crystal');
   final p = Paint();
   final x0 = math.max(0, (view.left / t).floor() - 1), x1 = math.min(room.w - 1, (view.right / t).ceil() + 1);
   final y0 = math.max(0, (view.top / t).floor() - 1), y1 = math.min(room.h - 1, (view.bottom / t).ceil() + 1);
@@ -232,6 +258,10 @@ void paintDynamicTiles(Canvas c, Room room, double time, Rect view) {
             p.style = PaintingStyle.fill;
           } else {
             final jit = st.shake >= 0 ? math.sin(time * 70 + x) * 2.2 : 0.0;
+            if (crumbleArt != null) {
+              drawArt(c, crumbleArt, Rect.fromLTWH(x * t + jit, y * t - 2, t, 18));
+              continue;
+            }
             paintPlank(c, x * t, y * t, t, const Color(0xFFC9A57A), const Color(0xFF7A5634), jitter: jit);
             p
               ..color = const Color(0xFF4A3220)
@@ -251,7 +281,9 @@ void paintDynamicTiles(Canvas c, Room room, double time, Rect view) {
         case Cell.bridge:
           final on = room.bridgeTimer > 0;
           final warn = on && room.bridgeTimer < 2 && (time * 8).floor().isEven;
-          if (on) {
+          if (on && bridgeArt != null) {
+            drawArt(c, bridgeArt, Rect.fromLTWH(x * t, y * t - 2, t, 18), opacity: warn ? 0.45 : 1);
+          } else if (on) {
             final a = warn ? 0.45 : 1.0;
             p.color = Palette.violet.withValues(alpha: 0.22 * a);
             c.drawRect(Rect.fromLTWH(x * t, y * t - 6, t, 26), p);
@@ -268,14 +300,43 @@ void paintDynamicTiles(Canvas c, Room room, double time, Rect view) {
             p.style = PaintingStyle.fill;
           }
         case Cell.thorn:
-          _thorn(c, p, x, y, room.thornWarn(x, y), room.thornActive(x, y), time);
+          final warnK = room.thornWarn(x, y), active = room.thornActive(x, y);
+          if (thornArt != null) {
+            final grow = active ? 1.0 : warnK * 0.25;
+            final shake = (!active && warnK > 0) ? math.sin(time * 60 + x) * 1.5 : 0.0;
+            if (warnK > 0 && !active) {
+              p.color = Palette.danger.withValues(alpha: 0.25 * warnK);
+              c.drawRect(Rect.fromLTWH(x * t, y * t + t - 10, t, 10), p);
+            }
+            final hgt = 8 + 30 * grow;
+            drawArt(c, thornArt, Rect.fromLTWH(x * t + shake, y * t + t - hgt, t, hgt));
+          } else {
+            _thorn(c, p, x, y, warnK, active, time);
+          }
         case Cell.spring:
           final anim = room.springAnim[y * room.w + x] ?? 0;
-          _spring(c, p, x * t, y * t, anim, time);
+          if (springArt != null) {
+            final k = anim > 0 ? math.sin((0.35 - anim) / 0.35 * math.pi * 2.5) * (anim / 0.35) : 0.0;
+            final hh = t * 1.2 * (1 - k * 0.35), ww = t * 1.3 * (1 + k * 0.25);
+            drawArt(c, springArt, Rect.fromLTWH(x * t + t / 2 - ww / 2, y * t + t - hh, ww, hh));
+          } else {
+            _spring(c, p, x * t, y * t, anim, time);
+          }
         case Cell.crystal:
           final on = room.bridgeTimer > 0;
           final cx = x * t + t / 2, cy = y * t + t / 2 + math.sin(time * 2.4) * 3;
           final col = on ? const Color(0xFF7DFFB2) : Palette.violet;
+          if (crystalArt != null) {
+            c.drawCircle(
+              Offset(cx, cy),
+              26,
+              Paint()
+                ..color = col.withValues(alpha: 0.3)
+                ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10),
+            );
+            drawArt(c, crystalArt, Rect.fromCenter(center: Offset(cx, cy), width: 30, height: 40), tint: on ? const Color(0x557DFFB2) : null);
+            continue;
+          }
           c.drawCircle(
             Offset(cx, cy),
             26 + 3 * math.sin(time * 4),
@@ -362,7 +423,12 @@ void _spring(Canvas c, Paint p, double x, double y, double anim, double time) {
   c.drawCircle(Offset(cx + 14 * squashX, capTop + capH * 0.55), 2, p);
 }
 
-void paintMover(Canvas c, double x, double y, double w, bool vertical, double time) {
+void paintMover(Canvas c, double x, double y, double w, bool vertical, double time, {int chapter = 1}) {
+  final art = Art.instance.image(vertical ? 'tile/ch${chapter}_lift' : 'tile/ch${chapter}_mover');
+  if (art != null) {
+    drawArt(c, art, Rect.fromLTWH(x, y - 4, w, 24));
+    return;
+  }
   final p = Paint();
   if (vertical) {
     p.shader = ui.Gradient.linear(Offset(0, y), Offset(0, y + 16), const [Color(0xFF7C8C88), Color(0xFF3F4B4A)]);

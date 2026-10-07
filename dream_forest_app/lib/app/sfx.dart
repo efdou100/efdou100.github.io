@@ -1,13 +1,17 @@
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 
+import 'art.dart';
 import 'save_data.dart';
 
-/// 효과음과 진동. 자주 나는 소리는 풀로 돌려 끊김을 줄이고, 같은 소리는 너무 촘촘히 겹치지 않게 해요.
+/// 효과음·배경음·진동.
+/// 소리 파일은 assets/audio/sfx/<이름>.(ogg|mp3|wav) 에 넣으면 기본 합성음(assets/audio/default) 대신 쓰여요.
+/// 배경음은 assets/audio/bgm/<이름>.(ogg|mp3) — 없으면 조용히 넘어가요.
 class Sfx {
   Sfx._();
   static final Sfx instance = Sfx._();
 
+  /// 게임에서 쓰는 효과음 이름. 새 효과음을 추가하면 여기와 docs/asset_manifest.json 에 같이 적어요.
   static const names = [
     'shoot',
     'hit',
@@ -32,30 +36,37 @@ class Sfx {
     'freeze',
     'zap',
     'focus',
+    'bounce',
+    'splat',
   ];
-  static const _pooled = {'shoot': 4, 'hit': 4, 'xp': 3, 'coin': 3, 'kill': 3};
-  static const _volume = {'shoot': 0.35, 'hit': 0.5, 'xp': 0.35, 'coin': 0.5, 'tele': 0.4, 'land': 0.5};
+  static const _pooled = {'shoot': 4, 'hit': 4, 'xp': 3, 'coin': 3, 'kill': 3, 'bounce': 4};
+  static const _volume = {'shoot': 0.35, 'hit': 0.5, 'xp': 0.35, 'coin': 0.5, 'tele': 0.4, 'land': 0.5, 'bounce': 0.45};
 
   final Map<String, AudioPool> _pools = {};
+  final Map<String, String> _files = {};
   final Map<String, int> _last = {};
   int _lastHaptic = 0;
-  bool _ready = false;
+  String? _bgm;
 
   Future<void> init() async {
     try {
-      FlameAudio.audioCache.prefix = 'assets/audio/';
-      await FlameAudio.audioCache.loadAll([for (final n in names) '$n.wav']);
-      for (final e in _pooled.entries) {
-        _pools[e.key] = await FlameAudio.createPool('${e.key}.wav', maxPlayers: e.value);
+      FlameAudio.audioCache.prefix = 'assets/';
+      for (final n in names) {
+        final f = Art.instance.sfxPath(n);
+        if (f != null) _files[n] = f;
       }
-      _ready = true;
-    } catch (_) {
-      _ready = false;
-    }
+      await FlameAudio.audioCache.loadAll(_files.values.toList());
+      for (final e in _pooled.entries) {
+        final f = _files[e.key];
+        if (f != null) _pools[e.key] = await FlameAudio.createPool(f, maxPlayers: e.value);
+      }
+    } catch (_) {}
   }
 
   void play(String name, {double volume = 1, int minGapMs = 35}) {
-    if (!_ready || !SaveData.instance.sound) return;
+    if (!SaveData.instance.sound) return;
+    final file = _files[name];
+    if (file == null) return;
     final now = DateTime.now().millisecondsSinceEpoch;
     if (now - (_last[name] ?? 0) < minGapMs) return;
     _last[name] = now;
@@ -65,9 +76,29 @@ class Sfx {
       if (pool != null) {
         pool.start(volume: v);
       } else {
-        FlameAudio.play('$name.wav', volume: v);
+        FlameAudio.play(file, volume: v);
       }
     } catch (_) {}
+  }
+
+  /// 배경음 전환. 같은 곡이면 그대로 둬요. 이름 목록은 docs/ASSET_PIPELINE.md 참고 (title, map, camp, stage_ch1, boss ...).
+  void music(String name) {
+    if (_bgm == name) return;
+    _bgm = name;
+    try {
+      final file = Art.instance.bgmPath(name);
+      if (file == null || !SaveData.instance.sound) {
+        FlameAudio.bgm.stop();
+        return;
+      }
+      FlameAudio.bgm.play(file, volume: 0.45);
+    } catch (_) {}
+  }
+
+  void refreshMusic() {
+    final n = _bgm;
+    _bgm = null;
+    if (n != null) music(n);
   }
 
   void haptic({bool strong = false}) {

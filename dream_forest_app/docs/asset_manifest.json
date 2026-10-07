@@ -1,0 +1,4940 @@
+{
+ "version": 1,
+ "style": {
+  "image_prefix": "High-quality 2D mobile game asset, cute but premium fantasy style like a top-grossing casual RPG, clean vector-like shapes with soft painterly shading, bold readable silhouette, warm magical night-forest palette (deep teal, violet, amber glow), subtle rim light, no text, no watermark, no frame, single subject centered, ",
+  "sprite_suffix": "side view facing RIGHT, full body, transparent background (PNG alpha), no ground shadow, no background elements.",
+  "icon_suffix": "game UI icon, centered, transparent background (PNG alpha), slight glow, readable at 64px.",
+  "bg_suffix": "wide horizontal parallax layer for a side-scrolling game, seamless left-right tiling, transparent sky area (PNG alpha) unless it is the sky layer, no characters.",
+  "tile_suffix": "square seamless game tile, top-down lighting from above, transparent where empty, tiles seamlessly left and right.",
+  "negative": "text, letters, logo, watermark, signature, blurry, low resolution, jpeg artifacts, photo, 3D render, multiple subjects, cropped subject",
+  "audio_prefix": "Game audio for a cute premium fantasy side-scrolling action RPG set in a magical night forest. "
+ },
+ "chapters": [
+  {
+   "n": 1,
+   "ko": "잠든 숲",
+   "theme": "sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight"
+  },
+  {
+   "n": 2,
+   "ko": "버섯 동굴",
+   "theme": "underground cavern of giant bioluminescent mushrooms, crystals, dripping moss"
+  },
+  {
+   "n": 3,
+   "ko": "안개 늪",
+   "theme": "misty swamp with lily pads, twisted roots, will-o-wisps, purple fog"
+  },
+  {
+   "n": 4,
+   "ko": "눈꽃 고원",
+   "theme": "snowy highland with frosted pines, aurora sky, ice crystals"
+  },
+  {
+   "n": 5,
+   "ko": "잿불 화산숲",
+   "theme": "volcanic forest with charred trees, glowing lava cracks, embers floating"
+  },
+  {
+   "n": 6,
+   "ko": "별빛 하늘섬",
+   "theme": "floating sky islands at night, starry sky, crystal bridges, clouds"
+  }
+ ],
+ "assets": [
+  {
+   "id": "player/head",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/head.png",
+   "ko": "머리(후드+얼굴)",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "Head of a young hooded archer: green hood with pointed tip falling back, round cute face, big eyes, brown bangs, looking right. ONLY the head and hood.",
+   "size": [
+    512,
+    480
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/body",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/body.png",
+   "ko": "몸통",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "Torso of the archer: green cloak tunic with leather belt and small amber scarf knot at the neck. ONLY the torso, no head, no arms, no legs.",
+   "size": [
+    384,
+    448
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/cape",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/cape.png",
+   "ko": "망토 뒷자락",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "Back flap of a short dark green cape flowing to the LEFT (behind the character). ONLY the cape piece.",
+   "size": [
+    384,
+    448
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/leg_front",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/leg_front.png",
+   "ko": "앞다리",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "One leg of the archer pointing straight down: dark green trousers and small brown leather boot. ONLY one leg.",
+   "size": [
+    160,
+    256
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/leg_back",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/leg_back.png",
+   "ko": "뒷다리",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "One leg of the archer pointing straight down, slightly darker shade (it is behind the body). ONLY one leg.",
+   "size": [
+    160,
+    256
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/bow",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/bow.png",
+   "ko": "활",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "Elegant wooden recurve bow held vertically, string on the LEFT side, small leaf ornaments, a hand gripping the middle. ONLY the bow and hand.",
+   "size": [
+    288,
+    448
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/full",
+   "type": "image",
+   "category": "player",
+   "status": "used",
+   "path": "assets/images/player/full.png",
+   "ko": "통짜 캐릭터(부위가 없을 때 대체)",
+   "desc": "주인공 부위. 피벗은 docs/ASSET_PIPELINE.md 표 참고",
+   "prompt": "Full body cute young hooded archer in green cloak with amber scarf, holding a wooden bow, idle pose.",
+   "size": [
+    512,
+    704
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/skin_moon_full",
+   "type": "image",
+   "category": "player",
+   "status": "planned",
+   "path": "assets/images/player/skin_moon_full.png",
+   "ko": "달빛 궁수",
+   "desc": "스킨(상점·이벤트 보상)",
+   "prompt": "Full body cute young hooded archer, silver-blue hood with moon embroidery, holding a bow, idle pose.",
+   "size": [
+    512,
+    704
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/skin_ember_full",
+   "type": "image",
+   "category": "player",
+   "status": "planned",
+   "path": "assets/images/player/skin_ember_full.png",
+   "ko": "잿불 궁수",
+   "desc": "스킨(상점·이벤트 보상)",
+   "prompt": "Full body cute young hooded archer, red-orange hood with ember patterns, holding a bow, idle pose.",
+   "size": [
+    512,
+    704
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/skin_frost_full",
+   "type": "image",
+   "category": "player",
+   "status": "planned",
+   "path": "assets/images/player/skin_frost_full.png",
+   "ko": "서리 궁수",
+   "desc": "스킨(상점·이벤트 보상)",
+   "prompt": "Full body cute young hooded archer, white-blue hood with frost fur trim, holding a bow, idle pose.",
+   "size": [
+    512,
+    704
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "player/skin_star_full",
+   "type": "image",
+   "category": "player",
+   "status": "planned",
+   "path": "assets/images/player/skin_star_full.png",
+   "ko": "별의 궁수",
+   "desc": "스킨(상점·이벤트 보상)",
+   "prompt": "Full body cute young hooded archer, deep navy hood with glittering star patterns, holding a bow, idle pose.",
+   "size": [
+    512,
+    704
+   ],
+   "transparent": true,
+   "suffix": "sprite"
+  },
+  {
+   "id": "monster/slime",
+   "type": "image",
+   "category": "monster",
+   "status": "used",
+   "path": "assets/images/monster/slime.png",
+   "ko": "슬라임",
+   "desc": "1챕터 · 천천히 다가오다 웅크린 뒤 덮쳐요",
+   "prompt": "cute round green jelly slime with big shiny eyes, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/slime_split",
+   "type": "image",
+   "category": "monster",
+   "status": "used",
+   "path": "assets/images/monster/slime_split.png",
+   "ko": "분열 슬라임",
+   "desc": "1챕터 · 쓰러지면 작은 슬라임 둘로 나뉘어요",
+   "prompt": "bigger blue jelly slime with small crystals floating inside, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/slime_mini",
+   "type": "image",
+   "category": "monster",
+   "status": "used",
+   "path": "assets/images/monster/slime_mini.png",
+   "ko": "꼬마 슬라임",
+   "desc": "1챕터 · 분열 슬라임에서 나와요. 빠르고 약해요",
+   "prompt": "tiny light-blue baby slime, mischievous face, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/mush_spore",
+   "type": "image",
+   "category": "monster",
+   "status": "used",
+   "path": "assets/images/monster/mush_spore.png",
+   "ko": "포자버섯",
+   "desc": "1챕터 · 부풀었다가 포자 3발을 쏴요",
+   "prompt": "red-capped mushroom creature with white spots and tiny feet, puffy cheeks, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/bat",
+   "type": "image",
+   "category": "monster",
+   "status": "used",
+   "path": "assets/images/monster/bat.png",
+   "ko": "박쥐",
+   "desc": "1챕터 · 조준선을 그린 뒤 돌진해요",
+   "prompt": "small purple bat with big ears and yellow eyes, wings spread, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/wisp",
+   "type": "image",
+   "category": "monster",
+   "status": "used",
+   "path": "assets/images/monster/wisp.png",
+   "ko": "도깨비불",
+   "desc": "1챕터 · 거리를 두고 유도탄을 쏴요",
+   "prompt": "floating blue spirit flame with cute face and wispy tail, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/cave_beetle",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/cave_beetle.png",
+   "ko": "수정 딱정벌레",
+   "desc": "2챕터 · 등껍질이 단단해 앞에서는 피해가 줄어요",
+   "prompt": "cave beetle with glowing crystal shell, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/glow_snail",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/glow_snail.png",
+   "ko": "빛 달팽이",
+   "desc": "2챕터 · 느리지만 지나간 자리에 독 점액을 남겨요",
+   "prompt": "snail with glowing mushroom shell, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/spore_puff",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/spore_puff.png",
+   "ko": "포자 복어",
+   "desc": "2챕터 · 터지면서 주변에 포자를 흩뿌려요",
+   "prompt": "puffy round spore creature like a pufferfish, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/cave_bat_king",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/cave_bat_king.png",
+   "ko": "동굴 큰박쥐",
+   "desc": "2챕터 · 세 마리가 함께 돌진해요",
+   "prompt": "large dark violet cave bat with crystal fangs, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/rock_golem_mini",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/rock_golem_mini.png",
+   "ko": "꼬마 바위 골렘",
+   "desc": "2챕터 · 느리게 걷다 땅을 쳐서 충격파를 보내요",
+   "prompt": "small cute rock golem with moss and glowing runes, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/crystal_imp",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/crystal_imp.png",
+   "ko": "수정 도깨비",
+   "desc": "2챕터 · 순간이동하며 수정 조각을 던져요",
+   "prompt": "small imp made of purple crystal, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/frog_knight",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/frog_knight.png",
+   "ko": "개구리 기사",
+   "desc": "3챕터 · 방패로 막다가 혀로 끌어당겨요",
+   "prompt": "frog knight with leaf shield and twig spear, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/swamp_eel",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/swamp_eel.png",
+   "ko": "늪 장어",
+   "desc": "3챕터 · 물 위로 튀어올라 포물선으로 덮쳐요",
+   "prompt": "slimy green eel leaping, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/mist_ghost",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/mist_ghost.png",
+   "ko": "안개 유령",
+   "desc": "3챕터 · 반투명해졌다 나타나며 공격해요",
+   "prompt": "translucent misty ghost with lantern, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/lily_turtle",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/lily_turtle.png",
+   "ko": "연잎 거북",
+   "desc": "3챕터 · 등이 발판이 돼요. 공격하면 숨어요",
+   "prompt": "turtle with a big lily pad on its back, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/mosquito",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/mosquito.png",
+   "ko": "대왕 모기",
+   "desc": "3챕터 · 빠르게 지그재그로 날아와요",
+   "prompt": "cute but annoying big mosquito, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/root_snake",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/root_snake.png",
+   "ko": "뿌리 뱀",
+   "desc": "3챕터 · 땅속에서 솟아올라 물어요",
+   "prompt": "snake made of twisted roots, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/snow_bunny",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/snow_bunny.png",
+   "ko": "눈토끼",
+   "desc": "4챕터 · 높이 뛰어 위에서 내려찍어요",
+   "prompt": "fluffy white snow rabbit with ice crystals on ears, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/ice_slime",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/ice_slime.png",
+   "ko": "얼음 슬라임",
+   "desc": "4챕터 · 닿으면 잠깐 느려져요",
+   "prompt": "transparent icy slime with snowflake inside, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/frost_owl",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/frost_owl.png",
+   "ko": "서리 부엉이",
+   "desc": "4챕터 · 위에서 얼음 깃털을 흩뿌려요",
+   "prompt": "white owl with frost feathers, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/yeti_cub",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/yeti_cub.png",
+   "ko": "아기 설인",
+   "desc": "4챕터 · 눈덩이를 굴려 보내요",
+   "prompt": "cute baby yeti holding a snowball, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/icicle_bat",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/icicle_bat.png",
+   "ko": "고드름 박쥐",
+   "desc": "4챕터 · 천장에 매달렸다 떨어져요",
+   "prompt": "bat with icicle wings, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/aurora_wisp",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/aurora_wisp.png",
+   "ko": "오로라 정령",
+   "desc": "4챕터 · 색이 바뀔 때마다 패턴이 달라져요",
+   "prompt": "rainbow aurora spirit, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/ember_slime",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/ember_slime.png",
+   "ko": "잿불 슬라임",
+   "desc": "5챕터 · 쓰러진 자리에 불길을 남겨요",
+   "prompt": "orange lava slime with ember glow, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/fire_fox",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/fire_fox.png",
+   "ko": "불여우",
+   "desc": "5챕터 · 불꽃 꼬리로 빠르게 돌진해요",
+   "prompt": "small fox with flaming tail, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/magma_crab",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/magma_crab.png",
+   "ko": "용암 게",
+   "desc": "5챕터 · 집게로 막고 화염탄을 쏴요",
+   "prompt": "crab with molten rock shell, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/ash_crow",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/ash_crow.png",
+   "ko": "잿빛 까마귀",
+   "desc": "5챕터 · 무리지어 위에서 급강하해요",
+   "prompt": "dark crow with glowing ember eyes, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/lava_golem",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/lava_golem.png",
+   "ko": "용암 골렘",
+   "desc": "5챕터 · 느리지만 아주 단단해요",
+   "prompt": "golem of cooled lava with glowing cracks, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/fire_sprite",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/fire_sprite.png",
+   "ko": "불꽃 요정",
+   "desc": "5챕터 · 불꽃 고리를 퍼뜨려요",
+   "prompt": "tiny fire fairy, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/star_jelly",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/star_jelly.png",
+   "ko": "별 해파리",
+   "desc": "6챕터 · 천천히 떠다니며 별가루를 떨어뜨려요",
+   "prompt": "floating jellyfish made of starlight, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/cloud_sheep",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/cloud_sheep.png",
+   "ko": "구름 양",
+   "desc": "6챕터 · 구름 발판을 만들었다 없애요",
+   "prompt": "fluffy sheep made of clouds, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/comet_bird",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/comet_bird.png",
+   "ko": "혜성 새",
+   "desc": "6챕터 · 꼬리를 끌며 직선으로 돌진해요",
+   "prompt": "bird with comet tail, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/moon_knight",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/moon_knight.png",
+   "ko": "달 기사",
+   "desc": "6챕터 · 초승달 검기를 날려요",
+   "prompt": "small armored knight with crescent moon helmet, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/nebula_eye",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/nebula_eye.png",
+   "ko": "성운의 눈",
+   "desc": "6챕터 · 레이저를 회전하며 쏴요",
+   "prompt": "floating eyeball inside a swirling nebula, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/crystal_dragonling",
+   "type": "image",
+   "category": "monster",
+   "status": "planned",
+   "path": "assets/images/monster/crystal_dragonling.png",
+   "ko": "수정 아기용",
+   "desc": "6챕터 · 수정 숨결을 뿜어요",
+   "prompt": "baby dragon made of crystal, cute enemy monster.",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_king_slime",
+   "type": "image",
+   "category": "boss",
+   "status": "used",
+   "path": "assets/images/monster/boss_king_slime.png",
+   "ko": "킹 슬라임",
+   "desc": "1챕터 보스 · 착지 지점 표시 → 쿵! 땅을 타는 충격파",
+   "prompt": "giant pink king slime wearing a golden crown, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_dream_lord",
+   "type": "image",
+   "category": "boss",
+   "status": "used",
+   "path": "assets/images/monster/boss_dream_lord.png",
+   "ko": "꿈의 군주",
+   "desc": "1챕터 보스 · 포자 비, 돌진, 소환, 회전탄",
+   "prompt": "mysterious floating lord in a violet robe with a huge glowing mushroom hat, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 1,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_crystal_queen",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_crystal_queen.png",
+   "ko": "수정 여왕 거미",
+   "desc": "2챕터 보스 · 거미줄로 발판을 묶고 수정을 쏴요",
+   "prompt": "giant crystal spider queen, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_mushroom_titan",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_mushroom_titan.png",
+   "ko": "버섯 거인",
+   "desc": "2챕터 보스 · 몸에서 버섯이 자라 소환해요",
+   "prompt": "enormous walking mushroom titan, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 2,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_swamp_hag",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_swamp_hag.png",
+   "ko": "늪 마녀",
+   "desc": "3챕터 보스 · 독 웅덩이와 개구리 소환",
+   "prompt": "swamp witch riding a giant frog, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_hydra",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_hydra.png",
+   "ko": "늪 히드라",
+   "desc": "3챕터 보스 · 머리 셋이 따로 공격해요",
+   "prompt": "three-headed swamp hydra, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 3,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_frost_yeti",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_frost_yeti.png",
+   "ko": "서리 설인왕",
+   "desc": "4챕터 보스 · 얼음 기둥을 세우고 눈사태",
+   "prompt": "huge yeti king with icy crown, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_aurora_stag",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_aurora_stag.png",
+   "ko": "오로라 사슴",
+   "desc": "4챕터 보스 · 빛의 길을 따라 돌진해요",
+   "prompt": "majestic stag with aurora antlers, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 4,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_lava_dragon",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_lava_dragon.png",
+   "ko": "용암 드래곤",
+   "desc": "5챕터 보스 · 화염 숨결과 용암 비",
+   "prompt": "lava dragon with glowing cracks, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_phoenix",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_phoenix.png",
+   "ko": "불사조",
+   "desc": "5챕터 보스 · 쓰러지면 한 번 되살아나요",
+   "prompt": "flaming phoenix, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 5,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_star_whale",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_star_whale.png",
+   "ko": "별고래",
+   "desc": "6챕터 보스 · 하늘섬 사이를 헤엄치며 공격",
+   "prompt": "giant whale made of night sky and stars, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "monster/boss_dream_eater",
+   "type": "image",
+   "category": "boss",
+   "status": "planned",
+   "path": "assets/images/monster/boss_dream_eater.png",
+   "ko": "꿈을 먹는 자",
+   "desc": "6챕터 보스 · 최종 보스. 지금까지의 패턴을 섞어 써요",
+   "prompt": "final boss: shadowy dream-eater with many glowing eyes and starry cloak, imposing but cute boss monster, dramatic glow.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "sprite",
+   "chapter": 6,
+   "variants": [
+    "_charge (공격 예고 자세, 선택)"
+   ]
+  },
+  {
+   "id": "skill/multishot",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/multishot.png",
+   "ko": "멀티샷",
+   "desc": "스킬 아이콘",
+   "prompt": "two arrows flying in quick succession.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/front",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/front.png",
+   "ko": "정면 화살 +1",
+   "desc": "스킬 아이콘",
+   "prompt": "three parallel arrows.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/diagonal",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/diagonal.png",
+   "ko": "사선 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "three arrows fanning out.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/back",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/back.png",
+   "ko": "뒤쪽 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrows flying left and right from a center.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/pierce",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/pierce.png",
+   "ko": "관통",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow piercing through a target.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/ricochet",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/ricochet.png",
+   "ko": "벽 도탄",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow bouncing off a stone wall with sparks.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/fire",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/fire.png",
+   "ko": "화염 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "flaming arrow.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/frost",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/frost.png",
+   "ko": "빙결 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "ice crystal arrow with snowflake.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/lightning",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/lightning.png",
+   "ko": "번개 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow crackling with lightning.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/attack",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/attack.png",
+   "ko": "공격력",
+   "desc": "스킬 아이콘",
+   "prompt": "glowing sharp arrowhead.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/haste",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/haste.png",
+   "ko": "속사",
+   "desc": "스킬 아이콘",
+   "prompt": "double chevron speed lines with arrow.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/crit",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/crit.png",
+   "ko": "급소 노리기",
+   "desc": "스킬 아이콘",
+   "prompt": "golden crosshair target.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/orbit",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/orbit.png",
+   "ko": "수호 구슬",
+   "desc": "스킬 아이콘",
+   "prompt": "glowing orbs orbiting a star.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/vampire",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/vampire.png",
+   "ko": "흡혈",
+   "desc": "스킬 아이콘",
+   "prompt": "red drop with leaf.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/heart",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/heart.png",
+   "ko": "생명의 이슬",
+   "desc": "스킬 아이콘",
+   "prompt": "heart-shaped dew drop.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/shield",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/shield.png",
+   "ko": "나뭇잎 방패",
+   "desc": "스킬 아이콘",
+   "prompt": "shield made of a big leaf.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/focus",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/focus.png",
+   "ko": "깊은 집중",
+   "desc": "스킬 아이콘",
+   "prompt": "glowing eye with blue aura.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/chain",
+   "type": "image",
+   "category": "skill",
+   "status": "used",
+   "path": "assets/images/skill/chain.png",
+   "ko": "연쇄 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow jumping between enemies with light trail.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/ground_bounce",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/ground_bounce.png",
+   "ko": "물수제비 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow skipping along the ground like a stone on water.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/arrow_rain",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/arrow_rain.png",
+   "ko": "화살비",
+   "desc": "스킬 아이콘",
+   "prompt": "many arrows falling from the sky.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/sky_shot",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/sky_shot.png",
+   "ko": "내려찍기",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow shooting downward from a jumping archer.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/boomerang",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/boomerang.png",
+   "ko": "부메랑 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "curved arrow returning.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/split_arrow",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/split_arrow.png",
+   "ko": "세 갈래 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow splitting into three on impact.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/giant_arrow",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/giant_arrow.png",
+   "ko": "거대 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "huge glowing arrow.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/explosive",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/explosive.png",
+   "ko": "폭발 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow with bomb tip exploding.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/poison",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/poison.png",
+   "ko": "독 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "green dripping poison arrow.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/wind",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/wind.png",
+   "ko": "바람 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow with swirling wind knocking back.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/homing",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/homing.png",
+   "ko": "유도 화살",
+   "desc": "스킬 아이콘",
+   "prompt": "arrow curving toward a target.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/wall_splat",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/wall_splat.png",
+   "ko": "벽 꽂기",
+   "desc": "스킬 아이콘",
+   "prompt": "enemy slammed into a wall with impact stars.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/juggle",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/juggle.png",
+   "ko": "띄우기",
+   "desc": "스킬 아이콘",
+   "prompt": "enemy knocked up into the air.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/ice_nova",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/ice_nova.png",
+   "ko": "얼음 폭발",
+   "desc": "스킬 아이콘",
+   "prompt": "ring of ice spikes.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/thunder",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/thunder.png",
+   "ko": "천둥 소환",
+   "desc": "스킬 아이콘",
+   "prompt": "lightning bolt striking from cloud.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/clone",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/clone.png",
+   "ko": "그림자 분신",
+   "desc": "스킬 아이콘",
+   "prompt": "shadow copy of the archer.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/owl_pet",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/owl_pet.png",
+   "ko": "부엉이 친구",
+   "desc": "스킬 아이콘",
+   "prompt": "cute owl companion.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/magnet",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/magnet.png",
+   "ko": "자석",
+   "desc": "스킬 아이콘",
+   "prompt": "magnet pulling coins.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/gold_rush",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/gold_rush.png",
+   "ko": "황금 사냥",
+   "desc": "스킬 아이콘",
+   "prompt": "pile of gold coins.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/xp_boost",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/xp_boost.png",
+   "ko": "깨달음",
+   "desc": "스킬 아이콘",
+   "prompt": "glowing book with stars.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/revive",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/revive.png",
+   "ko": "불사조 깃털",
+   "desc": "스킬 아이콘",
+   "prompt": "phoenix feather.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/thorns",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/thorns.png",
+   "ko": "가시 갑옷",
+   "desc": "스킬 아이콘",
+   "prompt": "armor with thorns reflecting damage.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "skill/slow_aura",
+   "type": "image",
+   "category": "skill",
+   "status": "planned",
+   "path": "assets/images/skill/slow_aura.png",
+   "ko": "시간의 고리",
+   "desc": "스킬 아이콘",
+   "prompt": "clock ring slowing time.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "equip/bow_oak",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/bow_oak.png",
+   "ko": "참나무 활",
+   "desc": "일반 등급 장비",
+   "prompt": "oak themed recurve bow, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "bow",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/bow_moon",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/bow_moon.png",
+   "ko": "달빛 활",
+   "desc": "일반 등급 장비",
+   "prompt": "moon themed recurve bow, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "bow",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/bow_ember",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/bow_ember.png",
+   "ko": "잿불 활",
+   "desc": "희귀 등급 장비",
+   "prompt": "ember themed recurve bow, rare rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "bow",
+   "rarity": "rare"
+  },
+  {
+   "id": "equip/bow_frost",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/bow_frost.png",
+   "ko": "서리 활",
+   "desc": "영웅 등급 장비",
+   "prompt": "frost themed recurve bow, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "bow",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/bow_star",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/bow_star.png",
+   "ko": "별빛 활",
+   "desc": "영웅 등급 장비",
+   "prompt": "star themed recurve bow, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "bow",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/bow_dream",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/bow_dream.png",
+   "ko": "꿈결 활",
+   "desc": "전설 등급 장비",
+   "prompt": "dream themed recurve bow, legend rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "bow",
+   "rarity": "legend"
+  },
+  {
+   "id": "equip/cloak_moss",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/cloak_moss.png",
+   "ko": "이끼 망토",
+   "desc": "일반 등급 장비",
+   "prompt": "moss themed short hooded cloak, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "cloak",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/cloak_night",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/cloak_night.png",
+   "ko": "밤하늘 망토",
+   "desc": "일반 등급 장비",
+   "prompt": "night themed short hooded cloak, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "cloak",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/cloak_flame",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/cloak_flame.png",
+   "ko": "불꽃 망토",
+   "desc": "희귀 등급 장비",
+   "prompt": "flame themed short hooded cloak, rare rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "cloak",
+   "rarity": "rare"
+  },
+  {
+   "id": "equip/cloak_aurora",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/cloak_aurora.png",
+   "ko": "오로라 망토",
+   "desc": "영웅 등급 장비",
+   "prompt": "aurora themed short hooded cloak, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "cloak",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/cloak_cloud",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/cloak_cloud.png",
+   "ko": "구름 망토",
+   "desc": "영웅 등급 장비",
+   "prompt": "cloud themed short hooded cloak, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "cloak",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/cloak_dream",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/cloak_dream.png",
+   "ko": "꿈결 망토",
+   "desc": "전설 등급 장비",
+   "prompt": "dream themed short hooded cloak, legend rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "cloak",
+   "rarity": "legend"
+  },
+  {
+   "id": "equip/hood_leaf",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/hood_leaf.png",
+   "ko": "나뭇잎 모자",
+   "desc": "일반 등급 장비",
+   "prompt": "leaf themed hat / hood, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "hood",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/hood_owl",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/hood_owl.png",
+   "ko": "부엉이 모자",
+   "desc": "일반 등급 장비",
+   "prompt": "owl themed hat / hood, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "hood",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/hood_fox",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/hood_fox.png",
+   "ko": "여우 모자",
+   "desc": "희귀 등급 장비",
+   "prompt": "fox themed hat / hood, rare rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "hood",
+   "rarity": "rare"
+  },
+  {
+   "id": "equip/hood_snow",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/hood_snow.png",
+   "ko": "눈꽃 모자",
+   "desc": "영웅 등급 장비",
+   "prompt": "snow themed hat / hood, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "hood",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/hood_crown",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/hood_crown.png",
+   "ko": "작은 왕관 모자",
+   "desc": "영웅 등급 장비",
+   "prompt": "crown themed hat / hood, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "hood",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/hood_dream",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/hood_dream.png",
+   "ko": "꿈결 모자",
+   "desc": "전설 등급 장비",
+   "prompt": "dream themed hat / hood, legend rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "hood",
+   "rarity": "legend"
+  },
+  {
+   "id": "equip/charm_acorn",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/charm_acorn.png",
+   "ko": "도토리 부적",
+   "desc": "일반 등급 장비",
+   "prompt": "acorn themed small magical charm pendant, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "charm",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/charm_feather",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/charm_feather.png",
+   "ko": "깃털 부적",
+   "desc": "일반 등급 장비",
+   "prompt": "feather themed small magical charm pendant, common rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "charm",
+   "rarity": "common"
+  },
+  {
+   "id": "equip/charm_crystal",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/charm_crystal.png",
+   "ko": "수정 부적",
+   "desc": "희귀 등급 장비",
+   "prompt": "crystal themed small magical charm pendant, rare rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "charm",
+   "rarity": "rare"
+  },
+  {
+   "id": "equip/charm_ember",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/charm_ember.png",
+   "ko": "불씨 부적",
+   "desc": "영웅 등급 장비",
+   "prompt": "ember themed small magical charm pendant, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "charm",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/charm_star",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/charm_star.png",
+   "ko": "별조각 부적",
+   "desc": "영웅 등급 장비",
+   "prompt": "star themed small magical charm pendant, epic rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "charm",
+   "rarity": "epic"
+  },
+  {
+   "id": "equip/charm_dream",
+   "type": "image",
+   "category": "equip",
+   "status": "planned",
+   "path": "assets/images/equip/charm_dream.png",
+   "ko": "꿈결 부적",
+   "desc": "전설 등급 장비",
+   "prompt": "dream themed small magical charm pendant, legend rarity item, item icon.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon",
+   "slot": "charm",
+   "rarity": "legend"
+  },
+  {
+   "id": "item/coin",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/coin.png",
+   "ko": "코인",
+   "desc": "아이템",
+   "prompt": "shiny gold coin with leaf emblem.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/dream_shard",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/dream_shard.png",
+   "ko": "꿈 조각",
+   "desc": "아이템",
+   "prompt": "glowing star-shaped crystal shard.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/heal_heart",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/heal_heart.png",
+   "ko": "회복 하트",
+   "desc": "아이템",
+   "prompt": "pink heart-shaped berry.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/chest_closed",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/chest_closed.png",
+   "ko": "보물상자(닫힘)",
+   "desc": "아이템",
+   "prompt": "wooden treasure chest with gold trim, closed.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/chest_open",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/chest_open.png",
+   "ko": "보물상자(열림)",
+   "desc": "아이템",
+   "prompt": "same wooden treasure chest, open with golden light.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/portal_closed",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/portal_closed.png",
+   "ko": "포털(닫힘)",
+   "desc": "아이템",
+   "prompt": "ancient stone arch portal, dim runes, inactive.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/portal_open",
+   "type": "image",
+   "category": "item",
+   "status": "used",
+   "path": "assets/images/item/portal_open.png",
+   "ko": "포털(열림)",
+   "desc": "아이템",
+   "prompt": "same stone arch portal, swirling green-gold magical light.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/gem",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/gem.png",
+   "ko": "보석",
+   "desc": "아이템",
+   "prompt": "sparkling blue gem.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/energy",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/energy.png",
+   "ko": "에너지",
+   "desc": "아이템",
+   "prompt": "glowing green leaf energy drop.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/ticket",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/ticket.png",
+   "ko": "도전 티켓",
+   "desc": "아이템",
+   "prompt": "golden ticket with leaf.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/key",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/key.png",
+   "ko": "열쇠",
+   "desc": "아이템",
+   "prompt": "ornate golden key.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/chest_silver",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/chest_silver.png",
+   "ko": "은 상자",
+   "desc": "아이템",
+   "prompt": "silver treasure chest.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/chest_gold",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/chest_gold.png",
+   "ko": "금 상자",
+   "desc": "아이템",
+   "prompt": "golden treasure chest.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/chest_dream",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/chest_dream.png",
+   "ko": "꿈의 상자",
+   "desc": "아이템",
+   "prompt": "magical violet treasure chest with stars.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "item/scroll",
+   "type": "image",
+   "category": "item",
+   "status": "planned",
+   "path": "assets/images/item/scroll.png",
+   "ko": "강화 주문서",
+   "desc": "아이템",
+   "prompt": "magic scroll.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "bg/ch1_sky",
+   "type": "image",
+   "category": "bg",
+   "status": "used",
+   "path": "assets/images/bg/ch1_sky.png",
+   "ko": "잠든 숲 하늘",
+   "desc": "가장 뒤 하늘 (불투명)",
+   "prompt": "sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, sky only with moon/stars, no trees.",
+   "size": [
+    2048,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch1_far",
+   "type": "image",
+   "category": "bg",
+   "status": "used",
+   "path": "assets/images/bg/ch1_far.png",
+   "ko": "잠든 숲 먼 풍경",
+   "desc": "시차 0.12",
+   "prompt": "sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, distant silhouettes, low contrast, misty.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch1_mid",
+   "type": "image",
+   "category": "bg",
+   "status": "used",
+   "path": "assets/images/bg/ch1_mid.png",
+   "ko": "잠든 숲 중간 숲",
+   "desc": "시차 0.3",
+   "prompt": "sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, mid-distance trees and shapes, medium contrast.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch1_near",
+   "type": "image",
+   "category": "bg",
+   "status": "used",
+   "path": "assets/images/bg/ch1_near.png",
+   "ko": "잠든 숲 가까운 숲",
+   "desc": "시차 0.55, 아래쪽은 땅에 가려져요",
+   "prompt": "sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, close large trunks and glowing plants framing the top and sides.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/map_ch1",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/map_ch1.png",
+   "ko": "잠든 숲 지도",
+   "desc": "스테이지 지도 배경",
+   "prompt": "sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, top-down-ish storybook world map with a winding path, no text.",
+   "size": [
+    2560,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch2_sky",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch2_sky.png",
+   "ko": "버섯 동굴 하늘",
+   "desc": "가장 뒤 하늘 (불투명)",
+   "prompt": "underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, sky only with moon/stars, no trees.",
+   "size": [
+    2048,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch2_far",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch2_far.png",
+   "ko": "버섯 동굴 먼 풍경",
+   "desc": "시차 0.12",
+   "prompt": "underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, distant silhouettes, low contrast, misty.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch2_mid",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch2_mid.png",
+   "ko": "버섯 동굴 중간 숲",
+   "desc": "시차 0.3",
+   "prompt": "underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, mid-distance trees and shapes, medium contrast.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch2_near",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch2_near.png",
+   "ko": "버섯 동굴 가까운 숲",
+   "desc": "시차 0.55, 아래쪽은 땅에 가려져요",
+   "prompt": "underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, close large trunks and glowing plants framing the top and sides.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/map_ch2",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/map_ch2.png",
+   "ko": "버섯 동굴 지도",
+   "desc": "스테이지 지도 배경",
+   "prompt": "underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, top-down-ish storybook world map with a winding path, no text.",
+   "size": [
+    2560,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch3_sky",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch3_sky.png",
+   "ko": "안개 늪 하늘",
+   "desc": "가장 뒤 하늘 (불투명)",
+   "prompt": "misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, sky only with moon/stars, no trees.",
+   "size": [
+    2048,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch3_far",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch3_far.png",
+   "ko": "안개 늪 먼 풍경",
+   "desc": "시차 0.12",
+   "prompt": "misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, distant silhouettes, low contrast, misty.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch3_mid",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch3_mid.png",
+   "ko": "안개 늪 중간 숲",
+   "desc": "시차 0.3",
+   "prompt": "misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, mid-distance trees and shapes, medium contrast.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch3_near",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch3_near.png",
+   "ko": "안개 늪 가까운 숲",
+   "desc": "시차 0.55, 아래쪽은 땅에 가려져요",
+   "prompt": "misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, close large trunks and glowing plants framing the top and sides.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/map_ch3",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/map_ch3.png",
+   "ko": "안개 늪 지도",
+   "desc": "스테이지 지도 배경",
+   "prompt": "misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, top-down-ish storybook world map with a winding path, no text.",
+   "size": [
+    2560,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch4_sky",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch4_sky.png",
+   "ko": "눈꽃 고원 하늘",
+   "desc": "가장 뒤 하늘 (불투명)",
+   "prompt": "snowy highland with frosted pines, aurora sky, ice crystals, sky only with moon/stars, no trees.",
+   "size": [
+    2048,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch4_far",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch4_far.png",
+   "ko": "눈꽃 고원 먼 풍경",
+   "desc": "시차 0.12",
+   "prompt": "snowy highland with frosted pines, aurora sky, ice crystals, distant silhouettes, low contrast, misty.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch4_mid",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch4_mid.png",
+   "ko": "눈꽃 고원 중간 숲",
+   "desc": "시차 0.3",
+   "prompt": "snowy highland with frosted pines, aurora sky, ice crystals, mid-distance trees and shapes, medium contrast.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch4_near",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch4_near.png",
+   "ko": "눈꽃 고원 가까운 숲",
+   "desc": "시차 0.55, 아래쪽은 땅에 가려져요",
+   "prompt": "snowy highland with frosted pines, aurora sky, ice crystals, close large trunks and glowing plants framing the top and sides.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/map_ch4",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/map_ch4.png",
+   "ko": "눈꽃 고원 지도",
+   "desc": "스테이지 지도 배경",
+   "prompt": "snowy highland with frosted pines, aurora sky, ice crystals, top-down-ish storybook world map with a winding path, no text.",
+   "size": [
+    2560,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch5_sky",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch5_sky.png",
+   "ko": "잿불 화산숲 하늘",
+   "desc": "가장 뒤 하늘 (불투명)",
+   "prompt": "volcanic forest with charred trees, glowing lava cracks, embers floating, sky only with moon/stars, no trees.",
+   "size": [
+    2048,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch5_far",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch5_far.png",
+   "ko": "잿불 화산숲 먼 풍경",
+   "desc": "시차 0.12",
+   "prompt": "volcanic forest with charred trees, glowing lava cracks, embers floating, distant silhouettes, low contrast, misty.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch5_mid",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch5_mid.png",
+   "ko": "잿불 화산숲 중간 숲",
+   "desc": "시차 0.3",
+   "prompt": "volcanic forest with charred trees, glowing lava cracks, embers floating, mid-distance trees and shapes, medium contrast.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch5_near",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch5_near.png",
+   "ko": "잿불 화산숲 가까운 숲",
+   "desc": "시차 0.55, 아래쪽은 땅에 가려져요",
+   "prompt": "volcanic forest with charred trees, glowing lava cracks, embers floating, close large trunks and glowing plants framing the top and sides.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/map_ch5",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/map_ch5.png",
+   "ko": "잿불 화산숲 지도",
+   "desc": "스테이지 지도 배경",
+   "prompt": "volcanic forest with charred trees, glowing lava cracks, embers floating, top-down-ish storybook world map with a winding path, no text.",
+   "size": [
+    2560,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch6_sky",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch6_sky.png",
+   "ko": "별빛 하늘섬 하늘",
+   "desc": "가장 뒤 하늘 (불투명)",
+   "prompt": "floating sky islands at night, starry sky, crystal bridges, clouds, sky only with moon/stars, no trees.",
+   "size": [
+    2048,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch6_far",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch6_far.png",
+   "ko": "별빛 하늘섬 먼 풍경",
+   "desc": "시차 0.12",
+   "prompt": "floating sky islands at night, starry sky, crystal bridges, clouds, distant silhouettes, low contrast, misty.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch6_mid",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch6_mid.png",
+   "ko": "별빛 하늘섬 중간 숲",
+   "desc": "시차 0.3",
+   "prompt": "floating sky islands at night, starry sky, crystal bridges, clouds, mid-distance trees and shapes, medium contrast.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/ch6_near",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/ch6_near.png",
+   "ko": "별빛 하늘섬 가까운 숲",
+   "desc": "시차 0.55, 아래쪽은 땅에 가려져요",
+   "prompt": "floating sky islands at night, starry sky, crystal bridges, clouds, close large trunks and glowing plants framing the top and sides.",
+   "size": [
+    4096,
+    1080
+   ],
+   "transparent": true,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/map_ch6",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/map_ch6.png",
+   "ko": "별빛 하늘섬 지도",
+   "desc": "스테이지 지도 배경",
+   "prompt": "floating sky islands at night, starry sky, crystal bridges, clouds, top-down-ish storybook world map with a winding path, no text.",
+   "size": [
+    2560,
+    1080
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/menu",
+   "type": "image",
+   "category": "bg",
+   "status": "used",
+   "path": "assets/images/bg/menu.png",
+   "ko": "메뉴 배경",
+   "desc": "타이틀·캠프 화면",
+   "prompt": "magical night forest clearing with giant moon and fireflies, cozy, wide shot.",
+   "size": [
+    2560,
+    1440
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "bg/lobby",
+   "type": "image",
+   "category": "bg",
+   "status": "planned",
+   "path": "assets/images/bg/lobby.png",
+   "ko": "로비(캠프) 배경",
+   "desc": "홈 화면: 모닥불과 텐트",
+   "prompt": "cozy forest camp at night with campfire, tent, lanterns, wide shot.",
+   "size": [
+    2560,
+    1440
+   ],
+   "transparent": false,
+   "suffix": "bg"
+  },
+  {
+   "id": "tile/ch1_ground",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_ground.png",
+   "ko": "잠든 숲 흙 속",
+   "desc": "타일",
+   "prompt": "ground soil fill texture, stones and roots, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_ground_top",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_ground_top.png",
+   "ko": "잠든 숲 윗면(풀)",
+   "desc": "타일",
+   "prompt": "ground block with grass and small flowers on top edge (top 32px is grass overhang), themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    128,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_plank",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_plank.png",
+   "ko": "잠든 숲 나무 발판",
+   "desc": "타일",
+   "prompt": "thin wooden plank platform, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_crumble",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_crumble.png",
+   "ko": "잠든 숲 부서지는 발판",
+   "desc": "타일",
+   "prompt": "cracked fragile wooden plank, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_spring",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_spring.png",
+   "ko": "잠든 숲 스프링 버섯",
+   "desc": "타일",
+   "prompt": "bouncy pink mushroom cap trampoline, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    160,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_thorn",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_thorn.png",
+   "ko": "잠든 숲 가시덩굴",
+   "desc": "타일",
+   "prompt": "purple thorny vine spikes pointing up, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_bridge",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_bridge.png",
+   "ko": "잠든 숲 수정 다리",
+   "desc": "타일",
+   "prompt": "glowing violet crystal bridge plank, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_mover",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_mover.png",
+   "ko": "잠든 숲 움직이는 발판",
+   "desc": "타일",
+   "prompt": "mossy floating log platform with glowing runes, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch1_lift",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/ch1_lift.png",
+   "ko": "잠든 숲 승강 발판",
+   "desc": "타일",
+   "prompt": "stone slab elevator platform with lantern, themed for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 1
+  },
+  {
+   "id": "tile/ch2_ground",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_ground.png",
+   "ko": "버섯 동굴 흙 속",
+   "desc": "타일",
+   "prompt": "ground soil fill texture, stones and roots, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_ground_top",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_ground_top.png",
+   "ko": "버섯 동굴 윗면(풀)",
+   "desc": "타일",
+   "prompt": "ground block with grass and small flowers on top edge (top 32px is grass overhang), themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    128,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_plank",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_plank.png",
+   "ko": "버섯 동굴 나무 발판",
+   "desc": "타일",
+   "prompt": "thin wooden plank platform, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_crumble",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_crumble.png",
+   "ko": "버섯 동굴 부서지는 발판",
+   "desc": "타일",
+   "prompt": "cracked fragile wooden plank, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_spring",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_spring.png",
+   "ko": "버섯 동굴 스프링 버섯",
+   "desc": "타일",
+   "prompt": "bouncy pink mushroom cap trampoline, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    160,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_thorn",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_thorn.png",
+   "ko": "버섯 동굴 가시덩굴",
+   "desc": "타일",
+   "prompt": "purple thorny vine spikes pointing up, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_bridge",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_bridge.png",
+   "ko": "버섯 동굴 수정 다리",
+   "desc": "타일",
+   "prompt": "glowing violet crystal bridge plank, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_mover",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_mover.png",
+   "ko": "버섯 동굴 움직이는 발판",
+   "desc": "타일",
+   "prompt": "mossy floating log platform with glowing runes, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch2_lift",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch2_lift.png",
+   "ko": "버섯 동굴 승강 발판",
+   "desc": "타일",
+   "prompt": "stone slab elevator platform with lantern, themed for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 2
+  },
+  {
+   "id": "tile/ch3_ground",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_ground.png",
+   "ko": "안개 늪 흙 속",
+   "desc": "타일",
+   "prompt": "ground soil fill texture, stones and roots, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_ground_top",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_ground_top.png",
+   "ko": "안개 늪 윗면(풀)",
+   "desc": "타일",
+   "prompt": "ground block with grass and small flowers on top edge (top 32px is grass overhang), themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    128,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_plank",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_plank.png",
+   "ko": "안개 늪 나무 발판",
+   "desc": "타일",
+   "prompt": "thin wooden plank platform, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_crumble",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_crumble.png",
+   "ko": "안개 늪 부서지는 발판",
+   "desc": "타일",
+   "prompt": "cracked fragile wooden plank, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_spring",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_spring.png",
+   "ko": "안개 늪 스프링 버섯",
+   "desc": "타일",
+   "prompt": "bouncy pink mushroom cap trampoline, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    160,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_thorn",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_thorn.png",
+   "ko": "안개 늪 가시덩굴",
+   "desc": "타일",
+   "prompt": "purple thorny vine spikes pointing up, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_bridge",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_bridge.png",
+   "ko": "안개 늪 수정 다리",
+   "desc": "타일",
+   "prompt": "glowing violet crystal bridge plank, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_mover",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_mover.png",
+   "ko": "안개 늪 움직이는 발판",
+   "desc": "타일",
+   "prompt": "mossy floating log platform with glowing runes, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch3_lift",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch3_lift.png",
+   "ko": "안개 늪 승강 발판",
+   "desc": "타일",
+   "prompt": "stone slab elevator platform with lantern, themed for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 3
+  },
+  {
+   "id": "tile/ch4_ground",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_ground.png",
+   "ko": "눈꽃 고원 흙 속",
+   "desc": "타일",
+   "prompt": "ground soil fill texture, stones and roots, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_ground_top",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_ground_top.png",
+   "ko": "눈꽃 고원 윗면(풀)",
+   "desc": "타일",
+   "prompt": "ground block with grass and small flowers on top edge (top 32px is grass overhang), themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    128,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_plank",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_plank.png",
+   "ko": "눈꽃 고원 나무 발판",
+   "desc": "타일",
+   "prompt": "thin wooden plank platform, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_crumble",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_crumble.png",
+   "ko": "눈꽃 고원 부서지는 발판",
+   "desc": "타일",
+   "prompt": "cracked fragile wooden plank, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_spring",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_spring.png",
+   "ko": "눈꽃 고원 스프링 버섯",
+   "desc": "타일",
+   "prompt": "bouncy pink mushroom cap trampoline, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    160,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_thorn",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_thorn.png",
+   "ko": "눈꽃 고원 가시덩굴",
+   "desc": "타일",
+   "prompt": "purple thorny vine spikes pointing up, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_bridge",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_bridge.png",
+   "ko": "눈꽃 고원 수정 다리",
+   "desc": "타일",
+   "prompt": "glowing violet crystal bridge plank, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_mover",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_mover.png",
+   "ko": "눈꽃 고원 움직이는 발판",
+   "desc": "타일",
+   "prompt": "mossy floating log platform with glowing runes, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch4_lift",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch4_lift.png",
+   "ko": "눈꽃 고원 승강 발판",
+   "desc": "타일",
+   "prompt": "stone slab elevator platform with lantern, themed for snowy highland with frosted pines, aurora sky, ice crystals.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 4
+  },
+  {
+   "id": "tile/ch5_ground",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_ground.png",
+   "ko": "잿불 화산숲 흙 속",
+   "desc": "타일",
+   "prompt": "ground soil fill texture, stones and roots, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_ground_top",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_ground_top.png",
+   "ko": "잿불 화산숲 윗면(풀)",
+   "desc": "타일",
+   "prompt": "ground block with grass and small flowers on top edge (top 32px is grass overhang), themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    128,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_plank",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_plank.png",
+   "ko": "잿불 화산숲 나무 발판",
+   "desc": "타일",
+   "prompt": "thin wooden plank platform, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_crumble",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_crumble.png",
+   "ko": "잿불 화산숲 부서지는 발판",
+   "desc": "타일",
+   "prompt": "cracked fragile wooden plank, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_spring",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_spring.png",
+   "ko": "잿불 화산숲 스프링 버섯",
+   "desc": "타일",
+   "prompt": "bouncy pink mushroom cap trampoline, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    160,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_thorn",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_thorn.png",
+   "ko": "잿불 화산숲 가시덩굴",
+   "desc": "타일",
+   "prompt": "purple thorny vine spikes pointing up, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_bridge",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_bridge.png",
+   "ko": "잿불 화산숲 수정 다리",
+   "desc": "타일",
+   "prompt": "glowing violet crystal bridge plank, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_mover",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_mover.png",
+   "ko": "잿불 화산숲 움직이는 발판",
+   "desc": "타일",
+   "prompt": "mossy floating log platform with glowing runes, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch5_lift",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch5_lift.png",
+   "ko": "잿불 화산숲 승강 발판",
+   "desc": "타일",
+   "prompt": "stone slab elevator platform with lantern, themed for volcanic forest with charred trees, glowing lava cracks, embers floating.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 5
+  },
+  {
+   "id": "tile/ch6_ground",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_ground.png",
+   "ko": "별빛 하늘섬 흙 속",
+   "desc": "타일",
+   "prompt": "ground soil fill texture, stones and roots, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_ground_top",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_ground_top.png",
+   "ko": "별빛 하늘섬 윗면(풀)",
+   "desc": "타일",
+   "prompt": "ground block with grass and small flowers on top edge (top 32px is grass overhang), themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    128,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_plank",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_plank.png",
+   "ko": "별빛 하늘섬 나무 발판",
+   "desc": "타일",
+   "prompt": "thin wooden plank platform, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_crumble",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_crumble.png",
+   "ko": "별빛 하늘섬 부서지는 발판",
+   "desc": "타일",
+   "prompt": "cracked fragile wooden plank, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_spring",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_spring.png",
+   "ko": "별빛 하늘섬 스프링 버섯",
+   "desc": "타일",
+   "prompt": "bouncy pink mushroom cap trampoline, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    160,
+    160
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_thorn",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_thorn.png",
+   "ko": "별빛 하늘섬 가시덩굴",
+   "desc": "타일",
+   "prompt": "purple thorny vine spikes pointing up, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_bridge",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_bridge.png",
+   "ko": "별빛 하늘섬 수정 다리",
+   "desc": "타일",
+   "prompt": "glowing violet crystal bridge plank, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    128,
+    48
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_mover",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_mover.png",
+   "ko": "별빛 하늘섬 움직이는 발판",
+   "desc": "타일",
+   "prompt": "mossy floating log platform with glowing runes, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/ch6_lift",
+   "type": "image",
+   "category": "tile",
+   "status": "planned",
+   "path": "assets/images/tile/ch6_lift.png",
+   "ko": "별빛 하늘섬 승강 발판",
+   "desc": "타일",
+   "prompt": "stone slab elevator platform with lantern, themed for floating sky islands at night, starry sky, crystal bridges, clouds.",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "suffix": "tile",
+   "chapter": 6
+  },
+  {
+   "id": "tile/crystal",
+   "type": "image",
+   "category": "tile",
+   "status": "used",
+   "path": "assets/images/tile/crystal.png",
+   "ko": "수정 스위치",
+   "desc": "쏘면 다리가 생겨요",
+   "prompt": "floating violet diamond crystal with glow.",
+   "size": [
+    192,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/logo",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/logo.png",
+   "ko": "게임 로고 (꿈의 숲)",
+   "desc": "UI",
+   "prompt": "game logo text \"꿈의 숲\" in cute rounded Korean letters with glowing amber gradient and leaf decorations (this one MAY include the title text).",
+   "size": [
+    1600,
+    640
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/app_icon",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/app_icon.png",
+   "ko": "앱 아이콘",
+   "desc": "UI",
+   "prompt": "app icon: cute hooded archer face with glowing forest background, rounded square composition.",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/splash",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/splash.png",
+   "ko": "스플래시",
+   "desc": "UI",
+   "prompt": "splash art of the hooded archer aiming a bow in the moonlit forest.",
+   "size": [
+    2560,
+    1440
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/frame_common",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/frame_common.png",
+   "ko": "카드 테두리(일반)",
+   "desc": "UI",
+   "prompt": "ornate card frame, teal.",
+   "size": [
+    512,
+    768
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/frame_rare",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/frame_rare.png",
+   "ko": "카드 테두리(희귀)",
+   "desc": "UI",
+   "prompt": "ornate card frame, blue.",
+   "size": [
+    512,
+    768
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/frame_epic",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/frame_epic.png",
+   "ko": "카드 테두리(영웅)",
+   "desc": "UI",
+   "prompt": "ornate card frame, purple with sparkles.",
+   "size": [
+    512,
+    768
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/frame_legend",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/frame_legend.png",
+   "ko": "카드 테두리(전설)",
+   "desc": "UI",
+   "prompt": "ornate card frame, gold with rays.",
+   "size": [
+    512,
+    768
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/btn_primary",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/btn_primary.png",
+   "ko": "기본 버튼",
+   "desc": "UI",
+   "prompt": "rounded glossy amber button base, empty.",
+   "size": [
+    512,
+    160
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/btn_secondary",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/btn_secondary.png",
+   "ko": "보조 버튼",
+   "desc": "UI",
+   "prompt": "rounded glossy teal button base, empty.",
+   "size": [
+    512,
+    160
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/panel",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/panel.png",
+   "ko": "패널 틀",
+   "desc": "UI",
+   "prompt": "wooden-and-leaf ornate panel frame, empty center.",
+   "size": [
+    1024,
+    640
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_shop",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_shop.png",
+   "ko": "상점 아이콘",
+   "desc": "UI",
+   "prompt": "shop icon: little market stall.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_attendance",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_attendance.png",
+   "ko": "출석 아이콘",
+   "desc": "UI",
+   "prompt": "calendar with leaf stamp.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_mission",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_mission.png",
+   "ko": "미션 아이콘",
+   "desc": "UI",
+   "prompt": "quest scroll with checkmark.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_codex",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_codex.png",
+   "ko": "도감 아이콘",
+   "desc": "UI",
+   "prompt": "monster encyclopedia book.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_equip",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_equip.png",
+   "ko": "장비 아이콘",
+   "desc": "UI",
+   "prompt": "bow and cloak.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_ranking",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_ranking.png",
+   "ko": "랭킹 아이콘",
+   "desc": "UI",
+   "prompt": "trophy.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_mail",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_mail.png",
+   "ko": "우편 아이콘",
+   "desc": "UI",
+   "prompt": "letter with seal.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/menu_settings",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/menu_settings.png",
+   "ko": "설정 아이콘",
+   "desc": "UI",
+   "prompt": "gear made of wood.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/stamp",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/stamp.png",
+   "ko": "출석 도장",
+   "desc": "UI",
+   "prompt": "round leaf stamp mark.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/star",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/star.png",
+   "ko": "별",
+   "desc": "UI",
+   "prompt": "golden star.",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/npc_owl",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/npc_owl.png",
+   "ko": "NPC 부엉이 할아버지",
+   "desc": "UI",
+   "prompt": "wise old owl NPC with glasses and scarf, quest giver.",
+   "size": [
+    768,
+    768
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "ui/npc_merchant",
+   "type": "image",
+   "category": "ui",
+   "status": "planned",
+   "path": "assets/images/ui/npc_merchant.png",
+   "ko": "NPC 상인 다람쥐",
+   "desc": "UI",
+   "prompt": "squirrel merchant with big backpack.",
+   "size": [
+    768,
+    768
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "codex/frame",
+   "type": "image",
+   "category": "codex",
+   "status": "planned",
+   "path": "assets/images/codex/frame.png",
+   "ko": "도감 카드 틀",
+   "desc": "몬스터 카드 배경",
+   "prompt": "storybook page card frame with vines, empty center.",
+   "size": [
+    768,
+    1024
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "codex/unknown",
+   "type": "image",
+   "category": "codex",
+   "status": "planned",
+   "path": "assets/images/codex/unknown.png",
+   "ko": "미발견 실루엣 배경",
+   "desc": "아직 못 만난 몬스터",
+   "prompt": "dark mysterious silhouette placeholder with question mark glow (no letters).",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "suffix": "icon"
+  },
+  {
+   "id": "sfx/shoot",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/shoot.ogg",
+   "ko": "활 쏘기",
+   "desc": "효과음",
+   "prompt": "short soft bow twang with whoosh.",
+   "duration_sec": 0.2
+  },
+  {
+   "id": "sfx/hit",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/hit.ogg",
+   "ko": "명중",
+   "desc": "효과음",
+   "prompt": "punchy soft impact thud with tiny crunch.",
+   "duration_sec": 0.15
+  },
+  {
+   "id": "sfx/crit",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/crit.ogg",
+   "ko": "치명타",
+   "desc": "효과음",
+   "prompt": "sharp bright impact with sparkle ring.",
+   "duration_sec": 0.25
+  },
+  {
+   "id": "sfx/kill",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/kill.ogg",
+   "ko": "처치",
+   "desc": "효과음",
+   "prompt": "satisfying pop with magical sparkle.",
+   "duration_sec": 0.3
+  },
+  {
+   "id": "sfx/jump",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/jump.ogg",
+   "ko": "점프",
+   "desc": "효과음",
+   "prompt": "light cute jump whoosh.",
+   "duration_sec": 0.15
+  },
+  {
+   "id": "sfx/land",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/land.ogg",
+   "ko": "착지",
+   "desc": "효과음",
+   "prompt": "soft grass landing thump.",
+   "duration_sec": 0.12
+  },
+  {
+   "id": "sfx/spring",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/spring.ogg",
+   "ko": "버섯 점프",
+   "desc": "효과음",
+   "prompt": "boingy rubbery mushroom bounce.",
+   "duration_sec": 0.35
+  },
+  {
+   "id": "sfx/coin",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/coin.ogg",
+   "ko": "코인",
+   "desc": "효과음",
+   "prompt": "bright two-note coin chime.",
+   "duration_sec": 0.2
+  },
+  {
+   "id": "sfx/xp",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/xp.ogg",
+   "ko": "경험치",
+   "desc": "효과음",
+   "prompt": "tiny twinkle pickup.",
+   "duration_sec": 0.08
+  },
+  {
+   "id": "sfx/levelup",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/levelup.ogg",
+   "ko": "레벨업",
+   "desc": "효과음",
+   "prompt": "uplifting magical level up arpeggio.",
+   "duration_sec": 0.8
+  },
+  {
+   "id": "sfx/hurt",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/hurt.ogg",
+   "ko": "피격",
+   "desc": "효과음",
+   "prompt": "player hurt grunt-free impact with low thud.",
+   "duration_sec": 0.3
+  },
+  {
+   "id": "sfx/portal",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/portal.ogg",
+   "ko": "포털",
+   "desc": "효과음",
+   "prompt": "magical portal whoosh with shimmer.",
+   "duration_sec": 0.7
+  },
+  {
+   "id": "sfx/crumble",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/crumble.ogg",
+   "ko": "발판 붕괴",
+   "desc": "효과음",
+   "prompt": "wood cracking and breaking.",
+   "duration_sec": 0.4
+  },
+  {
+   "id": "sfx/bridge",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/bridge.ogg",
+   "ko": "수정 다리",
+   "desc": "효과음",
+   "prompt": "crystal chime ascending.",
+   "duration_sec": 0.5
+  },
+  {
+   "id": "sfx/tele",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/tele.ogg",
+   "ko": "공격 예고",
+   "desc": "효과음",
+   "prompt": "short warning blip.",
+   "duration_sec": 0.12
+  },
+  {
+   "id": "sfx/boom",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/boom.ogg",
+   "ko": "폭발",
+   "desc": "효과음",
+   "prompt": "soft magical explosion.",
+   "duration_sec": 0.5
+  },
+  {
+   "id": "sfx/thud",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/thud.ogg",
+   "ko": "보스 착지",
+   "desc": "효과음",
+   "prompt": "heavy ground slam.",
+   "duration_sec": 0.5
+  },
+  {
+   "id": "sfx/select",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/select.ogg",
+   "ko": "선택",
+   "desc": "효과음",
+   "prompt": "UI select click with sparkle.",
+   "duration_sec": 0.15
+  },
+  {
+   "id": "sfx/chest",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/chest.ogg",
+   "ko": "상자 열기",
+   "desc": "효과음",
+   "prompt": "treasure chest open with golden jingle.",
+   "duration_sec": 0.7
+  },
+  {
+   "id": "sfx/shield",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/shield.ogg",
+   "ko": "방패",
+   "desc": "효과음",
+   "prompt": "leafy shield block whoosh.",
+   "duration_sec": 0.3
+  },
+  {
+   "id": "sfx/freeze",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/freeze.ogg",
+   "ko": "빙결",
+   "desc": "효과음",
+   "prompt": "ice crackle freeze.",
+   "duration_sec": 0.25
+  },
+  {
+   "id": "sfx/zap",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/zap.ogg",
+   "ko": "번개",
+   "desc": "효과음",
+   "prompt": "electric zap.",
+   "duration_sec": 0.2
+  },
+  {
+   "id": "sfx/focus",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/focus.ogg",
+   "ko": "집중",
+   "desc": "효과음",
+   "prompt": "time slow whoosh deepening.",
+   "duration_sec": 0.6
+  },
+  {
+   "id": "sfx/bounce",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/bounce.ogg",
+   "ko": "화살 튕김",
+   "desc": "효과음",
+   "prompt": "bright ricochet ping (pitch can rise).",
+   "duration_sec": 0.1
+  },
+  {
+   "id": "sfx/splat",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/splat.ogg",
+   "ko": "벽 꽂기",
+   "desc": "효과음",
+   "prompt": "chunky wall slam crunch.",
+   "duration_sec": 0.25
+  },
+  {
+   "id": "sfx/victory",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/victory.ogg",
+   "ko": "클리어 팡파레",
+   "desc": "효과음",
+   "prompt": "short triumphant fanfare.",
+   "duration_sec": 2.5
+  },
+  {
+   "id": "sfx/defeat",
+   "type": "audio",
+   "category": "sfx",
+   "status": "used",
+   "path": "assets/audio/sfx/defeat.ogg",
+   "ko": "패배",
+   "desc": "효과음",
+   "prompt": "gentle sad but hopeful jingle.",
+   "duration_sec": 2.0
+  },
+  {
+   "id": "sfx/ui_open",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/ui_open.ogg",
+   "ko": "창 열기",
+   "desc": "효과음",
+   "prompt": "soft UI panel open.",
+   "duration_sec": 0.2
+  },
+  {
+   "id": "sfx/ui_close",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/ui_close.ogg",
+   "ko": "창 닫기",
+   "desc": "효과음",
+   "prompt": "soft UI panel close.",
+   "duration_sec": 0.15
+  },
+  {
+   "id": "sfx/purchase",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/purchase.ogg",
+   "ko": "구매",
+   "desc": "효과음",
+   "prompt": "cash register sparkle.",
+   "duration_sec": 0.6
+  },
+  {
+   "id": "sfx/gacha_open",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/gacha_open.ogg",
+   "ko": "뽑기",
+   "desc": "효과음",
+   "prompt": "suspenseful chest rumble then pop.",
+   "duration_sec": 1.2
+  },
+  {
+   "id": "sfx/gacha_legend",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/gacha_legend.ogg",
+   "ko": "전설 등장",
+   "desc": "효과음",
+   "prompt": "epic legendary reveal with choir.",
+   "duration_sec": 2.0
+  },
+  {
+   "id": "sfx/attendance",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/attendance.ogg",
+   "ko": "출석 도장",
+   "desc": "효과음",
+   "prompt": "stamp thunk with chime.",
+   "duration_sec": 0.5
+  },
+  {
+   "id": "sfx/mission_done",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/mission_done.ogg",
+   "ko": "미션 완료",
+   "desc": "효과음",
+   "prompt": "cheerful completion chime.",
+   "duration_sec": 0.8
+  },
+  {
+   "id": "sfx/equip",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/equip.ogg",
+   "ko": "장착",
+   "desc": "효과음",
+   "prompt": "cloth and metal equip sound.",
+   "duration_sec": 0.3
+  },
+  {
+   "id": "sfx/upgrade",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/upgrade.ogg",
+   "ko": "강화 성공",
+   "desc": "효과음",
+   "prompt": "anvil ring with sparkle.",
+   "duration_sec": 0.8
+  },
+  {
+   "id": "sfx/boss_roar",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/boss_roar.ogg",
+   "ko": "보스 등장",
+   "desc": "효과음",
+   "prompt": "cute but powerful monster roar.",
+   "duration_sec": 1.5
+  },
+  {
+   "id": "sfx/boss_phase",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/boss_phase.ogg",
+   "ko": "보스 2페이즈",
+   "desc": "효과음",
+   "prompt": "dramatic power-up surge.",
+   "duration_sec": 1.0
+  },
+  {
+   "id": "sfx/rope",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/rope.ogg",
+   "ko": "밧줄 오르기",
+   "desc": "효과음",
+   "prompt": "rope creak.",
+   "duration_sec": 0.3
+  },
+  {
+   "id": "sfx/water",
+   "type": "audio",
+   "category": "sfx",
+   "status": "planned",
+   "path": "assets/audio/sfx/water.ogg",
+   "ko": "물 첨벙",
+   "desc": "효과음",
+   "prompt": "water splash.",
+   "duration_sec": 0.4
+  },
+  {
+   "id": "bgm/title",
+   "type": "audio",
+   "category": "bgm",
+   "status": "used",
+   "path": "assets/audio/bgm/title.ogg",
+   "ko": "타이틀",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "dreamy magical forest theme, music box, soft strings, memorable melody, seamless loop.",
+   "duration_sec": 90
+  },
+  {
+   "id": "bgm/map",
+   "type": "audio",
+   "category": "bgm",
+   "status": "used",
+   "path": "assets/audio/bgm/map.ogg",
+   "ko": "스테이지 지도",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "cozy adventurous walking theme, light percussion, flute, seamless loop.",
+   "duration_sec": 90
+  },
+  {
+   "id": "bgm/camp",
+   "type": "audio",
+   "category": "bgm",
+   "status": "used",
+   "path": "assets/audio/bgm/camp.ogg",
+   "ko": "캠프·상점",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "warm campfire acoustic guitar and ocarina, seamless loop.",
+   "duration_sec": 90
+  },
+  {
+   "id": "bgm/lobby",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/lobby.ogg",
+   "ko": "로비",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "relaxing hub theme, gentle harp, seamless loop.",
+   "duration_sec": 90
+  },
+  {
+   "id": "bgm/stage_ch1",
+   "type": "audio",
+   "category": "bgm",
+   "status": "used",
+   "path": "assets/audio/bgm/stage_ch1.ogg",
+   "ko": "잠든 숲 스테이지",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "upbeat action-adventure loop for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, 120-140 BPM, catchy, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/boss_ch1",
+   "type": "audio",
+   "category": "bgm",
+   "status": "used",
+   "path": "assets/audio/bgm/boss_ch1.ogg",
+   "ko": "잠든 숲 보스",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "intense but cute boss battle loop for sleepy night forest with giant trees, glowing mushrooms, fireflies, moonlight, driving drums, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/stage_ch2",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/stage_ch2.ogg",
+   "ko": "버섯 동굴 스테이지",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "upbeat action-adventure loop for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, 120-140 BPM, catchy, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/boss_ch2",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/boss_ch2.ogg",
+   "ko": "버섯 동굴 보스",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "intense but cute boss battle loop for underground cavern of giant bioluminescent mushrooms, crystals, dripping moss, driving drums, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/stage_ch3",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/stage_ch3.ogg",
+   "ko": "안개 늪 스테이지",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "upbeat action-adventure loop for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, 120-140 BPM, catchy, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/boss_ch3",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/boss_ch3.ogg",
+   "ko": "안개 늪 보스",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "intense but cute boss battle loop for misty swamp with lily pads, twisted roots, will-o-wisps, purple fog, driving drums, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/stage_ch4",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/stage_ch4.ogg",
+   "ko": "눈꽃 고원 스테이지",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "upbeat action-adventure loop for snowy highland with frosted pines, aurora sky, ice crystals, 120-140 BPM, catchy, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/boss_ch4",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/boss_ch4.ogg",
+   "ko": "눈꽃 고원 보스",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "intense but cute boss battle loop for snowy highland with frosted pines, aurora sky, ice crystals, driving drums, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/stage_ch5",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/stage_ch5.ogg",
+   "ko": "잿불 화산숲 스테이지",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "upbeat action-adventure loop for volcanic forest with charred trees, glowing lava cracks, embers floating, 120-140 BPM, catchy, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/boss_ch5",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/boss_ch5.ogg",
+   "ko": "잿불 화산숲 보스",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "intense but cute boss battle loop for volcanic forest with charred trees, glowing lava cracks, embers floating, driving drums, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/stage_ch6",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/stage_ch6.ogg",
+   "ko": "별빛 하늘섬 스테이지",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "upbeat action-adventure loop for floating sky islands at night, starry sky, crystal bridges, clouds, 120-140 BPM, catchy, seamless loop.",
+   "duration_sec": 120
+  },
+  {
+   "id": "bgm/boss_ch6",
+   "type": "audio",
+   "category": "bgm",
+   "status": "planned",
+   "path": "assets/audio/bgm/boss_ch6.ogg",
+   "ko": "별빛 하늘섬 보스",
+   "desc": "배경음 (끊김 없이 반복되게)",
+   "prompt": "intense but cute boss battle loop for floating sky islands at night, starry sky, crystal bridges, clouds, driving drums, seamless loop.",
+   "duration_sec": 120
+  }
+ ]
+}

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
 
+import '../../app/art.dart';
 import '../../app/theme.dart';
 import '../entities/arrow.dart';
 import '../entities/enemy.dart';
@@ -23,6 +24,14 @@ final TextPainter _bang = TextPainter(
 )..layout();
 
 Color _mix(Color a, Color b, double t) => Color.lerp(a, b, t)!;
+
+/// 교체 이미지가 있으면 그 사각형에 그리고 true. (부위 좌표는 docs/ASSET_PIPELINE.md 의 피벗 표 참고)
+bool _part(Canvas c, String id, Rect r, {Color? tint}) {
+  final img = Art.instance.image(id);
+  if (img == null) return false;
+  drawArt(c, img, r, tint: tint);
+  return true;
+}
 
 /// 공격 신호: 빨간 말풍선 느낌표
 void drawBang(Canvas c, double x, double y, double time) {
@@ -64,6 +73,16 @@ void drawPlayer(Canvas c, Player pl, double time, {bool focus = false}) {
   }
   final run = b.onGround && b.vx.abs() > 20;
   final air = !b.onGround;
+  final hurtTint = hurt ? Palette.danger : null;
+  // 부위 이미지가 없고 통짜 이미지(player/full)만 있으면 통째로 그리고 활만 따로 그려요.
+  final fullArt = Art.instance.has('player/body') ? null : Art.instance.image('player/full');
+  if (fullArt != null) {
+    final bob = run ? math.sin(pl.runPhase * 2) * 1.2 : math.sin(time * 2.2) * 0.6;
+    drawArtFeet(c, fullArt, 0, bob, 54, tint: hurtTint);
+    _bow(c, pl, face);
+    c.restore();
+    return;
+  }
   // 다리
   double legA, legB;
   if (air) {
@@ -80,84 +99,101 @@ void drawPlayer(Canvas c, Player pl, double time, {bool focus = false}) {
     c.save();
     c.translate(x, -12);
     c.rotate(ang);
-    _p.color = col;
-    c.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-2.6, 0, 5.2, 11), const Radius.circular(2.6)), _p);
-    _p.color = const Color(0xFF5A3A22);
-    c.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-3, 8.5, 7.5, 4), const Radius.circular(2)), _p);
+    if (!_part(c, x < 0 ? 'player/leg_back' : 'player/leg_front', const Rect.fromLTWH(-4, -1, 9, 14), tint: hurt ? Palette.danger : null)) {
+      _p.color = col;
+      c.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-2.6, 0, 5.2, 11), const Radius.circular(2.6)), _p);
+      _p.color = const Color(0xFF5A3A22);
+      c.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-3, 8.5, 7.5, 4), const Radius.circular(2)), _p);
+    }
     c.restore();
   }
 
   leg(legB, -3, const Color(0xFF243D30));
   // 망토 뒷자락
   final sway = math.sin(time * 6 + pl.runPhase * 0.5) * 2 + (b.vx.abs() / 255) * 6;
-  _p.color = hurt ? Palette.danger : Palette.cloakDark;
-  c.drawPath(
-    Path()
-      ..moveTo(-6, -30)
-      ..quadraticBezierTo(-16 - sway, -18, -14 - sway * 1.4, -7)
-      ..lineTo(-2, -10)
-      ..close(),
-    _p,
-  );
+  if (!_part(c, 'player/cape', Rect.fromLTWH(-21 - sway, -33, 20 + sway, 28), tint: hurtTint)) {
+    _p.color = hurt ? Palette.danger : Palette.cloakDark;
+    c.drawPath(
+      Path()
+        ..moveTo(-6, -30)
+        ..quadraticBezierTo(-16 - sway, -18, -14 - sway * 1.4, -7)
+        ..lineTo(-2, -10)
+        ..close(),
+      _p,
+    );
+  }
   // 몸통
-  _p.shader = ui.Gradient.linear(
-    const Offset(0, -32),
-    const Offset(0, -8),
-    hurt ? [const Color(0xFFFF8F8F), Palette.danger] : [const Color(0xFF63B97E), Palette.cloakDark],
-  );
-  c.drawPath(
-    Path()
-      ..moveTo(-8, -29)
-      ..quadraticBezierTo(0, -33, 8, -29)
-      ..lineTo(10, -10)
-      ..quadraticBezierTo(0, -6, -10, -10)
-      ..close(),
-    _p,
-  );
-  _p.shader = null;
-  // 허리띠
-  _p.color = const Color(0xFF6E4726);
-  c.drawRect(const Rect.fromLTWH(-9, -17, 19, 3), _p);
+  if (!_part(c, 'player/body', const Rect.fromLTWH(-12, -34, 24, 28), tint: hurtTint)) {
+    _p.shader = ui.Gradient.linear(
+      const Offset(0, -32),
+      const Offset(0, -8),
+      hurt ? [const Color(0xFFFF8F8F), Palette.danger] : [const Color(0xFF63B97E), Palette.cloakDark],
+    );
+    c.drawPath(
+      Path()
+        ..moveTo(-8, -29)
+        ..quadraticBezierTo(0, -33, 8, -29)
+        ..lineTo(10, -10)
+        ..quadraticBezierTo(0, -6, -10, -10)
+        ..close(),
+      _p,
+    );
+    _p.shader = null;
+    // 허리띠
+    _p.color = const Color(0xFF6E4726);
+    c.drawRect(const Rect.fromLTWH(-9, -17, 19, 3), _p);
+  }
   leg(legA, 3, const Color(0xFF2D4A3A));
   // 머리 (후드)
   final bob = run ? math.sin(pl.runPhase * 2) * 0.8 : math.sin(time * 2.2) * 0.6;
   c.translate(0, bob);
-  _p.color = hurt ? Palette.danger : Palette.cloak;
-  c.drawCircle(const Offset(0, -35), 11.5, _p);
-  c.drawPath(
-    Path()
-      ..moveTo(-9, -40)
-      ..quadraticBezierTo(-14, -50, -19, -46)
-      ..quadraticBezierTo(-14, -42, -8, -33)
-      ..close(),
-    _p,
-  );
-  _p.color = Palette.skin;
-  c.drawCircle(const Offset(3, -33.5), 7.6, _p);
-  // 앞머리
-  _p.color = const Color(0xFF3E2A1C);
-  c.drawPath(
-    Path()
-      ..moveTo(-3, -41)
-      ..quadraticBezierTo(5, -43, 10, -37)
-      ..quadraticBezierTo(4, -38, -1, -36)
-      ..close(),
-    _p,
-  );
-  // 눈 (깜빡임)
-  final eyeH = pl.blink < 0 ? 0.6 : 3.4;
-  _p.color = const Color(0xFF1A1A22);
-  c.drawOval(Rect.fromCenter(center: const Offset(5.2, -33), width: 2.4, height: eyeH), _p);
-  c.drawOval(Rect.fromCenter(center: const Offset(9.2, -33), width: 2.2, height: eyeH), _p);
-  _p.color = const Color(0x66FF8FA8);
-  c.drawCircle(const Offset(2.5, -29.5), 1.8, _p);
+  if (!_part(c, 'player/head', const Rect.fromLTWH(-17, -53, 32, 30), tint: hurtTint)) {
+    _p.color = hurt ? Palette.danger : Palette.cloak;
+    c.drawCircle(const Offset(0, -35), 11.5, _p);
+    c.drawPath(
+      Path()
+        ..moveTo(-9, -40)
+        ..quadraticBezierTo(-14, -50, -19, -46)
+        ..quadraticBezierTo(-14, -42, -8, -33)
+        ..close(),
+      _p,
+    );
+    _p.color = Palette.skin;
+    c.drawCircle(const Offset(3, -33.5), 7.6, _p);
+    // 앞머리
+    _p.color = const Color(0xFF3E2A1C);
+    c.drawPath(
+      Path()
+        ..moveTo(-3, -41)
+        ..quadraticBezierTo(5, -43, 10, -37)
+        ..quadraticBezierTo(4, -38, -1, -36)
+        ..close(),
+      _p,
+    );
+    // 눈 (깜빡임)
+    final eyeH = pl.blink < 0 ? 0.6 : 3.4;
+    _p.color = const Color(0xFF1A1A22);
+    c.drawOval(Rect.fromCenter(center: const Offset(5.2, -33), width: 2.4, height: eyeH), _p);
+    c.drawOval(Rect.fromCenter(center: const Offset(9.2, -33), width: 2.2, height: eyeH), _p);
+    _p.color = const Color(0x66FF8FA8);
+    c.drawCircle(const Offset(2.5, -29.5), 1.8, _p);
+  }
   c.translate(0, -bob);
-  // 활 (조준 방향으로 회전)
+  _bow(c, pl, face);
+  c.restore();
+}
+
+/// 활: 조준 방향으로 돌아가고 시위를 당겨요. (player/bow 이미지가 있으면 그걸로)
+void _bow(Canvas c, Player pl, double face) {
   final la = math.atan2(math.sin(pl.aim), math.cos(pl.aim) * face);
   c.save();
   c.translate(6 - pl.recoil * 3, -22);
   c.rotate(la);
   final pull = pl.bowPull;
+  if (_part(c, 'player/bow', Rect.fromLTWH(-6 - pull * 3, -16, 22, 32))) {
+    c.restore();
+    return;
+  }
   _stroke
     ..color = const Color(0xFFB5813F)
     ..strokeWidth = 3
@@ -178,7 +214,6 @@ void drawPlayer(Canvas c, Player pl, double time, {bool focus = false}) {
   // 손
   _p.color = Palette.skin;
   c.drawCircle(const Offset(2, 0), 3, _p);
-  c.restore();
   c.restore();
 }
 
@@ -217,81 +252,96 @@ void drawEnemy(Canvas c, Enemy e, double time, double playerX) {
   c.save();
   c.translate(b.cx, b.bottom);
   c.scale(e.sx * spawnK, e.sy * spawnK);
-  switch (e.kind) {
-    case EnemyKind.slime || EnemyKind.splitter || EnemyKind.splitling || EnemyKind.king:
-      _slimeBody(c, b.w, b.h, base, look, e.kind, white, time);
-    case EnemyKind.mushroom:
-      final k = e.state == 'charge' ? 1 + 0.4 * (1 - e.tele / 0.75) : 1.0;
-      if (e.state == 'charge') {
-        _glow.color = Palette.danger.withValues(alpha: 0.3);
-        c.drawCircle(Offset(0, -22 * k), 26 * k, _glow);
-      }
-      _p.color = white ? const Color(0xFFFFFFFF) : const Color(0xFFF0E2C4);
-      c.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-7, -18, 14, 18), const Radius.circular(5)), _p);
-      _p.color = const Color(0xFF1B2422);
-      c.drawOval(Rect.fromCenter(center: Offset(-3 + look * 1.5, -11), width: 2.4, height: 3.6), _p);
-      c.drawOval(Rect.fromCenter(center: Offset(3 + look * 1.5, -11), width: 2.4, height: 3.6), _p);
-      _p.shader = ui.Gradient.linear(Offset(0, -34 * k), const Offset(0, -16), [_mix(base, const Color(0xFFFFFFFF), 0.25), base]);
-      c.drawArc(Rect.fromCenter(center: const Offset(0, -16), width: 36 * k, height: 30 * k), math.pi, math.pi, true, _p);
-      _p.shader = null;
-      _p.color = const Color(0xE6FFF2E0);
-      c.drawCircle(Offset(-8 * k, -24 * k), 3 * k, _p);
-      c.drawCircle(Offset(5 * k, -28 * k), 2.6 * k, _p);
-      c.drawCircle(Offset(10 * k, -20 * k), 2 * k, _p);
-    case EnemyKind.bat:
-      final flap = math.sin(time * 18 + b.x) * 9;
-      _p.color = base;
-      for (final s in [-1.0, 1.0]) {
+  // 교체 이미지: monster/<id>.png (공격 예고 중이면 <id>_charge.png 가 있으면 그걸로). 오른쪽을 보는 그림 기준.
+  final artId = 'monster/${enemyArtId(e.kind)}';
+  final art = (tele ? Art.instance.image('${artId}_charge') : null) ?? Art.instance.image(artId);
+  if (art != null) {
+    final bob = e.spec.flying ? math.sin(time * 6 + b.x) * 3 : 0.0;
+    final tint = white
+        ? const Color(0xFFFFFFFF)
+        : (tele && blink)
+        ? const Color(0x99FF5A4F)
+        : e.slow > 0
+        ? const Color(0x668FD3FF)
+        : null;
+    drawArtFeet(c, art, 0, bob, b.h * (e.isBoss ? 1.25 : 1.35), flipX: look < 0, tint: tint);
+  } else {
+    switch (e.kind) {
+      case EnemyKind.slime || EnemyKind.splitter || EnemyKind.splitling || EnemyKind.king:
+        _slimeBody(c, b.w, b.h, base, look, e.kind, white, time);
+      case EnemyKind.mushroom:
+        final k = e.state == 'charge' ? 1 + 0.4 * (1 - e.tele / 0.75) : 1.0;
+        if (e.state == 'charge') {
+          _glow.color = Palette.danger.withValues(alpha: 0.3);
+          c.drawCircle(Offset(0, -22 * k), 26 * k, _glow);
+        }
+        _p.color = white ? const Color(0xFFFFFFFF) : const Color(0xFFF0E2C4);
+        c.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-7, -18, 14, 18), const Radius.circular(5)), _p);
+        _p.color = const Color(0xFF1B2422);
+        c.drawOval(Rect.fromCenter(center: Offset(-3 + look * 1.5, -11), width: 2.4, height: 3.6), _p);
+        c.drawOval(Rect.fromCenter(center: Offset(3 + look * 1.5, -11), width: 2.4, height: 3.6), _p);
+        _p.shader = ui.Gradient.linear(Offset(0, -34 * k), const Offset(0, -16), [_mix(base, const Color(0xFFFFFFFF), 0.25), base]);
+        c.drawArc(Rect.fromCenter(center: const Offset(0, -16), width: 36 * k, height: 30 * k), math.pi, math.pi, true, _p);
+        _p.shader = null;
+        _p.color = const Color(0xE6FFF2E0);
+        c.drawCircle(Offset(-8 * k, -24 * k), 3 * k, _p);
+        c.drawCircle(Offset(5 * k, -28 * k), 2.6 * k, _p);
+        c.drawCircle(Offset(10 * k, -20 * k), 2 * k, _p);
+      case EnemyKind.bat:
+        final flap = math.sin(time * 18 + b.x) * 9;
+        _p.color = base;
+        for (final s in [-1.0, 1.0]) {
+          c.drawPath(
+            Path()
+              ..moveTo(s * 5, -10)
+              ..quadraticBezierTo(s * 16, -22 - flap, s * 22, -12 - flap)
+              ..quadraticBezierTo(s * 17, -10, s * 19, -4 - flap * 0.3)
+              ..quadraticBezierTo(s * 12, -8, s * 5, -6)
+              ..close(),
+            _p,
+          );
+        }
+        c.drawCircle(const Offset(0, -9), 9, _p);
         c.drawPath(
           Path()
-            ..moveTo(s * 5, -10)
-            ..quadraticBezierTo(s * 16, -22 - flap, s * 22, -12 - flap)
-            ..quadraticBezierTo(s * 17, -10, s * 19, -4 - flap * 0.3)
-            ..quadraticBezierTo(s * 12, -8, s * 5, -6)
+            ..moveTo(-6, -15)
+            ..lineTo(-4, -22)
+            ..lineTo(-1, -16)
+            ..moveTo(6, -15)
+            ..lineTo(4, -22)
+            ..lineTo(1, -16),
+          _p,
+        );
+        _p.color = const Color(0xFFFFE07A);
+        c.drawCircle(Offset(-3 + look, -10), 1.8, _p);
+        c.drawCircle(Offset(3 + look, -10), 1.8, _p);
+      case EnemyKind.wisp:
+        final fl = math.sin(time * 9) * 3;
+        _glow.color = base.withValues(alpha: 0.5);
+        c.drawCircle(const Offset(0, -14), 20, _glow);
+        _p.shader = ui.Gradient.radial(const Offset(0, -12), 18, [const Color(0xFFFFFFFF), base, base.withValues(alpha: 0)], const [0, 0.5, 1]);
+        c.drawPath(
+          Path()
+            ..moveTo(0, -30 - fl)
+            ..quadraticBezierTo(14, -18, 10, -6)
+            ..quadraticBezierTo(0, 2 + fl, -10, -6)
+            ..quadraticBezierTo(-14, -18, 0, -30 - fl)
             ..close(),
           _p,
         );
-      }
-      c.drawCircle(const Offset(0, -9), 9, _p);
-      c.drawPath(
-        Path()
-          ..moveTo(-6, -15)
-          ..lineTo(-4, -22)
-          ..lineTo(-1, -16)
-          ..moveTo(6, -15)
-          ..lineTo(4, -22)
-          ..lineTo(1, -16),
-        _p,
-      );
-      _p.color = const Color(0xFFFFE07A);
-      c.drawCircle(Offset(-3 + look, -10), 1.8, _p);
-      c.drawCircle(Offset(3 + look, -10), 1.8, _p);
-    case EnemyKind.wisp:
-      final fl = math.sin(time * 9) * 3;
-      _glow.color = base.withValues(alpha: 0.5);
-      c.drawCircle(const Offset(0, -14), 20, _glow);
-      _p.shader = ui.Gradient.radial(const Offset(0, -12), 18, [const Color(0xFFFFFFFF), base, base.withValues(alpha: 0)], const [0, 0.5, 1]);
-      c.drawPath(
-        Path()
-          ..moveTo(0, -30 - fl)
-          ..quadraticBezierTo(14, -18, 10, -6)
-          ..quadraticBezierTo(0, 2 + fl, -10, -6)
-          ..quadraticBezierTo(-14, -18, 0, -30 - fl)
-          ..close(),
-        _p,
-      );
-      _p.shader = null;
-      _p.color = const Color(0xFF16303A);
-      c.drawCircle(Offset(-3.5 + look * 1.5, -13), 2.2, _p);
-      c.drawCircle(Offset(3.5 + look * 1.5, -13), 2.2, _p);
-      if (e.state == 'cast') {
-        _stroke
-          ..color = Palette.sky.withValues(alpha: 0.8)
-          ..strokeWidth = 2;
-        c.drawCircle(const Offset(0, -14), 22 + 6 * math.sin(time * 20), _stroke);
-      }
-    case EnemyKind.lord:
-      _lordBody(c, b.w, b.h, base, look, white, time, e);
+        _p.shader = null;
+        _p.color = const Color(0xFF16303A);
+        c.drawCircle(Offset(-3.5 + look * 1.5, -13), 2.2, _p);
+        c.drawCircle(Offset(3.5 + look * 1.5, -13), 2.2, _p);
+        if (e.state == 'cast') {
+          _stroke
+            ..color = Palette.sky.withValues(alpha: 0.8)
+            ..strokeWidth = 2;
+          c.drawCircle(const Offset(0, -14), 22 + 6 * math.sin(time * 20), _stroke);
+        }
+      case EnemyKind.lord:
+        _lordBody(c, b.w, b.h, base, look, white, time, e);
+    }
   }
   c.restore();
 
@@ -444,6 +494,12 @@ void drawArrow(Canvas c, Arrow a, Color color) {
   c.save();
   c.translate(a.x, a.y);
   c.rotate(ang);
+  if (a.bounced > 0) {
+    final k = math.min(1.0, a.bounced / 4);
+    c.scale(1 + k * 0.35);
+    _glow.color = Color.lerp(const Color(0x88FFE9A8), const Color(0xCCFFB347), k)!;
+    c.drawCircle(Offset.zero, 8 + k * 6, _glow);
+  }
   if (a.crit) {
     _glow.color = Palette.gold.withValues(alpha: 0.7);
     c.drawCircle(Offset.zero, 9, _glow);
@@ -520,6 +576,11 @@ void drawPickup(Canvas c, Pickup p, double time) {
       c.drawCircle(Offset(p.x, p.y), 3.4, _p);
     case PickupKind.coin:
       final sx = math.cos(time * 6 + p.x * 0.05).abs() * 0.85 + 0.15;
+      final coinArt = Art.instance.image('item/coin');
+      if (coinArt != null) {
+        drawArt(c, coinArt, Rect.fromCenter(center: Offset(p.x, p.y), width: 18 * sx, height: 18));
+        return;
+      }
       _glow.color = Palette.gold.withValues(alpha: 0.35);
       c.drawCircle(Offset(p.x, p.y), 11, _glow);
       _p.color = const Color(0xFFE0A93A);
@@ -529,6 +590,11 @@ void drawPickup(Canvas c, Pickup p, double time) {
       _p.color = const Color(0xCCFFF6D0);
       c.drawRect(Rect.fromCenter(center: Offset(p.x, p.y), width: 2 * sx, height: 6), _p);
     case PickupKind.heal:
+      final healArt = Art.instance.image('item/heal_heart');
+      if (healArt != null) {
+        drawArt(c, healArt, Rect.fromCenter(center: Offset(p.x, p.y), width: 22, height: 22));
+        return;
+      }
       _glow.color = const Color(0x88FF7A9A);
       c.drawCircle(Offset(p.x, p.y), 12, _glow);
       drawHeart(c, Offset(p.x, p.y - 6), 14, const Color(0xFFFF6B88));
@@ -538,6 +604,13 @@ void drawPickup(Canvas c, Pickup p, double time) {
 }
 
 void drawShard(Canvas c, double x, double y, double time, double scale) {
+  final art = Art.instance.image('item/dream_shard');
+  if (art != null) {
+    _glow.color = const Color(0x99A9E6FF);
+    c.drawCircle(Offset(x, y), 18 * scale, _glow);
+    drawArt(c, art, Rect.fromCenter(center: Offset(x, y), width: 30 * scale, height: 30 * scale));
+    return;
+  }
   c.save();
   c.translate(x, y);
   c.scale(scale);
@@ -572,6 +645,15 @@ void drawHeart(Canvas c, Offset o, double s, Color color) {
 
 void drawPortal(Canvas c, Room room, bool open, double time, double openAnim) {
   final cx = room.portalX + Room.portalW / 2, cy = room.portalY + Room.portalH / 2;
+  final art = Art.instance.image(open ? 'item/portal_open' : 'item/portal_closed');
+  if (art != null) {
+    if (open) {
+      _glow.color = const Color(0x8890FFB8);
+      c.drawOval(Rect.fromCenter(center: Offset(cx, cy), width: 80 + openAnim * 30, height: 110 + openAnim * 30), _glow);
+    }
+    drawArtFeet(c, art, cx, room.portalY + Room.portalH + 4, 96);
+    return;
+  }
   c.save();
   c.translate(cx, cy);
   if (open) {
@@ -600,6 +682,15 @@ void drawPortal(Canvas c, Room room, bool open, double time, double openAnim) {
 
 void drawChest(Canvas c, Spot s, bool opened, double time) {
   final x = s.x, y = s.y;
+  final art = Art.instance.image(opened ? 'item/chest_open' : 'item/chest_closed');
+  if (art != null) {
+    if (!opened) {
+      _glow.color = Palette.gold.withValues(alpha: 0.35 + 0.15 * math.sin(time * 4));
+      c.drawOval(Rect.fromCenter(center: Offset(x, y - 16), width: 70, height: 50), _glow);
+    }
+    drawArtFeet(c, art, x, y, 40);
+    return;
+  }
   final bob = opened ? 0.0 : math.sin(time * 3) * 1.5;
   if (!opened) {
     _glow.color = Palette.gold.withValues(alpha: 0.35 + 0.15 * math.sin(time * 4));

@@ -323,7 +323,12 @@ class Hud {
       final a = math.min(1.0, math.min(k * 3, bannerT * 2));
       final slide = (1 - math.min(1.0, k * 2.5)) * 40;
       c.saveLayer(Rect.fromLTWH(0, 0, w, kViewH), Paint()..color = Color.fromRGBO(0, 0, 0, a));
-      _p.shader = ui.Gradient.linear(Offset(0, kViewH / 2 - 60), Offset(0, kViewH / 2 + 50), const [Color(0x00061012), Color(0xAA061012), Color(0x00061012)], const [0, 0.5, 1]);
+      _p.shader = ui.Gradient.linear(
+        Offset(0, kViewH / 2 - 60),
+        Offset(0, kViewH / 2 + 50),
+        const [Color(0x00061012), Color(0xAA061012), Color(0x00061012)],
+        const [0, 0.5, 1],
+      );
       c.drawRect(Rect.fromLTWH(0, kViewH / 2 - 60, w, 110), _p);
       _p.shader = null;
       final title = TextPainter(
@@ -348,7 +353,12 @@ class Hud {
       final sub = _t(bannerSub, 18, const Color(0xFFCFE3D6));
       sub.paint(c, Offset(w / 2 - sub.width / 2 - slide, kViewH / 2 + 14));
       _p
-        ..shader = ui.Gradient.linear(Offset(w / 2 - 200, 0), Offset(w / 2 + 200, 0), const [Color(0x00F5B85C), Color(0xFFF5B85C), Color(0x00F5B85C)], const [0, 0.5, 1])
+        ..shader = ui.Gradient.linear(
+          Offset(w / 2 - 200, 0),
+          Offset(w / 2 + 200, 0),
+          const [Color(0x00F5B85C), Color(0xFFF5B85C), Color(0x00F5B85C)],
+          const [0, 0.5, 1],
+        )
         ..strokeWidth = 1.5;
       c.drawLine(Offset(w / 2 - 200, kViewH / 2 + 8), Offset(w / 2 + 200, kViewH / 2 + 8), _p);
       _p.shader = null;

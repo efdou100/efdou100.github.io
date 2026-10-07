@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
 
+import '../../app/art.dart';
 import '../constants.dart';
 
 /// 잠든 숲 배경: 하늘 → 먼 산 → 중간 숲 → 가까운 숲(빛나는 버섯) + 빛줄기, 반딧불.
@@ -13,7 +14,9 @@ class Background {
   final List<Firefly> flies;
   final Paint _p = Paint();
 
-  Background() : flies = List.generate(40, (i) => Firefly(i)) {
+  /// 교체 이미지: bg/ch{n}_sky, bg/ch{n}_far, bg/ch{n}_mid, bg/ch{n}_near (좌우가 이어지는 가로 그림)
+  final int chapter;
+  Background({this.chapter = 1}) : flies = List.generate(40, (i) => Firefly(i)) {
     far = _bake(11, _drawFar);
     mid = _bake(23, _drawMid);
     near = _bake(57, _drawNear);
@@ -123,6 +126,14 @@ class Background {
   }
 
   void render(Canvas c, double viewW, double camX, double camY, double roomH, double time) {
+    final art = Art.instance;
+    final skyArt = art.image('bg/ch${chapter}_sky');
+    final lift = math.max(0.0, (roomH - kViewH) - camY);
+    if (skyArt != null) {
+      drawArt(c, skyArt, Rect.fromLTWH(0, 0, viewW, kViewH));
+      _layersArt(c, viewW, camX, lift, time);
+      return;
+    }
     // 하늘
     final sky = ui.Gradient.linear(
       const Offset(0, 0),
@@ -157,7 +168,10 @@ class Background {
     c.drawCircle(Offset(mx, my), 34, _p..color = const Color(0xFFF6ECD0));
     c.drawCircle(Offset(mx - 10, my - 6), 7, _p..color = const Color(0x40C8BC9A));
     c.drawCircle(Offset(mx + 11, my + 10), 5, _p..color = const Color(0x40C8BC9A));
-    final lift = math.max(0.0, (roomH - kViewH) - camY);
+    if (art.has('bg/ch${chapter}_far')) {
+      _layersArt(c, viewW, camX, lift, time);
+      return;
+    }
     for (final (img, f, dy) in [(far, 0.12, -150.0), (mid, 0.3, -110.0), (near, 0.55, -80.0)]) {
       final off = -((camX * f) % layerW);
       final y = dy + lift * f * 0.6;
@@ -167,6 +181,32 @@ class Background {
       if (identical(img, far)) _fog(c, viewW, time, y + 280, const Color(0x1A9FC2C8));
       if (identical(img, mid)) _rays(c, viewW, time);
     }
+    for (final f in flies) {
+      final x = ((f.x - camX * 0.7) % viewW + viewW) % viewW;
+      final y = f.y + math.sin(time * f.sp + f.ph) * 16;
+      final a = 0.35 + 0.35 * math.sin(time * 2.2 * f.sp + f.ph);
+      c.drawCircle(Offset(x, y), 7, _p..color = Color.fromRGBO(240, 255, 170, a * 0.18));
+      c.drawCircle(Offset(x, y), 1.6, _p..color = Color.fromRGBO(250, 255, 205, a));
+    }
+  }
+
+  /// 교체 이미지로 그린 숲 레이어 (높이를 화면에 맞추고 가로로 반복)
+  void _layersArt(Canvas c, double viewW, double camX, double lift, double time) {
+    final art = Art.instance;
+    for (final (name, f) in [('far', 0.12), ('mid', 0.3), ('near', 0.55)]) {
+      final img = art.image('bg/ch${chapter}_$name');
+      if (img == null) continue;
+      final h = kViewH, w = h * img.width / img.height;
+      final off = -((camX * f) % w);
+      for (var x = off; x < viewW; x += w) {
+        drawArt(c, img, Rect.fromLTWH(x, lift * f * 0.6, w, h));
+      }
+      if (name == 'mid') _rays(c, viewW, time);
+    }
+    _flies(c, viewW, camX, time);
+  }
+
+  void _flies(Canvas c, double viewW, double camX, double time) {
     for (final f in flies) {
       final x = ((f.x - camX * 0.7) % viewW + viewW) % viewW;
       final y = f.y + math.sin(time * f.sp + f.ph) * 16;

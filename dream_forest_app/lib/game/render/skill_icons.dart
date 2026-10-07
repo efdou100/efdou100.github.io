@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import '../../app/art.dart';
 import '../../app/theme.dart';
 import '../skills.dart';
 
@@ -18,6 +19,11 @@ String rarityLabel(Rarity r) => switch (r) {
 
 /// 스킬 아이콘을 벡터로 그려요. r 안에 꽉 차게.
 void paintSkillIcon(Canvas c, String id, Rect r, {Color color = const Color(0xFFFFFFFF)}) {
+  final art = Art.instance.image('skill/$id');
+  if (art != null) {
+    drawArt(c, art, r);
+    return;
+  }
   final s = r.shortestSide;
   c.save();
   c.translate(r.center.dx - s / 2, r.center.dy - s / 2);
@@ -64,6 +70,18 @@ void paintSkillIcon(Canvas c, String id, Rect r, {Color color = const Color(0xFF
       line.strokeWidth = 8;
       arrow(const Offset(8, 50), const Offset(90, 50));
     case 'ricochet':
+      // 벽에 튕기는 화살
+      c.drawRect(const Rect.fromLTWH(78, 6, 14, 88), Paint()..color = color.withValues(alpha: 0.45));
+      line.strokeWidth = 7;
+      c.drawPath(
+        Path()
+          ..moveTo(10, 84)
+          ..lineTo(74, 40),
+        line,
+      );
+      arrow(const Offset(74, 40), const Offset(20, 12), head: 14);
+      c.drawCircle(const Offset(76, 40), 7, fill);
+    case 'chain':
       line.strokeWidth = 7;
       c.drawPath(
         Path()

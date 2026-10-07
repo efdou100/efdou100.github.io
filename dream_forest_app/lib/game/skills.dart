@@ -20,7 +20,8 @@ const List<SkillDef> kSkills = [
   SkillDef('diagonal', '사선 화살', '비스듬한 화살 2발을 함께 쏴요', 2, Rarity.rare),
   SkillDef('back', '뒤쪽 화살', '등 뒤로도 화살이 나가요', 2, Rarity.common),
   SkillDef('pierce', '관통', '화살이 적을 꿰뚫고 계속 날아가요', 1, Rarity.rare),
-  SkillDef('ricochet', '도탄', '맞힌 화살이 가까운 적에게 한 번 더 튕겨요', 3, Rarity.epic),
+  SkillDef('ricochet', '벽 도탄', '화살이 벽·천장·바닥에 두 번 더 튕겨요. 튕길수록 세져요', 2, Rarity.rare),
+  SkillDef('chain', '연쇄 화살', '맞힌 화살이 가까운 적에게 한 번 더 날아가요', 3, Rarity.epic),
   SkillDef('fire', '화염 화살', '적을 불태워요. 불붙은 적은 쓰러질 때 터져요', 1, Rarity.rare),
   SkillDef('frost', '빙결 화살', '적을 느리게 하고, 세 번 맞히면 얼려요', 1, Rarity.rare),
   SkillDef('lightning', '번개 화살', '맞은 적 근처 두 명에게 번개가 튀어요', 1, Rarity.epic),
@@ -87,6 +88,12 @@ class RunStats {
   List<SkillDef> offer(math.Random rng, {int count = 3}) {
     final pool = kSkills.where(canTake).toList();
     final picked = <SkillDef>[];
+    // 첫 레벨업에는 '벽 도탄'을 꼭 보여줘요. 이 게임의 손맛을 가장 먼저 느끼게.
+    if (level == 2 && stacks.isEmpty) {
+      final r = pool.firstWhere((s) => s.id == 'ricochet');
+      picked.add(r);
+      pool.remove(r);
+    }
     double weight(SkillDef s) => switch (s.rarity) {
       Rarity.common => 10,
       Rarity.rare => 6,

@@ -2,7 +2,7 @@
 import math, os, random, struct, wave
 
 SR = 22050
-OUT = os.path.join(os.path.dirname(__file__), '..', 'assets', 'audio')
+OUT = os.path.join(os.path.dirname(__file__), '..', 'assets', 'audio', 'default')
 os.makedirs(OUT, exist_ok=True)
 random.seed(7)
 
@@ -67,4 +67,6 @@ save('shield', mix(tone(0.2, 1200, 600, 'sine', 0.3), tone(0.2, 1800, 900, 'tri'
 save('freeze', tone(0.16, 2200, 1200, 'sine', 0.2, noise=0.2))
 save('zap', tone(0.12, 1800, 300, 'saw', 0.18, noise=0.5))
 save('focus', mix(tone(0.5, 200, 800, 'sine', 0.35), tone(0.5, 300, 1200, 'tri', 0.1)))
+save('bounce', mix(tone(0.06, 1700, 2600, 'tri', 0.22), tone(0.04, 3200, 2000, 'sine', 0.1)))
+save('splat', mix(tone(0.18, 160, 60, 'square', 0.3), tone(0.12, 600, 150, 'saw', 0.18, noise=0.9)))
 print('ok', len(os.listdir(OUT)))

@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
+import '../app/art.dart';
 import '../app/save_data.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
@@ -116,7 +117,13 @@ class DreamGame extends Game implements EnemyHost {
   // ───────────────────────── 준비 ─────────────────────────
   @override
   Future<void> onLoad() async {
-    bg = Background();
+    final ch = stage.chapter;
+    final art = Art.instance;
+    await Future.wait([
+      for (final prefix in ['tile/ch${ch}_', 'tile/crystal', 'bg/ch${ch}_', 'monster/', 'player/', 'item/', 'skill/', 'fx/']) art.preloadPrefix(prefix),
+    ]);
+    Sfx.instance.music(stage.isBoss ? 'boss_ch$ch' : 'stage_ch$ch');
+    bg = Background(chapter: ch);
     hud = Hud(this);
     run = RunStats(SaveData.instance.baseStats);
     _loadRoom(0);
@@ -140,7 +147,7 @@ class DreamGame extends Game implements EnemyHost {
     roomIndex = index;
     final sr = stage.rooms[index];
     room = Room(sr.tpl, mirrored: sr.mirrored);
-    _tiles = bakeStaticTiles(room);
+    _tiles = bakeStaticTiles(room, chapter: stage.chapter);
     player = Player(room.startX, room.startY);
     enemies = [for (final s in room.spawns) Enemy(enemyKindFromChar(s.kind)!, s.x, s.y, stage.power, rng)];
     arrows = [];
@@ -565,6 +572,7 @@ class DreamGame extends Game implements EnemyHost {
       final dist = math.sqrt(a.vx * a.vx + a.vy * a.vy) * dt;
       final steps = math.max(1, (dist / 8).ceil());
       for (var s = 0; s < steps && !a.dead; s++) {
+        final px = a.x, py = a.y;
         a.x += a.vx * dt / steps;
         a.y += a.vy * dt / steps;
         final cx = cellOf(a.x), cy = cellOf(a.y);
@@ -581,6 +589,10 @@ class DreamGame extends Game implements EnemyHost {
           break;
         }
         if (room.kindAt(cx, cy) == 2) {
+          if (a.wallBounces > 0) {
+            _bounceArrow(a, px, py, cx, cy);
+            continue;
+          }
           fx.sparks(a.x, a.y, math.atan2(a.vy, a.vx) + math.pi, const Color(0xFFE8DCC0), n: 5, speed: 260);
           a.dead = true;
           break;
@@ -616,6 +628,32 @@ class DreamGame extends Game implements EnemyHost {
     arrows.removeWhere((a) => a.dead);
   }
 
+  /// 벽·천장·바닥에 튕겨요. 튕길 때마다 15% 세지고 더 밝아져요.
+  void _bounceArrow(Arrow a, double px, double py, int cx, int cy) {
+    final pcx = cellOf(px), pcy = cellOf(py);
+    var flipX = pcx != cx, flipY = pcy != cy;
+    if (flipX && flipY) {
+      // 모서리: 어느 쪽 면에 먼저 닿았는지 확인
+      final sideBlocked = room.kindAt(cx, pcy) == 2, vertBlocked = room.kindAt(pcx, cy) == 2;
+      if (sideBlocked && !vertBlocked) flipY = false;
+      if (vertBlocked && !sideBlocked) flipX = false;
+    }
+    if (!flipX && !flipY) flipX = true;
+    if (flipX) a.vx = -a.vx;
+    if (flipY) a.vy = -a.vy;
+    a.x = px;
+    a.y = py;
+    a.wallBounces--;
+    a.bounced++;
+    a.dmg *= 1.15;
+    a.life = math.max(a.life, 0.7);
+    a.hit.clear(); // 튕긴 뒤에는 같은 적을 다시 맞힐 수 있어요
+    final ang = math.atan2(a.vy, a.vx);
+    fx.sparks(px, py, ang, Palette.gold, n: 9, spread: 0.7, speed: 380);
+    fx.ring(px, py, const Color(0xFFFFE9A8), to: 22 + a.bounced * 6.0, life: 0.18, width: 3);
+    sound('bounce', minGap: 20);
+  }
+
   Enemy? _nearestEnemy(double x, double y, double range, Set<Enemy> exclude) {
     Enemy? best;
     var bd = range;
@@ -634,14 +672,27 @@ class DreamGame extends Game implements EnemyHost {
     if (e.dead) return;
     var d = dmg;
     if (e.frozen > 0) d *= 1.5;
+    final airborne = !e.spec.flying && !e.isBoss && !e.body.onGround;
+    if (airborne) d *= 1.25; // 공중에 뜬 적은 더 아파요 (띄워서 이어 맞히는 맛)
     e.hp -= d;
     e.flash = 0.09;
     e.squash(crit ? 0.6 : 0.35);
     if (!e.isBoss && e.frozen <= 0) {
-      e.kx = math.cos(ang) * (crit ? 330 : 210);
-      if (!e.spec.flying && e.body.onGround) e.body.vy = -140;
+      e.kx = math.cos(ang) * (crit ? 360 : 230);
+      if (!e.spec.flying) e.body.vy = airborne ? math.min(e.body.vy, -300) : (e.body.onGround ? -150 : e.body.vy);
     }
-    fx.text(e.cx, e.body.y - 6, '${d.round()}${crit ? '!' : ''}', color: crit ? Palette.gold : Palette.ink, size: crit ? 28 : 19, crit: crit);
+    fx.text(
+      e.cx,
+      e.body.y - 6,
+      '${d.round()}${crit ? '!' : ''}',
+      color: crit
+          ? Palette.gold
+          : airborne
+          ? const Color(0xFFFFB37A)
+          : Palette.ink,
+      size: crit ? 28 : (airborne ? 22 : 19),
+      crit: crit,
+    );
     fx.sparks(hx, hy, ang, crit ? Palette.gold : arrowColor, n: crit ? 12 : 7, speed: crit ? 520 : 400);
     if (crit) {
       fx.ring(hx, hy, Palette.gold, to: 46, life: 0.25, width: 4);
@@ -1087,7 +1138,7 @@ class DreamGame extends Game implements EnemyHost {
       shardsTotal: total,
       endlessDepth: stage.isEndless ? endlessDepth : null,
     );
-    sound('levelup');
+    sound('victory');
     phase.value = GamePhase.cleared;
   }
 
@@ -1104,6 +1155,7 @@ class DreamGame extends Game implements EnemyHost {
       shardsTotal: stage.shardCount,
     );
     slowMo = 0;
+    sound('defeat');
     Future.delayed(const Duration(milliseconds: 700), () => phase.value = GamePhase.failed);
     phase.value = GamePhase.paused;
   }
@@ -1166,9 +1218,9 @@ class DreamGame extends Game implements EnemyHost {
     drawPortal(c, room, _portalOpen, time, portalAnim);
     final tiles = _tiles;
     if (tiles != null) c.drawPicture(tiles);
-    paintDynamicTiles(c, room, time, view);
+    paintDynamicTiles(c, room, time, view, chapter: stage.chapter);
     for (final m in room.movers) {
-      paintMover(c, m.x, m.y, m.w, m.vertical, time);
+      paintMover(c, m.x, m.y, m.w, m.vertical, time, chapter: stage.chapter);
     }
     for (var i = 0; i < room.chests.length; i++) {
       drawChest(c, room.chests[i], openedChests.contains(i), time);
@@ -1277,6 +1329,27 @@ class DreamGame extends Game implements EnemyHost {
 
   @override
   void shakeCam(double t) => trauma = math.max(trauma, t);
+
+  /// 넉백으로 벽에 부딪힌 적: 추가 피해 + 찌그러짐 + 먼지 + 흔들림
+  @override
+  void wallSplat(Enemy e, double speed) {
+    if (e.dead || e.isBoss) return;
+    final d = run.damage * (0.5 + speed / 900);
+    e.hp -= d;
+    e.flash = 0.1;
+    e.stun = 0.45;
+    e.sx = 0.55;
+    e.sy = 1.35;
+    final wallX = e.kx > 0 ? e.body.right : e.body.x;
+    fx.dust(wallX, e.cy + 8, n: 8, dir: -e.kx.sign, power: 1.2);
+    fx.burst(wallX, e.cy, const Color(0xFFFFE3A0), n: 8, speed: 220, gravity: 300, shape: PShape.star, size: 3);
+    fx.text(e.cx, e.body.y - 14, '벽꽝! ${d.round()}', color: const Color(0xFFFF9A4A), size: 21, crit: true);
+    hitstop = math.max(hitstop, 0.045);
+    trauma = math.max(trauma, 0.22);
+    sound('splat');
+    Sfx.instance.haptic();
+    if (e.hp <= 0) e.dead = true;
+  }
 
   @override
   int countEnemies(EnemyKind kind) => enemies.where((e) => e.kind == kind && !e.dead).length;

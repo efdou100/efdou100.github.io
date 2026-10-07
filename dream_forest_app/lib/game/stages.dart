@@ -15,7 +15,10 @@ class StageDef {
   final String subtitle;
   final List<StageRoom> rooms;
   final double power;
-  const StageDef({required this.number, required this.name, required this.subtitle, required this.rooms, required this.power});
+
+  /// 챕터 번호: 타일·배경·배경음 이미지를 고를 때 써요 (tile/ch1_ground, bg/ch1_far, bgm/stage_ch1 …).
+  final int chapter;
+  const StageDef({required this.number, required this.name, required this.subtitle, required this.rooms, required this.power, this.chapter = 1});
 
   bool get isBoss => rooms.any((r) => r.tpl.type == RoomType.boss);
   bool get isEndless => number == 0;

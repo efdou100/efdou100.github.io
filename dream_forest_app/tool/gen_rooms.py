@@ -17,6 +17,9 @@ class Room:
             s.g[y][0] = '#'; s.g[y][W - 1] = '#'
         if ground is not None:
             s.fill(0, ground, W - 1, H - 1, '#')
+        if type in ('combat', 'boss'):
+            # 전투방은 닫힌 아레나: 천장이 있어서 위로 쏜 화살도 튕겨 돌아와요.
+            s.fill(0, 0, W - 1, 0, '#')
         ROOMS.append(s)
     def fill(s, x0, y0, x1, y1, c):
         for y in range(y0, y1 + 1):

@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../app/art.dart';
 import '../app/save_data.dart';
+import '../app/sfx.dart';
 import '../app/theme.dart';
 import '../widgets/ui_kit.dart';
 import 'camp_screen.dart';
@@ -28,6 +30,8 @@ class _TitleScreenState extends State<TitleScreen> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final save = SaveData.instance;
+    Sfx.instance.music('title');
+    final logo = Art.instance.pathOf('ui/logo');
     return Scaffold(
       body: ForestBackdrop(
         child: SafeArea(
@@ -47,7 +51,10 @@ class _TitleScreenState extends State<TitleScreen> with TickerProviderStateMixin
                         const SizedBox(width: 10),
                         RoundIconButton(
                           save.sound ? Icons.volume_up_rounded : Icons.volume_off_rounded,
-                          onTap: () => setState(() => save.setSound(!save.sound)),
+                          onTap: () => setState(() {
+                            save.setSound(!save.sound);
+                            Sfx.instance.refreshMusic();
+                          }),
                         ),
                         const SizedBox(width: 8),
                         RoundIconButton(
@@ -67,7 +74,7 @@ class _TitleScreenState extends State<TitleScreen> with TickerProviderStateMixin
                           children: [
                             Text('DREAM FOREST', style: display(16, color: Palette.mute).copyWith(letterSpacing: 8)),
                             const SizedBox(height: 4),
-                            const ShinyTitle('꿈의 숲', size: 88),
+                            logo != null ? Image.asset(logo, height: 130) : const ShinyTitle('꿈의 숲', size: 88),
                             const SizedBox(height: 6),
                             Text('고른 스킬로 강해지고, 잠든 숲을 끝까지 올라가요', style: TextStyle(fontSize: 15, color: Palette.ink.withValues(alpha: 0.85))),
                             const SizedBox(height: 28),

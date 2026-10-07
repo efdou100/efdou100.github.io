@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../app/art.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
 import '../game/render/skill_icons.dart';
@@ -49,6 +50,16 @@ class _BackdropPainter extends CustomPainter {
   @override
   void paint(Canvas c, Size s) {
     final p = Paint();
+    // 교체 이미지 bg/menu 가 있으면 화면을 꽉 채워 그리고 반딧불만 얹어요.
+    final menuArt = Art.instance.image('bg/menu');
+    if (menuArt != null) {
+      final k = math.max(s.width / menuArt.width, s.height / menuArt.height);
+      final w = menuArt.width * k, h = menuArt.height * k;
+      drawArt(c, menuArt, Rect.fromLTWH((s.width - w) / 2, (s.height - h) / 2, w, h));
+      _fireflies(c, s, p);
+      if (dim > 0) c.drawRect(Offset.zero & s, p..color = Color.fromRGBO(6, 12, 14, dim));
+      return;
+    }
     p.shader = ui.Gradient.linear(
       Offset.zero,
       Offset(0, s.height),
@@ -115,7 +126,11 @@ class _BackdropPainter extends CustomPainter {
         ray,
       );
     }
-    // 반딧불
+    _fireflies(c, s, p);
+    if (dim > 0) c.drawRect(Offset.zero & s, p..color = Color.fromRGBO(6, 12, 14, dim));
+  }
+
+  void _fireflies(Canvas c, Size s, Paint p) {
     for (var i = 0; i < 46; i++) {
       final bx = (i * 137.5) % s.width, by = s.height * 0.3 + (i * 61.7) % (s.height * 0.65);
       final x = bx + math.sin(t * 0.4 + i) * 30, y = by + math.cos(t * 0.5 + i * 1.3) * 20;
@@ -129,7 +144,6 @@ class _BackdropPainter extends CustomPainter {
       );
       c.drawCircle(Offset(x, y), 2, p..color = Color.fromRGBO(250, 255, 210, a));
     }
-    if (dim > 0) c.drawRect(Offset.zero & s, p..color = Color.fromRGBO(6, 12, 14, dim));
   }
 
   void _trees(Canvas c, Size s, double base, double scale, int n, Color col, int seed) {

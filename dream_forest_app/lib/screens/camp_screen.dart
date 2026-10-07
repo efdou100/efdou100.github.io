@@ -37,6 +37,7 @@ class _CampScreenState extends State<CampScreen> {
   @override
   Widget build(BuildContext context) {
     final save = SaveData.instance;
+    Sfx.instance.music('camp');
     return Scaffold(
       body: ForestBackdrop(
         dim: 0.35,
