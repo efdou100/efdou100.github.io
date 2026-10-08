@@ -25,11 +25,21 @@ class BlockDef {
 }
 
 class MirrorDef {
-  const MirrorDef(this.x, this.y, this.s, this.rot, this.len);
+  const MirrorDef(this.x, this.y, this.s, this.rot, this.len, {this.relay = false, this.spin = 0});
   final double x, y;
   final int s;
   final bool rot;
   final double len;
+  final bool relay; // 되쏘기 고리: 화살을 붙잡았다가 s*45° 방향으로 다시 쏨 (탭하면 8방향)
+  final double spin; // 도는 거울: spin 초마다 반 바퀴 (0 = 고정)
+  int get states => relay ? 8 : 4;
+}
+
+/// 유리 마개: soft 면(l/r/t/b)으로 맞을 때만 깨진다 (화살은 멈춤). 나머지 면은 나무처럼 튕긴다.
+class CrystalDef {
+  const CrystalDef(this.x, this.y, this.w, this.h, this.soft);
+  final double x, y, w, h;
+  final String soft;
 }
 
 class BumperDef {
@@ -104,9 +114,12 @@ class LevelData {
     this.prisms = const [],
     this.switches = const [],
     this.gates = const [],
+    this.crystals = const [],
+    this.lanterns = const [],
     required this.targets,
     this.skills = const {},
     this.hint,
+    this.intro,
     this.tier = Tier.normal,
     this.solution,
     this.width = 0,
@@ -125,9 +138,12 @@ class LevelData {
   final List<PointDef> prisms;
   final List<SwitchDef> switches;
   final List<GateDef> gates;
+  final List<CrystalDef> crystals;
+  final List<PointDef> lanterns;
   final List<TargetDef> targets;
   final Map<String, int> skills;
   final String? hint;
+  final String? intro; // 이 판에서 처음 소개하는 요소 (새 장치 팝업)
   final Tier tier;
   final Solution? solution;
   final double width; // 솔버가 잰 성공 각도 폭(°)
@@ -156,12 +172,17 @@ class LevelData {
       edges: edges,
       walls: [for (final w in j['walls'] as List? ?? []) WallDef(_d(w[0]), _d(w[1]), _d(w[2]), _d(w[3]), (w.length > 4 ? w[4] : 'w') as String)],
       blocks: [for (final b in j['blocks'] as List? ?? []) BlockDef(_d(b[0]), _d(b[1]), _d(b[2]), _d(b[3]), (b.length > 4 ? b[4] : 'w') as String)],
-      mirrors: [for (final m in j['mirrors'] as List? ?? []) MirrorDef(_d(m['x']), _d(m['y']), m['s'] as int, m['rot'] as bool? ?? true, _d(m['len'] ?? 58))],
+      mirrors: [
+        for (final m in j['mirrors'] as List? ?? [])
+          MirrorDef(_d(m['x']), _d(m['y']), m['s'] as int, m['rot'] as bool? ?? true, _d(m['len'] ?? 58), relay: m['relay'] as bool? ?? false, spin: _d(m['spin'] ?? 0)),
+      ],
       bumpers: [for (final u in j['bumpers'] as List? ?? []) BumperDef(_d(u['x']), _d(u['y']), _d(u['r'] ?? 22))],
       portals: [for (final p in j['portals'] as List? ?? []) PortalDef(_d(p['a'][0]), _d(p['a'][1]), _d(p['b'][0]), _d(p['b'][1]))],
       prisms: [for (final x in j['prisms'] as List? ?? []) PointDef(_d(x['x']), _d(x['y']))],
       switches: [for (final s in j['switches'] as List? ?? []) SwitchDef(_d(s['x']), _d(s['y']), [for (final g in s['g'] as List) g as int])],
       gates: [for (final g in j['gates'] as List? ?? []) GateDef(_d(g['x1']), _d(g['y1']), _d(g['x2']), _d(g['y2']), _d(g['dur']))],
+      crystals: [for (final k in j['crystals'] as List? ?? []) CrystalDef(_d(k['x']), _d(k['y']), _d(k['w']), _d(k['h']), k['soft'] as String)],
+      lanterns: [for (final n in j['lanterns'] as List? ?? []) PointDef(_d(n['x']), _d(n['y']))],
       targets: [
         for (final t in j['targets'] as List)
           TargetDef(
@@ -176,6 +197,7 @@ class LevelData {
       ],
       skills: {for (final e in (j['skills'] as Map<String, dynamic>? ?? {}).entries) e.key: e.value as int},
       hint: j['hint'] as String?,
+      intro: j['intro'] as String?,
       tier: Tier.values.firstWhere((t) => t.name == (j['tier'] ?? 'normal'), orElse: () => Tier.normal),
       solution: sol == null
           ? null

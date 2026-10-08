@@ -1,6 +1,6 @@
 # 이미지 에셋 목록 (Gemini 프롬프트)
 
-총 68장. 아트 기준은 [ART_DIRECTION.md](ART_DIRECTION.md).
+총 73장. 아트 기준은 [ART_DIRECTION.md](ART_DIRECTION.md).
 
 저장 규칙: 받은 이미지를 `raw/<id에서 / 를 __ 로 바꾼 이름>.png` 로 저장 → `python3 tool/process_assets.py raw/` → `python3 tool/check_assets.py`
 
@@ -140,6 +140,18 @@ a swirling magical portal ring, cool blue spiral energy around a dark center, fr
 a floating diamond-shaped rainbow prism crystal, faceted, refracting rainbow light, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
 ```
 
+### `device/lantern` — 256×320 · 투명
+
+```
+a small glowing red-orange paper lantern with dark wooden caps top and bottom and a short string, warm light inside, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
+```
+
+### `device/relay` — 256×256 · 투명
+
+```
+a round mint-green magical ring with a single bright arrow notch on its right side, glowing softly, seen from the front, empty center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
+```
+
 ### `device/switch_off` — 256×256 · 투명
 
 ```
@@ -156,6 +168,42 @@ a round ancient stone rune button glowing bright cyan, triangle rune shining, en
 
 ```
 a horizontal magical barrier bar of violet energy with flowing runes, tileable left to right. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
+```
+
+## 타일
+
+### `tile/crystal` — 512×128 · 투명
+
+```
+a horizontal slab of pale lavender crystal glass with faceted highlights, one short end has pink glowing cracks. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
+```
+
+## 아이콘
+
+### `icon/split` — 128×128 · 투명
+
+```
+a golden arrow splitting into three arrows, flat game icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
+```
+
+### `icon/pierce` — 128×128 · 투명
+
+```
+a green arrow piercing through a moss block, flat game icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
+```
+
+### `icon/app_icon` — 1024×1024
+- 메모: flutter_launcher_icons 원본
+
+```
+app icon, a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch drawing a glowing golden crescent-moon bow, a glowing cyan arrow trail echo behind, deep indigo background, bold readable silhouette. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border
+```
+
+### `icon/app_icon_fg` — 1024×1024 · 투명
+- 메모: 안드로이드 적응형 아이콘 전경(가운데 66%만 보임)
+
+```
+app icon foreground only, a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch drawing a glowing golden crescent-moon bow, centered with generous padding. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
 ```
 
 ## 배경
@@ -433,20 +481,4 @@ a big treasure chest overflowing with gold moon coins. hand-painted storybook il
 
 ```
 a huge mountain of gold moon coins with gems, glowing. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
-```
-
-## 아이콘
-
-### `icon/app_icon` — 1024×1024
-- 메모: flutter_launcher_icons 원본
-
-```
-app icon, a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch drawing a glowing golden crescent-moon bow, a glowing cyan arrow trail echo behind, deep indigo background, bold readable silhouette. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border
-```
-
-### `icon/app_icon_fg` — 1024×1024 · 투명
-- 메모: 안드로이드 적응형 아이콘 전경(가운데 66%만 보임)
-
-```
-app icon foreground only, a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch drawing a glowing golden crescent-moon bow, centered with generous padding. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background
 ```

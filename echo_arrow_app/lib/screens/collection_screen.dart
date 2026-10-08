@@ -26,12 +26,18 @@ class CollectionPage extends StatelessWidget {
     _Entry('dev_wood', 'tile/wood_block', (l) => true),
     _Entry('dev_moss', 'tile/moss_block', (l) => l.blocks.any((b) => b.k == 'm') || l.walls.any((w) => w.k == 'm') || l.edges.values.any((e) => e.any((s) => s.k == 'm'))),
     _Entry('dev_bumper', 'device/bumper', (l) => l.bumpers.isNotEmpty),
-    _Entry('dev_mirror', 'device/mirror', (l) => l.mirrors.isNotEmpty),
+    _Entry('dev_lantern', 'device/lantern', (l) => l.lanterns.isNotEmpty),
+    _Entry('dev_mirror', 'device/mirror', (l) => l.mirrors.any((m) => !m.relay && m.spin == 0)),
+    _Entry('dev_spinner', 'device/mirror', (l) => l.mirrors.any((m) => m.spin > 0)),
     _Entry('dev_ice', 'tile/ice', (l) => l.blocks.any((b) => b.k == 'i')),
     _Entry('dev_portal', 'device/portal_a', (l) => l.portals.isNotEmpty),
     _Entry('dev_prism', 'device/prism', (l) => l.prisms.isNotEmpty),
+    _Entry('dev_split', 'icon/split', (l) => l.skills.containsKey('split')),
+    _Entry('dev_pierce', 'icon/pierce', (l) => l.skills.containsKey('pierce')),
+    _Entry('dev_relay', 'device/relay', (l) => l.mirrors.any((m) => m.relay)),
     _Entry('dev_gate', 'device/switch_on', (l) => l.gates.isNotEmpty),
     _Entry('dev_echo', 'char/arrow', (l) => l.par > 1),
+    _Entry('dev_crystal', 'tile/crystal', (l) => l.crystals.isNotEmpty),
   ];
 
   @override
@@ -120,6 +126,44 @@ class _Card extends StatelessWidget {
   );
 }
 
+/// 소개 판의 intro 키 → 도감 항목 키
+const introEntry = {
+  'moss': 'dev_moss', 'bumper': 'dev_bumper', 'moving': 'spirit_moving', 'lantern': 'dev_lantern', 'mirror': 'dev_mirror', 'shield': 'spirit_shield',
+  'baby': 'spirit_baby', 'spinner': 'dev_spinner', 'ice': 'dev_ice', 'portal': 'dev_portal', 'prism': 'dev_prism', 'split': 'dev_split',
+  'pierce': 'dev_pierce', 'relay': 'dev_relay', 'echo': 'dev_echo', 'crystal': 'dev_crystal',
+};
+
+/// 새 요소를 처음 만났을 때 뜨는 소개 팝업: 그림 + 이름 + 한 줄 설명
+class NewDeviceSheet extends StatelessWidget {
+  const NewDeviceSheet({super.key, required this.intro});
+  final String intro;
+  @override
+  Widget build(BuildContext context) {
+    final key = introEntry[intro] ?? 'dev_wood';
+    return SheetFrame(
+      title: tr('new_device'),
+      accent: Palette.echo,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(shape: BoxShape.circle, gradient: const RadialGradient(colors: [Color(0xFF34408F), Color(0xFF171D52)]), border: Border.all(color: Palette.echo.withValues(alpha: 0.6), width: 2)),
+            child: CustomPaint(painter: _MiniPainter(key)),
+          ),
+          const SizedBox(height: Space.m),
+          Text(tr(key), style: ko(TypeScale.title)),
+          const SizedBox(height: Space.s),
+          Text(tr('${key}_d'), style: ko(TypeScale.body, color: Palette.inkSoft, height: 1.5), textAlign: TextAlign.center),
+          const SizedBox(height: Space.xl),
+          Btn(tr('got_it'), style: BtnStyle.green, onTap: () => Navigator.pop(context), sound: 'pop'),
+        ],
+      ),
+    );
+  }
+}
+
 /// 이미지가 없을 때의 작은 미리보기 그림
 class _MiniPainter extends CustomPainter {
   _MiniPainter(this.key);
@@ -174,6 +218,21 @@ class _MiniPainter extends CustomPainter {
         c.rotate(-0.7);
         c.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: Offset.zero, width: r * 3, height: 9), const Radius.circular(4)), Paint()..shader = ui.Gradient.linear(const Offset(0, -5), const Offset(0, 5), const [Colors.white, Color(0xFF5D7AA8)]));
         c.restore();
+      case 'dev_lantern':
+        c.drawCircle(o, r * 1.3, Paint()..color = const Color(0x66FFAA50)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8));
+        c.drawOval(Rect.fromCenter(center: o, width: r * 1.7, height: r * 2), Paint()..shader = ui.Gradient.radial(o, r * 1.2, const [Color(0xFFFFECAA), Color(0xFFFF8A3D), Color(0xFFC23A2A)], const [0, 0.55, 1]));
+      case 'dev_spinner':
+        c.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: o, width: r * 3, height: 9), const Radius.circular(4)), Paint()..shader = ui.Gradient.linear(o.translate(0, -5), o.translate(0, 5), const [Colors.white, Color(0xFF5D7AA8)]));
+        c.drawCircle(o, 9, Paint()..color = const Color(0xFFFFB25A)..style = PaintingStyle.stroke..strokeWidth = 3);
+        c.drawArc(Rect.fromCircle(center: o, radius: r * 1.2), -0.6, 1.4, false, Paint()..color = const Color(0xFFFFB25A)..style = PaintingStyle.stroke..strokeWidth = 2.5..strokeCap = StrokeCap.round);
+      case 'dev_relay':
+        c.drawCircle(o, r * 0.9, Paint()..color = const Color(0xFF0B2A22));
+        c.drawCircle(o, r * 0.9, Paint()..color = const Color(0xFF8DFFB5)..style = PaintingStyle.stroke..strokeWidth = 3.5);
+        c.drawLine(o.translate(r * 1.0, 0), o.translate(r * 1.6, 0), Paint()..color = const Color(0xFF8DFFB5)..strokeWidth = 3.5..strokeCap = StrokeCap.round);
+      case 'dev_crystal':
+        final rect = Rect.fromCenter(center: o, width: r * 2.6, height: r * 1.3);
+        c.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(4)), Paint()..shader = ui.Gradient.linear(rect.topLeft, rect.bottomRight, const [Color(0xFFF3E6FF), Color(0xFF9A7BE0)]));
+        c.drawLine(rect.topRight, rect.bottomRight, Paint()..color = const Color(0xFFFF7AC8)..strokeWidth = 3.5);
       case 'dev_ice':
         c.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: o, width: r * 3, height: r * 0.8), const Radius.circular(4)), Paint()..color = const Color(0xCCBFEFFF));
       case 'dev_portal':

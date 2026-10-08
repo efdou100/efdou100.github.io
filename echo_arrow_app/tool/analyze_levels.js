@@ -20,7 +20,7 @@ const pHit = (w, s) => erf(w / (2 * Math.SQRT2 * s));
 
 function configs(L) {
   let out = [(L.mirrors || []).map(m => m.s)];
-  (L.mirrors || []).forEach((m, i) => { if (!m.rot) return; const n = []; for (const c of out) for (let s = 0; s < 4; s++) { const x = c.slice(); x[i] = s; n.push(x); } out = n; });
+  (L.mirrors || []).forEach((m, i) => { if (!m.rot) return; const n = []; for (const c of out) for (let s = 0; s < (m.relay ? 8 : 4); s++) { const x = c.slice(); x[i] = s; n.push(x); } out = n; });
   return out;
 }
 
@@ -41,8 +41,9 @@ const rows = [];
 for (const L0 of levels) {
   const L = JSON.parse(JSON.stringify(L0));
   if (L.par !== 1) { rows.push({ id: L.id, w: L.w, name: L.name, par: L.par, echo: true, tier: L.tier }); continue; }
-  const moving = L.targets.some(t => t.per);
-  const steps = moving ? [0, 60, 120, 180, 240, 300, 360, 420, 480, 540] : [0];
+  const spin = (L.mirrors || []).filter(m => m.spin).map(m => Math.round(m.spin * 240));
+  const moving = L.targets.some(t => t.per) || spin.length > 0;
+  const steps = spin.length ? Array.from({ length: 8 }, (_, k) => Math.round(Math.min(...spin) / 4 + (k * Math.min(...spin)) / 2)) : moving ? [0, 60, 120, 180, 240, 300, 360, 420, 480, 540] : [0];
   const st = moving ? 0.5 : 0.25;
   let best = { w: 0 }, ways = 0, wins = 0, lucky = 0, minB = 99;
   for (const cfg of configs(L)) for (const kind of ['n', ...Object.keys(L.skills || {})]) for (const step of steps) {

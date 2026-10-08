@@ -86,4 +86,11 @@ save('star', mix(tone(0.4, 1568, 2093, 'sine', 0.25, vib=0.01), noise(0.1, 0.06)
 save('chest', seq(tone(0.08, 392, 392, 'tri', 0.3), tone(0.08, 523, 523, 'tri', 0.3), mix(tone(0.5, 784, 784, 'tri', 0.3, vib=0.01), noise(0.3, 0.1, lp=0.6))))
 save('purchase', seq(tone(0.06, 880, 880, 'sine', 0.25), tone(0.06, 1175, 1175, 'sine', 0.25), tone(0.25, 1760, 1760, 'sine', 0.28)))
 save('pop', tone(0.08, 400, 900, 'sine', 0.3))
+# 등불 폭발: 낮은 쿵 + 터지는 노이즈 + 반짝임
+save('boom', mix(tone(0.55, 120, 40, 'sine', 0.55), noise(0.45, 0.4, lp=0.25), seq(silence(0.06), tone(0.3, 1600, 900, 'tri', 0.08))))
+# 유리 마개 깨짐: 높은 파편음 여러 개
+save('crack', mix(noise(0.3, 0.3, lp=0.7), *[seq(silence(i * 0.03), tone(0.14, f, f * 0.8, 'tri', 0.12)) for i, f in enumerate([2600, 3100, 2200, 3500])]))
+# 되쏘기 고리: 붙잡을 때 위로 감기는 소리, 놓을 때 튕기는 소리
+save('relay_catch', mix(tone(0.3, 400, 1200, 'sine', 0.22, vib=0.02), noise(0.08, 0.08, lp=0.4)))
+save('relay', mix(tone(0.16, 900, 300, 'tri', 0.3), noise(0.06, 0.14, lp=0.4)))
 print('ok')

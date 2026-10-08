@@ -243,6 +243,66 @@
    "note": ""
   },
   {
+   "id": "device/lantern",
+   "path": "assets/images/device/lantern.png",
+   "size": [
+    256,
+    320
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a small glowing red-orange paper lantern with dark wooden caps top and bottom and a short string, warm light inside, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/relay",
+   "path": "assets/images/device/relay.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a round mint-green magical ring with a single bright arrow notch on its right side, glowing softly, seen from the front, empty center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "tile/crystal",
+   "path": "assets/images/tile/crystal.png",
+   "size": [
+    512,
+    128
+   ],
+   "transparent": true,
+   "group": "타일",
+   "prompt": "a horizontal slab of pale lavender crystal glass with faceted highlights, one short end has pink glowing cracks. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "icon/split",
+   "path": "assets/images/icon/split.png",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "group": "아이콘",
+   "prompt": "a golden arrow splitting into three arrows, flat game icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "icon/pierce",
+   "path": "assets/images/icon/pierce.png",
+   "size": [
+    128,
+    128
+   ],
+   "transparent": true,
+   "group": "아이콘",
+   "prompt": "a green arrow piercing through a moss block, flat game icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
    "id": "device/switch_off",
    "path": "assets/images/device/switch_off.png",
    "size": [

@@ -287,7 +287,7 @@ class GameController extends ChangeNotifier {
       _fire();
     } else if (mirrorTap >= 0) {
       final i = mirrorTap;
-      mirrors[i] = (mirrors[i] + 1) % 4;
+      mirrors[i] = (mirrors[i] + 1) % level.mirrors[i].states;
       mirrorSpin = (i, 0);
       Sfx.instance.play('rotate');
       Sfx.instance.haptic();
@@ -532,8 +532,12 @@ class GameController extends ChangeNotifier {
               if (mine) _missionToast(Missions.bump('trick'));
             }
           }
-          if (!mine && (mode == Mode.fly || mode == Mode.hold)) _missionToast(Missions.bump('echo'));
-          if (!mine && label == null) label = tr('f_echo');
+          if (a != null && !mine && (mode == Mode.fly || mode == Mode.hold)) _missionToast(Missions.bump('echo'));
+          if (e.boom) {
+            label ??= tr('f_blast');
+          } else if (!mine && label == null) {
+            label = tr('f_echo');
+          }
           if (label != null) _text(e.x, e.y - 26, label, e.b >= 2 ? 0xFFFFD36B : 0xFFFFFFFF, 22, 1.1);
           lastHit = (e.x, e.y);
           wakeAt[e.i] = clock;
@@ -570,8 +574,12 @@ class GameController extends ChangeNotifier {
           flash = 0.2;
           _burst(e.x, e.y, 0xFFFF9FC8, 20, 200, 3);
           _ring(e.x, e.y, 0xFFFF7A9A, 48, 0.5, 4);
-          _text(e.x, e.y - 26, mine ? tr('f_oops_me') : tr('f_oops_echo'), 0xFFFF9FC8, 17, 1.6);
-          if (!mine) onToast?.call(tr('t_baby_echo'));
+          _text(e.x, e.y - 26, e.boom ? tr('f_oops_boom') : (mine ? tr('f_oops_me') : tr('f_oops_echo')), 0xFFFF9FC8, 17, 1.6);
+          if (e.boom) {
+            onToast?.call(tr('t_baby_boom'));
+          } else if (!mine) {
+            onToast?.call(tr('t_baby_echo'));
+          }
         case Ev.ice:
           sfx.play('ice');
           shake = math.max(shake, 4);
@@ -599,6 +607,39 @@ class GameController extends ChangeNotifier {
           sfx.play('prism', volume: 0.6);
           _ring(e.x, e.y, 0xFFFFD36B, 30, 0.4, 3);
           _text(e.x, e.y - 16, tr('f_split'), 0xFFFFD36B, 18, 0.8);
+        case Ev.crack:
+          sfx.play('crack');
+          sfx.haptic(strong: true);
+          shake = math.max(shake, 5);
+          if (e.i >= 0 && e.i < level.crystals.length) {
+            final k = level.crystals[e.i];
+            for (var n = 0; n < 26; n++) {
+              parts.add(Particle(k.x + _rnd.nextDouble() * k.w, k.y + _rnd.nextDouble() * k.h, (_rnd.nextDouble() - 0.5) * 300, (_rnd.nextDouble() - 0.8) * 240, 0.7 + _rnd.nextDouble() * 0.5,
+                  _rnd.nextBool() ? 0xFFFFC8F0 : 0xFFE0D4FF, 2 + _rnd.nextDouble() * 3, g: 520, confetti: true, rot: _rnd.nextDouble() * 6));
+            }
+          }
+          _ring(e.x, e.y, 0xFFFFC8F0, 36, 0.4, 3);
+          _text(e.x, e.y - 16, tr('f_crack'), 0xFFFFC8F0, 18, 0.8);
+        case Ev.relayCatch:
+          sfx.play('relay_catch', volume: 0.6);
+          _ring(e.x, e.y, 0xFF8DFFB5, 26, 0.5, 3);
+        case Ev.relay:
+          sfx.play('relay', volume: 0.7);
+          sfx.haptic();
+          _ring(e.x, e.y, 0xFF8DFFB5, 40, 0.4, 4);
+          _burst(e.x, e.y, 0xFF8DFFB5, 12, 160, 2.2);
+        case Ev.boom:
+          sfx.play('boom');
+          sfx.haptic(strong: true);
+          shake = math.max(shake, 9);
+          flash = math.max(flash, 0.35);
+          hitstop = math.max(hitstop, 0.05);
+          _ring(e.x, e.y, 0xFFFFB25A, kBlastR, 0.5, 6);
+          _ring(e.x, e.y, 0xFFFFE08A, kBlastR * 0.6, 0.35, 3);
+          for (final col in const [0xFFFFB25A, 0xFFFFE08A, 0xFFFF7A5A]) {
+            _burst(e.x, e.y, col, 14, 280, 3);
+          }
+          _text(e.x, e.y - 20, tr('f_boom'), 0xFFFFC27A, 22, 0.9);
         case Ev.shield:
           sfx.play('shield');
           _burst(e.x, e.y, 0xFFDFE8FF, 12, 160, 2.2);

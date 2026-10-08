@@ -491,8 +491,14 @@ class GamePainter extends CustomPainter {
       c.restore();
     }
     final mirrorImg = _art.image('device/mirror');
+    _crystals(c);
+    _lanterns(c);
     for (var i = 0; i < l.mirrors.length; i++) {
       final m = l.mirrors[i], sg = run.mseg[i];
+      if (sg == null) {
+        _relay(c, i);
+        continue;
+      }
       var ang = math.atan2(sg.y2 - sg.y1, sg.x2 - sg.x1);
       final spin = g.mirrorSpin;
       if (spin != null && spin.$1 == i) ang -= (1 - Curves.easeOutBack.transform(math.min(1.0, spin.$2))) * math.pi / 4;
@@ -519,9 +525,142 @@ class GamePainter extends CustomPainter {
         c.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(3.5)), Paint()..shader = ui.Gradient.linear(const Offset(0, -4), const Offset(0, 4), [Colors.white, const Color(0xFFA9C4E8), const Color(0xFF5D7AA8)], [0, 0.5, 1]));
       }
       c.drawCircle(Offset.zero, 4, Paint()..color = m.rot ? Palette.moon : const Color(0xFF6B7BB0));
+      if (m.spin > 0) {
+        // 째깍 거울: 다음 째깍까지 남은 시간을 축 둘레 호로 보여 준다
+        final per = (m.spin / kDt).round();
+        final k = (run.step % per) / per;
+        c.drawArc(Rect.fromCircle(center: Offset.zero, radius: 13), -math.pi / 2 - ang, math.pi * 2 * k, false, Paint()..color = const Color(0xFFFFE08A)..style = PaintingStyle.stroke..strokeWidth = 2.5..strokeCap = StrokeCap.round);
+        c.drawCircle(Offset.zero, 8, Paint()..color = const Color(0xFFFFB25A)..style = PaintingStyle.stroke..strokeWidth = 2);
+        for (var k = 0; k < 6; k++) {
+          final a = k * math.pi / 3;
+          c.drawLine(Offset(math.cos(a) * 8, math.sin(a) * 8), Offset(math.cos(a) * 11, math.sin(a) * 11), Paint()..color = const Color(0xFFFFB25A)..strokeWidth = 2.5..strokeCap = StrokeCap.round);
+        }
+      }
       final sh = ((g.clock * 0.6) % 1.4) - 0.2;
       if (sh > 0 && sh < 1) c.drawRect(Rect.fromLTWH(-m.len / 2 + sh * m.len - 3, -3, 6, 6), Paint()..color = const Color(0xCCFFFFFF));
       c.restore();
+    }
+  }
+
+  /// 되쏘기 고리: 초록 고리 + 다시 쏠 방향 화살표. 붙잡힌 화살은 안에서 빙글빙글 돌며 충전된다.
+  void _relay(Canvas c, int i) {
+    final m = g.level.mirrors[i], run = g.run;
+    final o = Offset(m.x, m.y);
+    var ang = run.mirrors[i] * math.pi / 4;
+    final spin = g.mirrorSpin;
+    if (spin != null && spin.$1 == i) ang -= (1 - Curves.easeOutBack.transform(math.min(1.0, spin.$2))) * math.pi / 4;
+    (int, int)? held;
+    for (final h in run.held) {
+      if (h.$1 == i) held = h;
+    }
+    const col = Color(0xFF8DFFB5);
+    c.drawCircle(o, kRelayR + 9, Paint()..color = col.withValues(alpha: held != null ? 0.55 : 0.25)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 9));
+    final img = _art.image('device/relay');
+    if (img != null) {
+      c.drawArt(img, o, const Size.square((kRelayR + 7) * 2), rotation: ang);
+    } else {
+      c.drawCircle(o, kRelayR + 3, Paint()..color = const Color(0xF20B2A22));
+      c.drawCircle(o, kRelayR + 3, Paint()..color = col..style = PaintingStyle.stroke..strokeWidth = 3);
+      for (var k = 0; k < 8; k++) {
+        final a = k * math.pi / 4;
+        c.drawCircle(o + Offset(math.cos(a), math.sin(a)) * (kRelayR + 3), k == run.mirrors[i] ? 3 : 1.4, Paint()..color = k == run.mirrors[i] ? Colors.white : col.withValues(alpha: 0.6));
+      }
+    }
+    // 방향 화살표 (고리 밖으로)
+    c.save();
+    c.translate(o.dx, o.dy);
+    c.rotate(ang);
+    final ap = Paint()..color = col..strokeWidth = 3..strokeCap = StrokeCap.round;
+    c.drawLine(const Offset(kRelayR + 6, 0), const Offset(kRelayR + 18, 0), ap);
+    c.drawPath(Path()..moveTo(kRelayR + 24, 0)..lineTo(kRelayR + 16, -5.5)..lineTo(kRelayR + 16, 5.5)..close(), Paint()..color = col);
+    c.restore();
+    if (held != null) {
+      final total = (kRelayHold / kDt).round();
+      final k = (1 - (held.$2 - run.step) / total).clamp(0.0, 1.0);
+      c.drawArc(Rect.fromCircle(center: o, radius: kRelayR + 7), -math.pi / 2, math.pi * 2 * k, false, Paint()..color = Colors.white..style = PaintingStyle.stroke..strokeWidth = 3..strokeCap = StrokeCap.round);
+      final sp = g.clock * 18;
+      c.drawLine(o + Offset(math.cos(sp), math.sin(sp)) * -8, o + Offset(math.cos(sp), math.sin(sp)) * 8, Paint()..color = Palette.moon..strokeWidth = 3..strokeCap = StrokeCap.round);
+    }
+    if (m.rot && g.mode == Mode.aim) {
+      final pulse = 0.5 + 0.5 * math.sin(g.clock * 3);
+      c.drawCircle(o, kRelayR + 12, Paint()..color = Palette.moon.withValues(alpha: 0.18 * pulse)..style = PaintingStyle.stroke..strokeWidth = 4);
+      _label(c, 'TAP', m.x, m.y + kRelayR + 10, const Color(0xBFC8DCFF), 9, num: true);
+    }
+  }
+
+  /// 유리 마개: 단단한 면은 은빛 테두리, 깨지는 면은 분홍 금 + 안쪽을 가리키는 표시
+  void _crystals(Canvas c) {
+    final l = g.level, run = g.run;
+    final img = _art.image('tile/crystal');
+    for (var i = 0; i < l.crystals.length; i++) {
+      if (run.crys[i]) continue;
+      final k = l.crystals[i];
+      final rect = Rect.fromLTWH(k.x, k.y, k.w, k.h), rr = RRect.fromRectAndRadius(rect, const Radius.circular(3));
+      c.drawRRect(rr.inflate(3), Paint()..color = const Color(0x66E0B8FF)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6));
+      if (img != null) {
+        c.drawImageRect(img, Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()), rect, Paint()..filterQuality = FilterQuality.medium);
+      } else {
+        c.drawRRect(rr, Paint()..shader = ui.Gradient.linear(rect.topLeft, rect.bottomRight, [const Color(0xE6F3E6FF), const Color(0xCC9A7BE0)]));
+        final facet = Paint()..color = const Color(0x99FFFFFF)..strokeWidth = 1;
+        c.drawLine(rect.topLeft + const Offset(4, 3), rect.center, facet);
+        c.drawLine(rect.bottomRight - const Offset(4, 3), rect.center, facet);
+        c.drawRRect(rr, Paint()..color = const Color(0xFFE8F0FF)..style = PaintingStyle.stroke..strokeWidth = 2);
+      }
+      // 깨지는 면
+      final (a, b, n) = switch (k.soft) {
+        't' => (rect.topLeft, rect.topRight, const Offset(0, -1)),
+        'b' => (rect.bottomLeft, rect.bottomRight, const Offset(0, 1)),
+        'l' => (rect.topLeft, rect.bottomLeft, const Offset(-1, 0)),
+        _ => (rect.topRight, rect.bottomRight, const Offset(1, 0)),
+      };
+      final crack = Path()..moveTo(a.dx, a.dy);
+      for (var j = 1; j <= 6; j++) {
+        final p = Offset.lerp(a, b, j / 6)!;
+        crack.lineTo(p.dx - n.dx * (j.isOdd ? 3 : 0), p.dy - n.dy * (j.isOdd ? 3 : 0));
+      }
+      c.drawPath(crack, Paint()..color = const Color(0xFFFF7AC8)..style = PaintingStyle.stroke..strokeWidth = 2.5..strokeJoin = StrokeJoin.round);
+      final pulse = 0.5 + 0.5 * math.sin(g.clock * 4 + i);
+      final mid = Offset.lerp(a, b, 0.5)!;
+      for (var j = 0; j < 2; j++) {
+        final tip = mid + n * (7 + j * 7 + pulse * 3);
+        final side = Offset(-n.dy, n.dx) * 4.5;
+        c.drawPath(Path()..moveTo(tip.dx - n.dx * 5, tip.dy - n.dy * 5)..lineTo(tip.dx + side.dx, tip.dy + side.dy)..moveTo(tip.dx - n.dx * 5, tip.dy - n.dy * 5)..lineTo(tip.dx - side.dx, tip.dy - side.dy),
+            Paint()..color = const Color(0xFFFF9FD8).withValues(alpha: 0.5 + 0.4 * pulse)..strokeWidth = 2..strokeCap = StrokeCap.round..style = PaintingStyle.stroke);
+      }
+    }
+  }
+
+  /// 등불: 맞으면 터진다. 폭발 반경을 은은한 점선 원으로 보여 준다.
+  void _lanterns(Canvas c) {
+    final l = g.level, run = g.run;
+    final img = _art.image('device/lantern');
+    for (var i = 0; i < l.lanterns.length; i++) {
+      final n = l.lanterns[i];
+      final o = Offset(n.x, n.y);
+      if (run.lit[i]) {
+        c.drawCircle(o, 10, Paint()..color = const Color(0x55301A10)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4));
+        continue;
+      }
+      final flick = 0.8 + 0.2 * math.sin(g.clock * 9 + i * 2) * math.sin(g.clock * 5.3 + i);
+      if (g.mode == Mode.aim || g.mode == Mode.hold) {
+        final ring = Paint()..color = const Color(0x40FFB25A)..style = PaintingStyle.stroke..strokeWidth = 1.5;
+        for (var k = 0; k < 24; k++) {
+          c.drawArc(Rect.fromCircle(center: o, radius: kBlastR), k * math.pi / 12 + g.clock * 0.2, math.pi / 24, false, ring);
+        }
+      }
+      c.drawCircle(o, kLanternR + 10, Paint()..color = Color.fromRGBO(255, 170, 80, 0.45 * flick)..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10));
+      if (img != null) {
+        c.drawArt(img, o, const Size(kLanternR * 2.4, kLanternR * 3));
+        continue;
+      }
+      final body = Rect.fromCenter(center: o, width: kLanternR * 1.9, height: kLanternR * 2.2);
+      c.drawLine(o - Offset(0, kLanternR * 1.1 + 6), o - Offset(0, kLanternR * 1.1), Paint()..color = const Color(0xFF5A3A28)..strokeWidth = 2);
+      c.drawOval(body, Paint()..shader = ui.Gradient.radial(o, kLanternR * 1.3, [Color.fromRGBO(255, 236, 170, flick), const Color(0xFFFF8A3D), const Color(0xFFC23A2A)], [0, 0.55, 1]));
+      for (final dy in const [-0.45, 0.0, 0.45]) {
+        c.drawLine(Offset(body.left + 3, o.dy + dy * kLanternR), Offset(body.right - 3, o.dy + dy * kLanternR), Paint()..color = const Color(0x55801A10)..strokeWidth = 1);
+      }
+      c.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: Offset(o.dx, body.top), width: 10, height: 4), const Radius.circular(1.5)), Paint()..color = const Color(0xFF3A2418));
+      c.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: Offset(o.dx, body.bottom), width: 10, height: 4), const Radius.circular(1.5)), Paint()..color = const Color(0xFF3A2418));
     }
   }
 
@@ -839,6 +978,12 @@ class GamePainter extends CustomPainter {
     }
     _label(c, label, bx, by - 7, fine > 0.6 ? Palette.moon : Colors.white, 12, num: true);
     final lp = r.paths.last.last;
+    if (r.end == 'l') {
+      c.drawCircle(Offset(lp.$1, lp.$2), kBlastR, Paint()..color = const Color(0x22FFB25A));
+      c.drawCircle(Offset(lp.$1, lp.$2), kBlastR, Paint()..color = const Color(0x99FFB25A)..style = PaintingStyle.stroke..strokeWidth = 1.5);
+    } else if (r.end == 'c') {
+      c.drawCircle(Offset(lp.$1, lp.$2), 5, Paint()..color = const Color(0xFFFF7AC8));
+    }
     if (r.end == 'm' || r.end == 'g') {
       final x = Paint()..color = const Color(0xE6FF7A8A)..strokeWidth = 2.2..strokeCap = StrokeCap.round;
       c.drawLine(Offset(lp.$1 - 5, lp.$2 - 5), Offset(lp.$1 + 5, lp.$2 + 5), x);

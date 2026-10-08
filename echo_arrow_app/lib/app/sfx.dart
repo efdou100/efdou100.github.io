@@ -12,7 +12,7 @@ class Sfx {
 
   static final names = [
     'twang', 'echo', 'stick', 'gate_stick', 'switch', 'gate_open', 'gate_close', 'win', 'fail', 'oops', 'fizzle', 'ice', 'portal',
-    'prism', 'shield', 'rotate', 'click', 'coin', 'star', 'chest', 'purchase', 'pop',
+    'prism', 'shield', 'rotate', 'click', 'coin', 'star', 'chest', 'purchase', 'pop', 'boom', 'crack', 'relay_catch', 'relay',
     for (var i = 0; i < 10; i++) 'bounce_$i',
     for (var i = 0; i < 4; i++) 'hit_$i',
   ];

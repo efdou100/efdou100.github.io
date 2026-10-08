@@ -18,6 +18,7 @@ import '../game/sim.dart';
 import '../services/services.dart';
 import '../widgets/icons.dart';
 import '../widgets/ui.dart';
+import 'collection_screen.dart' show NewDeviceSheet;
 import 'sheets.dart';
 import 'shell.dart';
 
@@ -56,7 +57,21 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     })..start();
     Sfx.instance.music('bgm_game');
     Analytics.log('level_start', {'id': level.id, 'boosters': widget.boosters.join(',')});
-    if (level.hint != null) Future<void>.delayed(const Duration(milliseconds: 1500), () => _showToast(levelHint(level.hint!), gold: true, sticky: true));
+    Future<void>.delayed(const Duration(milliseconds: 1400), _introduce);
+  }
+
+  /// 새 요소를 처음 만나는 판이면 소개 팝업부터, 그다음 판 안내 문구
+  Future<void> _introduce() async {
+    if (!mounted) return;
+    final key = level.intro, p = Profile.instance;
+    if (key != null && !p.seen.contains('intro_$key')) {
+      p.seen.add('intro_$key');
+      p.save();
+      Analytics.log('device_intro', {'key': key});
+      await showSheet<void>(context, NewDeviceSheet(intro: key));
+      if (!mounted) return;
+    }
+    if (level.hint != null) _showToast(levelHint(level.hint!), gold: true, sticky: true);
   }
 
   @override
