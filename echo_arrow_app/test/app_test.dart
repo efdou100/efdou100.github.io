@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:echo_arrow/app/economy.dart';
 import 'package:echo_arrow/app/profile.dart';
 import 'package:echo_arrow/game/controller.dart';
 import 'package:echo_arrow/game/level.dart';
+import 'package:echo_arrow/game/sim.dart';
 import 'package:echo_arrow/screens/game_screen.dart';
 import 'package:echo_arrow/screens/shell.dart';
 import 'package:flutter/material.dart';
@@ -64,10 +66,23 @@ void main() {
   test('컨트롤러: 화살을 다 쓰면 실패 콜백, 이어하기로 화살이 늘어난다', () {
     final l = LevelRepo.instance[1];
     var out = false;
+    // 시뮬레이션으로 확실히 빗나가는 각도를 고른다 (레벨 배치가 바뀌어도 안전)
+    var miss = 0.0;
+    for (var d = 0; d < 360; d += 7) {
+      final ang = d * math.pi / 180;
+      final r = Run(l, [Shot(ang: ang, step: 0, idx: 0, kind: 'n'), Shot(ang: ang, step: 0, idx: 1, kind: 'n')], l.defaultMirrors);
+      for (var i = 0; i < 3000 && !r.done; i++) {
+        r.tick();
+      }
+      if (!r.won) {
+        miss = ang;
+        break;
+      }
+    }
     final g = GameController(l)..onOutOfArrows = () => out = true;
     for (var s = 0; s < l.shots; s++) {
       g.pointerDown(180, 400);
-      g.pointerMove(180, 300); // 아래쪽으로 쏨 → 바닥 이끼 없음, 튕기다 소멸
+      g.pointerMove(180 - math.cos(miss) * 60, 400 - math.sin(miss) * 60);
       g.pointerUp();
       for (var i = 0; i < 2000 && g.mode == Mode.fly; i++) {
         g.update(1 / 60);

@@ -133,7 +133,8 @@ function switchAnglesFor(L, cfg, idx) {
   return groups.map(g => g[Math.floor(g.length / 2)]);
 }
 function analyze(L) {
-  if (L.par === 1) return analyzeOne(L, FAIR_B[L.w] || 3);
+  // 손으로 만든 판은 의도된 긴 튕김 풀이일 수 있으니, 공정 풀이가 없으면 제한 없이 다시 찾는다
+  if (L.par === 1) return analyzeOne(L, FAIR_B[L.w] || 3) || analyzeOne(L, 99);
   if (L.par === 2) return analyzeTwo(L);
   return analyzeThree(L);
 }
@@ -236,6 +237,8 @@ HAND.forEach(L => handByWorld[L.w].push(L));
 const TIERS = { 1: [3, 40], 2: [2.5, 30], 3: [2.5, 25], 4: [0.4, 40], 5: [2, 18] };
 const FAIR_B = { 1: 2, 2: 2, 3: 3, 4: 3, 5: 3 };
 const ECHO_SHARE = { 5: 6 }; // 별의 끝: 20판 중 6판은 메아리 판
+module.exports = { analyze, analyzeOne };
+if (require.main !== module) return;
 
 const out = [];
 const t0 = Date.now();
