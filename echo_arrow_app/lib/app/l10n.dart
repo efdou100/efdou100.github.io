@@ -186,6 +186,7 @@ const _strings = <String, Map<String, String>>{
 };
 
 const _levelNames = {
+  '등불': 'Lantern', '연쇄 등불': 'Chain Lanterns', '째깍 거울': 'Ticking Mirror', '되쏘기 고리': 'Relay Ring', '유리 마개': 'Glass Plug',
   '늙은 참나무': 'Old Oak', '도토리 언덕': 'Acorn Hill', '새벽 거울': 'Dawn Mirror', '꺾인 빛': 'Bent Light', '메아리 탑': 'Echo Tower', '시간의 틈': 'Crack in Time', '기억의 화살': 'Arrow of Memory', '과거의 화살': 'Arrow of the Past',
   '첫 발': 'First Shot', '고요한 숲': 'Quiet Woods', '벽 튕기기': 'Bank Shot', '반딧불 길': 'Firefly Trail', '꿰뚫기': 'Pierce Through', '별빛 숲길': 'Starlit Path',
   '바람결': 'Breeze', '두 번 튕기기': 'Double Bounce', '이끼 계단': 'Mossy Steps', '나무뿌리 미로': 'Root Maze', '버섯 범퍼': 'Mushroom Bumper', '달빛 오솔길': 'Moonlit Lane',
@@ -207,6 +208,12 @@ const _levelNames = {
 };
 
 const _hints = {
+  '등불을 맞히면 펑! 둘레의 정령이 한꺼번에 깨어나요.': 'Hit the lantern and BOOM! Every spirit around it wakes at once.',
+  '이끼 벽 너머는 화살이 못 가요. 등불 불꽃은 옆 등불로 번져요!': 'Arrows can’t pass the moss wall. But lantern fire spreads to the next lantern!',
+  '째깍 거울은 저절로 45°씩 돌아요. 누르고 있으면 시간이 느려지니, 조준선이 정령에 닿는 순간 놓으세요.': 'The ticking mirror turns 45° on its own. Holding slows time — release when the aim line reaches the spirit.',
+  '초록 고리는 화살을 붙잡았다가 화살표 쪽으로 다시 쏴요. 톡 누르면 방향이 바뀌어요.': 'The green ring catches your arrow, then fires it along its arrow. Tap to change direction.',
+  '유리는 분홍 금이 간 오른쪽 면으로만 깨져요. 1발로 옆에서 깨고, 2발은 메아리가 깬 다음에 지나가게 쏘세요!': 'The glass breaks only from its right side, where the pink crack is. Break it from the side with shot 1, then send shot 2 through after your echo breaks it!',
+
   '화면 아무 곳이나 누르고 뒤로 당겨 조준, 놓으면 발사!': 'Press anywhere, pull back to aim, release to shoot!',
   '초록 이끼는 화살을 붙잡아요. 나무 벽에 튕겨서 맞혀 보세요.': 'Green moss stops arrows. Bounce off the wooden walls instead.',
   '화살은 정령을 꿰뚫고 계속 날아가요. 한 발로 둘 다!': 'Arrows fly right through spirits. Get both with one shot!',
