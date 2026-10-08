@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../app/art.dart';
 import '../app/economy.dart';
 import '../app/l10n.dart';
+import '../app/missions.dart';
 import '../app/profile.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
@@ -18,6 +19,7 @@ import 'collection_screen.dart';
 import 'game_screen.dart';
 import 'home_screen.dart';
 import 'meta_sheets.dart';
+import 'mission_sheets.dart';
 import 'pass_screen.dart';
 import 'shop_screen.dart';
 
@@ -181,7 +183,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
                     HomeMapPage(key: _mapKey, onOpenLevel: _openLevel, justCleared: widget.justCleared, topInset: pad.top + topBarH, bottomInset: bottomInset + 96),
                     Positioned(left: 0, right: 0, top: 0, child: IgnorePointer(child: Container(height: pad.top + 130, decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xF0080B22), Color(0x00080B22)]))))),
                     Positioned(left: 0, right: 0, bottom: 0, child: IgnorePointer(child: Container(height: bottomInset + 140, decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Color(0xF0080B22), Color(0x00080B22)]))))),
-                    Positioned(left: Space.m, top: pad.top + topBarH + 4, child: _EventDock(onDaily: _daily, onRefresh: _refresh)),
+                    Positioned(left: Space.m, top: pad.top + topBarH + 4, child: _EventDock(onDaily: _daily, onRefresh: _refresh, world: LevelRepo.instance[current].world)),
                     Positioned(right: Space.l, top: pad.top + topBarH + 4, child: _WorldChip(world: LevelRepo.instance[current].world)),
                     Positioned(left: 0, right: 0, bottom: bottomInset + 10, child: Center(child: _PlayButton(level: current + 1, disabled: p.nextLevelIndex >= LevelRepo.instance.count, pulse: _pulse, onTap: () => _openLevel(current)))),
                   ],
@@ -414,14 +416,17 @@ class _WorldChip extends StatelessWidget {
 }
 
 class _EventDock extends StatelessWidget {
-  const _EventDock({required this.onDaily, required this.onRefresh});
+  const _EventDock({required this.onDaily, required this.onRefresh, required this.world});
   final VoidCallback onDaily, onRefresh;
+  final int world;
   @override
   Widget build(BuildContext context) {
     final p = Profile.instance;
     final items = <Widget>[
       if (Economy.unlocked(Economy.unlockCheckin)) _DockItem(icon: GI.calendar, label: tr('checkin'), badge: p.checkinAvailable, onTap: () => showSheet<void>(context, const CheckinSheet()).then((_) => onRefresh())),
       if (Economy.unlocked(Economy.unlockDaily)) _DockItem(icon: GI.sunrise, label: tr('daily'), badge: p.dailyAvailable, onTap: onDaily),
+      if (Missions.unlocked) _DockItem(icon: GI.medal, label: tr('dock_missions', {'n': Missions.doneCount}), badge: Missions.anyClaimable, onTap: () => showSheet<void>(context, const MissionsSheet()).then((_) => onRefresh())),
+      if (Economy.unlocked(Economy.unlockStarChest)) _DockItem(icon: GI.chest, label: tr('stars_n', {'n': StarChests.starsIn(world)}), badge: StarChests.anyReady(world), onTap: () => showSheet<void>(context, StarChestSheet(world: world)).then((_) => onRefresh())),
       if (Economy.unlocked(Economy.unlockStreak)) _DockItem(icon: GI.flame, label: tr('streak_n', {'n': p.streak}), badge: false, onTap: () => showSheet<void>(context, const StreakSheet())),
       if (p.starterActive) _DockItem(icon: GI.gift, label: fmtDur(Duration(milliseconds: p.starterUntil - DateTime.now().millisecondsSinceEpoch)), badge: true, onTap: () => showSheet<void>(context, const StarterOfferSheet()).then((_) => onRefresh())),
     ];

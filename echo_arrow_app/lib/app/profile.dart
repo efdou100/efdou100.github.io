@@ -35,6 +35,11 @@ class Profile extends ChangeNotifier {
   bool passPremium = false;
   Set<int> passClaimed = {};
   Set<int> passClaimedPremium = {};
+  String missionDate = '';
+  List<int> missionProg = [0, 0, 0];
+  int missionClaimed = 0; // 비트마스크
+  bool missionChest = false;
+  Set<String> starChests = {}; // '월드-단계'
 
   // 수익
   bool adsRemoved = false;
@@ -182,6 +187,11 @@ class Profile extends ChangeNotifier {
     'passPremium': passPremium,
     'passClaimed': passClaimed.toList(),
     'passClaimedPremium': passClaimedPremium.toList(),
+    'missionDate': missionDate,
+    'missionProg': missionProg,
+    'missionClaimed': missionClaimed,
+    'missionChest': missionChest,
+    'starChests': starChests.toList(),
     'adsRemoved': adsRemoved,
     'spent': spent,
     'starterUntil': starterUntil,
@@ -218,6 +228,12 @@ class Profile extends ChangeNotifier {
     passPremium = j['passPremium'] as bool? ?? false;
     passClaimed = {for (final v in j['passClaimed'] as List? ?? []) v as int};
     passClaimedPremium = {for (final v in j['passClaimedPremium'] as List? ?? []) v as int};
+    missionDate = j['missionDate'] as String? ?? '';
+    missionProg = [for (final v in j['missionProg'] as List? ?? [0, 0, 0]) v as int];
+    if (missionProg.length != 3) missionProg = [0, 0, 0];
+    missionClaimed = j['missionClaimed'] as int? ?? 0;
+    missionChest = j['missionChest'] as bool? ?? false;
+    starChests = {for (final v in j['starChests'] as List? ?? []) v as String};
     adsRemoved = j['adsRemoved'] as bool? ?? false;
     spent = (j['spent'] as num? ?? 0).toDouble();
     starterUntil = j['starterUntil'] as int? ?? 0;

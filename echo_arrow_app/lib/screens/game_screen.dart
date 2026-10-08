@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../app/economy.dart';
 import '../app/l10n.dart';
+import '../app/missions.dart';
 import '../app/profile.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
@@ -125,11 +126,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     p.clearsSinceAd++;
     if (p.cleared == Economy.unlockShop && p.starterUntil == 0) p.starterUntil = DateTime.now().millisecondsSinceEpoch + const Duration(hours: 48).inMilliseconds;
     p.save();
+    final missionsDone = Missions.recordWin(r, level);
     Analytics.log('level_win', {'id': level.id, 'stars': r.stars, 'used': r.used, 'continues': g.continues, 'tricks': r.tricks});
     var replayed = false;
     while (true) {
       if (!mounted) return;
-      final action = await showFullscreen<String>(context, WinScreen(level: level, result: r, coins: coins, streak: p.streak, isLast: widget.index >= LevelRepo.instance.count - 1, replayed: replayed));
+      final action = await showFullscreen<String>(context, WinScreen(level: level, result: r, coins: coins, streak: p.streak, isLast: widget.index >= LevelRepo.instance.count - 1, replayed: replayed, missions: replayed ? const [] : missionsDone));
       if (!mounted) return;
       if (action == 'replay') {
         replayed = true;

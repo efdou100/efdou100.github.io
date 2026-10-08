@@ -556,6 +556,13 @@ class GamePainter extends CustomPainter {
       final wk = woke == null ? 1.0 : ((g.clock - woke) / 0.6).clamp(0.0, 1.0);
       final breathe = hit ? 1.0 : 1 + math.sin(g.clock * 2.2 + i) * 0.04;
       var bob = hit ? math.sin(g.clock * 3 + i) * 1.5 : math.sin(g.clock * 1.6 + i) * 2.5;
+      // '아깝다' — 화살이 스쳐 간 정령이 화들짝 놀라 떤다
+      final pk = g.peekAt[i];
+      if (pk != null && !hit) {
+        final k = ((g.clock - pk) / 0.7).clamp(0.0, 1.0);
+        x += math.sin(k * 40) * 3.5 * (1 - k);
+        bob -= math.sin(k * math.pi) * 6;
+      }
       // 클리어 후 정령들이 하늘로 날아오름
       var fly = 0.0;
       if (g.winAt > 0 && hit && !av && g.mode != Mode.replay) {
@@ -821,6 +828,16 @@ class GamePainter extends CustomPainter {
         }
       }
     }
+    // 각도 표시 + 정밀 조준 게이지: 같은 각도를 다시 쏠 수 있게 해 '계획'이 가능해진다
+    final deg = g.aimDeg;
+    final fine = (1 - g.aimSens) / 0.65;
+    final bx = g.level.bowX + (g.aimDeg < 0 ? 66 : -66), by = g.level.bowY + 14;
+    final label = '${deg >= 0 ? '' : '−'}${deg.abs().toStringAsFixed(1)}°';
+    c.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: Offset(bx, by), width: 58, height: 20), const Radius.circular(10)), Paint()..color = const Color(0xCC0C102E));
+    if (fine > 0.05) {
+      c.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(bx - 27, by + 6, 54 * fine, 2.5), const Radius.circular(2)), Paint()..color = Palette.moon.withValues(alpha: 0.85));
+    }
+    _label(c, label, bx, by - 7, fine > 0.6 ? Palette.moon : Colors.white, 12, num: true);
     final lp = r.paths.last.last;
     if (r.end == 'm' || r.end == 'g') {
       final x = Paint()..color = const Color(0xE6FF7A8A)..strokeWidth = 2.2..strokeCap = StrokeCap.round;

@@ -16,6 +16,7 @@ class Economy {
   static const unlockPass = 14;
   static const unlockStreak = 19;
   static const unlockCollection = 10;
+  static const unlockStarChest = 5;
   static const interstitialFrom = 15;
 
   static bool unlocked(int threshold) => Profile.instance.cleared >= threshold;

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
 import '../app/l10n.dart';
+import '../app/missions.dart';
 import '../app/profile.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
@@ -72,6 +73,9 @@ class GameController extends ChangeNotifier {
 
   // 조준
   double aimAng = -math.pi / 2, pull = 0;
+  double? _rawAng; // 직전 손가락 각도 (정밀 조준용)
+  /// 정밀 조준: 길게 당길수록 손가락 움직임 대비 각도 변화가 작아진다 (1.0 → 0.35)
+  double get aimSens => (1.1 - pull / 150).clamp(0.35, 1.0);
   double dsX = 0, dsY = 0;
   int mirrorTap = -1;
   (int, double)? mirrorSpin;
@@ -89,6 +93,10 @@ class GameController extends ChangeNotifier {
   final Map<int, double> wakeAt = {}; // 정령이 깬 시각(clock) → 깨어나는 애니메이션
   double fireAt = -9; // 마지막 발사 시각 → 궁수 반동
   double winAt = -9;
+  final Map<int, double> _near = {}; // 이번 턴 내 화살과 정령의 최소 거리
+  bool _nearShown = false;
+  int nearMisses = 0; // 이번 판 '아깝다' 횟수
+  final Map<int, double> peekAt = {}; // 아깝게 비껴간 정령이 놀라는 시각
 
   final List<Particle> parts = [];
   final List<RingFx> rings = [];
@@ -121,6 +129,8 @@ class GameController extends ChangeNotifier {
     gateWas = List.filled(run.c.gates.length, false);
     trailsFull = false;
     wakeAt.clear();
+    _near.clear();
+    _nearShown = false;
     if (quiet) return;
     if (!first && shots.isNotEmpty) onToast?.call(tr('t_echo_wait', {'n': shots.length}));
   }
@@ -238,6 +248,7 @@ class GameController extends ChangeNotifier {
     dsX = x;
     dsY = y;
     pull = 0;
+    _rawAng = null;
     return true;
   }
 
@@ -245,7 +256,29 @@ class GameController extends ChangeNotifier {
     if (mode != Mode.hold) return;
     final dx = dsX - x, dy = dsY - y;
     pull = math.sqrt(dx * dx + dy * dy);
-    if (pull > 6) aimAng = math.atan2(dy, dx);
+    if (pull <= 6) {
+      _rawAng = null;
+      return;
+    }
+    final raw = math.atan2(dy, dx);
+    final prev = _rawAng;
+    _rawAng = raw;
+    if (prev == null) {
+      aimAng = raw;
+      return;
+    }
+    var d = raw - prev;
+    if (d > math.pi) d -= 2 * math.pi;
+    if (d < -math.pi) d += 2 * math.pi;
+    // 크게 휘두르면 그대로 따라가고, 미세하게 움직이면 감도를 낮춘다
+    aimAng += d.abs() > 0.2 ? d : d * aimSens;
+  }
+
+  /// 화면 표시용 각도 (위쪽 0°, 오른쪽 +)
+  double get aimDeg {
+    var d = (aimAng + math.pi / 2) * 180 / math.pi;
+    d = (d + 540) % 360 - 180;
+    return d;
   }
 
   void pointerUp() {
@@ -317,6 +350,7 @@ class GameController extends ChangeNotifier {
         a.trail.addAll([a.x, a.y]);
         if (!trailsFull && a.trail.length > 44) a.trail.removeRange(0, 2);
       }
+      if (mode == Mode.fly) _checkNear();
     }
     _updateGates();
     if (mode == Mode.fly && run.done && !run.won) {
@@ -355,6 +389,41 @@ class GameController extends ChangeNotifier {
     if (ms != null) mirrorSpin = ms.$2 >= 1 ? null : (ms.$1, ms.$2 + rdt * 7);
     _updateFx(rdt);
     notifyListeners();
+  }
+
+  /// 내 화살이 정령 옆을 아슬아슬하게 스쳐 지나가면 '아깝다!' (턴당 1번)
+  void _checkNear() {
+    if (_nearShown || run.won) return;
+    final ts = level.targets;
+    for (var i = 0; i < ts.length; i++) {
+      if (ts[i].avoid || run.hit[i]) continue;
+      final (tx, ty) = ts[i].pos(run.time);
+      var best = 1e9;
+      for (final a in run.arrows) {
+        if (!a.alive || a.idx != curIdx) continue;
+        final dx = a.x - tx, dy = a.y - ty;
+        best = math.min(best, math.sqrt(dx * dx + dy * dy));
+      }
+      final prev = _near[i];
+      if (best < 1e8) _near[i] = math.min(prev ?? 1e9, best);
+      // 가장 가까웠던 순간을 지나 멀어지기 시작할 때 판정
+      if (prev != null && prev < kTargetR + 13 && best > prev + 4) {
+        _nearShown = true;
+        nearMisses++;
+        _missionToast(Missions.bump('near'));
+        peekAt[i] = clock;
+        slowT = math.max(slowT, 0.22);
+        Sfx.instance.play('oops', volume: 0.35);
+        Sfx.instance.haptic();
+        _text(tx, ty - 30, tr('f_near'), 0xFFFFB08A, 18, 1.0);
+        _ring(tx, ty, 0xFFFFB08A, 30, 0.4, 2);
+        return;
+      }
+    }
+  }
+
+  void _missionToast(List<String> done) {
+    if (done.isNotEmpty) onToast?.call(tr('m_done', {'x': done.first}), gold: true);
   }
 
   void _updateGates() {
@@ -458,8 +527,12 @@ class GameController extends ChangeNotifier {
           }
           if (e.b >= 2) {
             label = label == null ? tr('f_trick') : tr('f_trick_x', {'x': label});
-            if (mode != Mode.replay) tricks++;
+            if (mode != Mode.replay) {
+              tricks++;
+              if (mine) _missionToast(Missions.bump('trick'));
+            }
           }
+          if (!mine && (mode == Mode.fly || mode == Mode.hold)) _missionToast(Missions.bump('echo'));
           if (!mine && label == null) label = tr('f_echo');
           if (label != null) _text(e.x, e.y - 26, label, e.b >= 2 ? 0xFFFFD36B : 0xFFFFFFFF, 22, 1.1);
           lastHit = (e.x, e.y);
