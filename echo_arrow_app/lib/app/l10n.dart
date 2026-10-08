@@ -186,6 +186,7 @@ const _strings = <String, Map<String, String>>{
 };
 
 const _levelNames = {
+  '늙은 참나무': 'Old Oak', '도토리 언덕': 'Acorn Hill', '새벽 거울': 'Dawn Mirror', '꺾인 빛': 'Bent Light', '메아리 탑': 'Echo Tower', '시간의 틈': 'Crack in Time', '기억의 화살': 'Arrow of Memory', '과거의 화살': 'Arrow of the Past',
   '첫 발': 'First Shot', '고요한 숲': 'Quiet Woods', '벽 튕기기': 'Bank Shot', '반딧불 길': 'Firefly Trail', '꿰뚫기': 'Pierce Through', '별빛 숲길': 'Starlit Path',
   '바람결': 'Breeze', '두 번 튕기기': 'Double Bounce', '이끼 계단': 'Mossy Steps', '나무뿌리 미로': 'Root Maze', '버섯 범퍼': 'Mushroom Bumper', '달빛 오솔길': 'Moonlit Lane',
   '이슬 웅덩이': 'Dew Pond', '흔들리는 정령': 'Swaying Spirit', '안개 낀 숲': 'Foggy Woods', '조용한 개울': 'Silent Brook', '세 정령': 'Three Spirits', '부엉이 둥지': "Owl's Nest",
