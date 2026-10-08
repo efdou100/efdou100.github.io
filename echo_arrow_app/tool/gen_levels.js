@@ -27,32 +27,43 @@ function configs(L) {
 const kinds = L => ['n', ...Object.keys(L.skills || {})];
 const moving = L => L.targets.some(t => t.per);
 
-// 한 발 분석: 배치·종류별 성공 구간을 모아 가장 넓은 구간의 가운데를 정답으로
-function analyzeOne(L, stepDeg = 0.25) {
-  const ts = moving(L) ? [0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240, 264, 288, 312, 336, 360, 384, 408, 432, 456, 480, 504, 528, 552, 576, 600] : [0];
+// 한 발 분석 (공정성 기준): 정답 화살이 maxB 번 이하로 튕겨서 맞히는 각도만 '공정한 성공'으로 친다.
+// 조준선은 반사 2번까지 보이므로, 플레이어가 눈으로 계획해서 풀 수 있는 판만 남긴다.
+function runOne(L, ang, cfg, kind, step) {
+  const run = SIM.newRun(L, [{ ang, step, idx: 0, kind }], cfg);
+  let maxB = 0;
+  const ev = [];
+  while (run.step < 2600) {
+    ev.length = 0;
+    SIM.step(run, ev);
+    for (const e of ev) if (e.type === 'hit') maxB = Math.max(maxB, e.b);
+    if (run.won || SIM.done(run)) break;
+  }
+  return { won: run.won, maxB };
+}
+function analyzeOne(L, fairB = 3, stepDeg = 0.25) {
+  const ts = moving(L) ? [0, 48, 96, 144, 192, 240, 288, 336, 384, 432, 480, 528] : [0];
   const st = moving(L) ? 0.5 : stepDeg;
-  let best = null, ways = 0, bestWidth = 0;
-  for (const cfg of configs(L)) for (const kind of kinds(L)) {
-    let cfgWins = 0;
-    for (const step of ts) {
-      let run0 = null;
-      for (let d = -180; d < 180 + st; d += st) {
-        const ok = d < 180 && SIM.simulate(L, [{ ang: d * D2R, step, idx: 0, kind }], cfg).won;
-        if (ok) { cfgWins++; if (run0 === null) run0 = d; }
-        else if (run0 !== null) {
-          ways++;
-          const w = d - run0;
-          if (!best || w > best.w) best = { w, ang: run0 + (w - st) / 2, step, kind, cfg: cfg.slice() };
-          run0 = null;
-        }
+  let best = null, ways = 0, fairWays = 0, minB = 99;
+  for (const cfg of configs(L)) for (const kind of kinds(L)) for (const step of ts) {
+    let run0 = null, runAny = false;
+    for (let d = -180; d < 180 + st; d += st) {
+      const r = d < 180 ? runOne(L, d * D2R, cfg, kind, step) : { won: false, maxB: 99 };
+      if (r.won) minB = Math.min(minB, r.maxB);
+      if (r.won && !runAny) { ways++; runAny = true; } else if (!r.won) runAny = false;
+      const fair = r.won && r.maxB <= fairB;
+      if (fair) { if (run0 === null) run0 = d; }
+      else if (run0 !== null) {
+        fairWays++;
+        const w = d - run0;
+        if (!best || w > best.w) best = { w, ang: run0 + (w - st) / 2, step, kind, cfg: cfg.slice() };
+        run0 = null;
       }
     }
-    bestWidth = Math.max(bestWidth, (cfgWins * st) / ts.length);
   }
   if (!best) return null;
-  // 정답 각도 재확인 (가운데가 막힌 경우 대비)
   if (!SIM.simulate(L, [{ ang: best.ang * D2R, step: best.step, idx: 0, kind: best.kind }], best.cfg).won) best.ang = best.ang - best.w / 2 + st / 2;
-  return { width: +bestWidth.toFixed(2), ways, solution: { mirrors: best.cfg, shots: [{ ang: +best.ang.toFixed(3), step: best.step, kind: best.kind }] } };
+  return { width: +best.w.toFixed(2), ways, fairWays, minB, solution: { mirrors: best.cfg, shots: [{ ang: +best.ang.toFixed(3), step: best.step, kind: best.kind }] } };
 }
 function hasOneShot(L) {
   for (const cfg of configs(L)) for (const kind of kinds(L)) for (const step of moving(L) ? [0, 48, 96, 144, 192, 240, 288, 336, 384, 432] : [0])
@@ -122,7 +133,7 @@ function switchAnglesFor(L, cfg, idx) {
   return groups.map(g => g[Math.floor(g.length / 2)]);
 }
 function analyze(L) {
-  if (L.par === 1) return analyzeOne(L);
+  if (L.par === 1) return analyzeOne(L, FAIR_B[L.w] || 3);
   if (L.par === 2) return analyzeTwo(L);
   return analyzeThree(L);
 }
@@ -221,7 +232,10 @@ const NAMES = {
 const HAND = SIM.LEVELS.map(L => { const { _c, ...rest } = L; return JSON.parse(JSON.stringify(rest)); });
 const handByWorld = { 1: [], 2: [], 3: [], 4: [], 5: [] };
 HAND.forEach(L => handByWorld[L.w].push(L));
-const TIERS = { 1: [4, 40], 2: [2, 30], 3: [1.5, 25], 4: [0.4, 40], 5: [0.6, 15] };
+// 공정한 성공 구간(°) 하한/상한, 정답 튕김 수 상한
+const TIERS = { 1: [3, 40], 2: [2.5, 30], 3: [2.5, 25], 4: [0.4, 40], 5: [2, 18] };
+const FAIR_B = { 1: 2, 2: 2, 3: 3, 4: 3, 5: 3 };
+const ECHO_SHARE = { 5: 6 }; // 별의 끝: 20판 중 6판은 메아리 판
 
 const out = [];
 const t0 = Date.now();
@@ -234,15 +248,18 @@ for (let w = 1; w <= 5; w++) {
   while (gen.length < need && tries < 900) {
     tries++;
     const cfg = WORLD_GEN[w];
-    const L = cfg.echo ? genEcho(w, cfg) : genLevel(w, cfg);
+    const wantEcho = cfg.echo || (ECHO_SHARE[w] && gen.filter(x => x.par > 1).length < ECHO_SHARE[w] && gen.length % 3 === 0);
+    const L = wantEcho ? genEcho(w, WORLD_GEN[4]) : genLevel(w, cfg);
+    if (L) L.w = w;
     if (!L) continue;
     let a;
-    if (cfg.echo) { if (hasOneShot(L)) continue; a = analyzeTwo(L); }
-    else a = analyzeOne(L);
+    if (wantEcho) { if (hasOneShot(L)) continue; a = analyzeTwo(L); }
+    else a = analyzeOne(L, FAIR_B[w]);
     if (!a) continue;
     const [lo, hi] = TIERS[w];
-    if (a.width < lo || a.width > hi) continue;
-    if (!cfg.echo && a.ways < 2) continue;
+    if (!wantEcho && (a.width < lo || a.width > hi)) continue;
+    if (wantEcho && a.width < 0.4) continue;
+    if (!wantEcho && a.ways < 2) continue;
     // 정답이 장치/스킬 없이도 되는지 기록
     L.name = names.length ? names.splice(Math.floor(rnd() * names.length), 1)[0] : (EXTRA_NAMES[w] || []).shift() || `${w}-${gen.length + 1}`;
     gen.push({ ...L, ...a });
@@ -263,6 +280,7 @@ for (let w = 1; w <= 5; w++) {
     if (!L) return;
     L.tier = s === 19 ? 'boss' : s === 18 ? 'superhard' : s === 9 ? 'hard' : 'normal';
     if (!L.shots) L.shots = L.par + 2;
+    L.guide = Math.max(L.guide || 1, 2);
     out.push(L);
   });
 }
