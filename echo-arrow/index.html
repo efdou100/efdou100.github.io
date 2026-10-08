@@ -57,11 +57,15 @@ p { color: var(--muted); font-size: 0.95em; line-height: 1.45; }
 .logo .en i { font-style: normal; background: linear-gradient(180deg, #e9fdff, var(--echo)); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 0 0.35em rgba(126, 240, 255, 0.7)); }
 .logo .ko { font-size: 1.15em; color: var(--ink); letter-spacing: 0.3em; }
 .logo .tag { font-size: 0.85em; color: var(--muted); margin-top: 0.4em; }
-.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.55em; width: 100%; max-width: 19em; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.45em; width: 100%; max-width: 19em; }
 .lv { appearance: none; border: 1px solid var(--line); background: linear-gradient(180deg, #232d6b, #1a2153); color: var(--ink); font: inherit; border-radius: 0.8em; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1em; cursor: pointer; position: relative; padding: 0; }
 .lv b { font-family: var(--f-display); font-weight: 700; font-size: 1.25em; line-height: 1; }
 .lv small { font-size: 0.62em; letter-spacing: 0.05em; color: var(--moon); min-height: 1em; }
-.lv.echo { border-color: rgba(126, 240, 255, 0.55); box-shadow: inset 0 0 0.8em rgba(126, 240, 255, 0.18); }
+.lv.w2 { border-color: rgba(220, 235, 255, 0.6); background: linear-gradient(180deg, #2b3a74, #1d2556); }
+.lv.w3 { border-color: rgba(185, 164, 255, 0.65); background: linear-gradient(180deg, #31296f, #211b52); }
+.lv.w4 { border-color: rgba(126, 240, 255, 0.6); box-shadow: inset 0 0 0.8em rgba(126, 240, 255, 0.18); }
+.legend span.l2::before { border-color: rgba(220, 235, 255, 0.8); background: #2b3a74; }
+.legend span.l3::before { border-color: rgba(185, 164, 255, 0.9); background: #31296f; }
 .lv.next { background: linear-gradient(180deg, #ffe39a, #ffc14d); color: #1b1440; animation: pulse 1.4s ease-in-out infinite; }
 .lv.next small { color: #6a4310; }
 .lv:disabled { opacity: 0.35; cursor: default; }
@@ -92,7 +96,7 @@ p { color: var(--muted); font-size: 0.95em; line-height: 1.45; }
       </div>
       <div class="grid" id="grid"></div>
       <p class="howto">화면 아무 곳이나 <b>누르고 → 당기고 → 놓기</b><br>누르는 동안 시간이 느려지고, 지난 화살(메아리)이 다시 날아와요.</p>
-      <div class="legend"><span class="n">튕기기 퍼즐</span><span>메아리 퍼즐</span></div>
+      <div class="legend"><span class="n">숲</span><span class="l2">거울</span><span class="l3">수정</span><span>메아리</span></div>
       <div class="menu-foot">
         <button class="btn" id="bPlay">이어서 하기</button>
         <button class="btn alt" id="bSound" style="flex:0 0 5.4em;font-size:0.9em">소리 ON</button>
@@ -142,56 +146,114 @@ p { color: var(--muted); font-size: 0.95em; line-height: 1.45; }
 <script>
 // 메아리 화살 — 결정론적 시뮬레이션 (게임과 솔버가 함께 사용)
 const SIM = (() => {
-  const DT = 1 / 240, SPEED = 560, MAXB = 10, LIFE = 5.5, TR = 15, SR = 13;
+  const DT = 1 / 240, SPEED = 560, MAXB = 12, LIFE = 6, TR = 15, SR = 13, PR = 15, XR = 12, MAXA = 30;
   const F = { x0: 12, y0: 84, x1: 348, y1: 624 };
+  const D2R = Math.PI / 180;
 
-  // 레벨 정의 도우미
-  const B = (x, y, w, h, k = 'w') => [x, y, w, h, k];
-  const S = (x1, y1, x2, y2, k = 'w') => [x1, y1, x2, y2, k];
-  const T = (x, y, mx = 0, my = 0, per = 0) => ({ x, y, mx, my, per });
+  // ---- 레벨 정의 도우미 ----
+  const B = (x, y, w, h, k = 'w') => [x, y, w, h, k];            // 블록: w 나무(튕김) m 이끼(정지) i 얼음(한 번 튕기고 깨짐)
+  const S = (x1, y1, x2, y2, k = 'w') => [x1, y1, x2, y2, k];    // 선분 벽
+  const T = (x, y, o = {}) => ({ x, y, mx: 0, my: 0, per: 0, ...o }); // 정령 (mx/my/per: 왕복, shield: 방패 방향°)
+  const M = (x, y, s = 0, rot = true, len = 58) => ({ x, y, s, rot, len }); // 거울: s*45° 방향, rot=회전 가능
+  const U = (x, y, r = 22) => ({ x, y, r });                      // 버섯 범퍼
+  const P = (x1, y1, x2, y2) => ({ a: [x1, y1], b: [x2, y2] });   // 포털 쌍
+  const X = (x, y) => ({ x, y });                                 // 프리즘
+  const MOSS = { top: [[F.x0, F.x1, 'm']], bottom: [[F.x0, F.x1, 'm']], left: [[F.y0, F.y1, 'm']], right: [[F.y0, F.y1, 'm']] };
 
   const LEVELS = [
-    { name: '첫 발', shots: 3, par: 1, guide: 2, bow: [180, 590], targets: [T(180, 250)],
+    // ---------------- 월드 1: 숲 ----------------
+    { w: 1, name: '첫 발', shots: 3, par: 1, guide: 2, bow: [180, 590], targets: [T(180, 250)],
       hint: '화면 아무 곳이나 누르고 뒤로 당겨 조준, 놓으면 발사!' },
-    { name: '벽 튕기기', shots: 3, par: 1, guide: 2, bow: [180, 590], blocks: [B(110, 300, 140, 40, 'm')], targets: [T(180, 170)],
+    { w: 1, name: '벽 튕기기', shots: 3, par: 1, guide: 2, bow: [180, 590], blocks: [B(110, 300, 140, 40, 'm')], targets: [T(180, 170)],
       hint: '초록 이끼는 화살을 붙잡아요. 나무 벽에 튕겨서 맞혀 보세요.' },
-    { name: '꿰뚫기', shots: 3, par: 1, guide: 2, bow: [180, 590], blocks: [B(220, 200, 128, 24, 'm')], targets: [T(120, 400), T(60, 210)],
+    { w: 1, name: '꿰뚫기', shots: 3, par: 1, guide: 2, bow: [180, 590], blocks: [B(220, 200, 128, 24, 'm')], targets: [T(120, 400), T(60, 210)],
       hint: '화살은 정령을 꿰뚫고 계속 날아가요. 한 발로 둘 다!' },
-    { name: '두 번 튕기기', shots: 3, par: 1, guide: 2, bow: [180, 590], blocks: [B(12, 300, 250, 26, 'm')], targets: [T(70, 150)],
-      hint: '틈으로 들어가 두 번 튕겨 보세요.' },
-    { name: '이끼 숲', shots: 3, par: 1, guide: 2, bow: [180, 590],
-      edges: { left: [[84, 330, 'w'], [330, 624, 'm']], right: [[84, 330, 'w'], [330, 624, 'm']] },
-      blocks: [B(120, 210, 120, 26, 'm')], targets: [T(180, 150)] },
-    { name: '주머니', shots: 3, par: 1, guide: 1, bow: [80, 590], walls: [S(262, 84, 262, 190)], blocks: [B(12, 330, 230, 26, 'm')], targets: [T(305, 130)] },
-    { name: '세 정령', shots: 3, par: 1, guide: 1, bow: [180, 590], blocks: [B(150, 420, 60, 24, 'm')], targets: [T(70, 160), T(290, 160), T(180, 330)],
-      hint: '한 발로 셋 다 맞히면 별 3개. 못 하면 여러 발로 나눠 쏴도 돼요.' },
-    { name: '흔들리는 정령', shots: 3, par: 1, guide: 1, bow: [180, 590], walls: [S(12, 300, 160, 300, 'm'), S(200, 300, 348, 300, 'm')], targets: [T(180, 170, 120, 0, 2.6)],
-      hint: '누르고 있는 동안 시간이 느려져요. 타이밍을 노려 놓으세요.' },
-    { name: '좁은 틈', shots: 3, par: 1, guide: 1, bow: [290, 590], blocks: [B(12, 360, 150, 26, 'm'), B(186, 360, 162, 26, 'm')], targets: [T(60, 140)] },
-    { name: '다이아몬드', shots: 3, par: 1, guide: 1, bow: [180, 590],
-      walls: [S(180, 250, 240, 330), S(240, 330, 180, 410), S(180, 410, 120, 330), S(120, 330, 180, 250)], targets: [T(60, 130), T(300, 130)] },
-    { name: '메아리', shots: 4, par: 2, guide: 1, bow: [180, 590], echoIntro: true,
+    { w: 1, name: '두 번 튕기기', shots: 3, par: 1, guide: 2, bow: [180, 590], blocks: [B(12, 300, 250, 26, 'm')], targets: [T(70, 150)] },
+    { w: 1, name: '버섯 범퍼', shots: 3, par: 1, guide: 2, bow: [180, 590],
+      blocks: [B(100, 300, 160, 30, 'm')], bumpers: [U(90, 440, 30), U(270, 440, 30)], targets: [T(180, 170)],
+      hint: '둥근 버섯은 맞는 자리에 따라 튕기는 각도가 달라져요.' },
+    { w: 1, name: '흔들리는 정령', shots: 3, par: 1, guide: 1, bow: [180, 590], walls: [S(12, 300, 160, 300, 'm'), S(200, 300, 348, 300, 'm')],
+      targets: [T(180, 170, { mx: 120, per: 2.6 })], hint: '누르고 있는 동안 시간이 느려져요. 타이밍을 노려 놓으세요.' },
+    { w: 1, name: '세 정령', shots: 3, par: 1, guide: 1, bow: [180, 590], blocks: [B(150, 420, 60, 24, 'm')], targets: [T(70, 160), T(290, 160), T(180, 330)],
+      hint: '한 발로 셋 다 맞히면 별 3개. 여러 발로 나눠 쏴도 깰 수는 있어요.' },
+
+    // ---------------- 월드 2: 거울 ----------------
+    { w: 2, name: '은빛 거울', shots: 3, par: 1, guide: 2, bow: [180, 590], edges: MOSS,
+      walls: [S(250, 280, 348, 280, 'm'), S(250, 380, 348, 380, 'm')], mirrors: [M(160, 330, 0, true, 66)], targets: [T(315, 330)],
+      hint: '은빛 거울을 톡 누르면 45°씩 돌아가요. 사방이 이끼라 거울만이 길이에요.' },
+    { w: 2, name: '잠망경', shots: 3, par: 1, guide: 2, bow: [180, 590], edges: MOSS,
+      walls: [S(12, 190, 140, 190, 'm')], mirrors: [M(180, 440, 0, true, 64), M(300, 440, 0, true, 64), M(300, 140, 1, false, 64)], targets: [T(60, 140)],
+      hint: '거울 두 개를 이어서 꺾어 보세요.' },
+    { w: 2, name: '거울과 버섯', shots: 3, par: 1, guide: 1, bow: [180, 590],
+      edges: { left: [[F.y0, 300, 'w'], [300, F.y1, 'm']], right: [[F.y0, 300, 'w'], [300, F.y1, 'm']] },
+      blocks: [B(130, 260, 100, 26, 'm')], bumpers: [U(70, 420, 26)], mirrors: [M(280, 400, 0, true, 64)], targets: [T(180, 150)] },
+    { w: 2, name: '방패 정령', shots: 3, par: 1, guide: 1, bow: [180, 590], targets: [T(180, 260, { shield: 90 })], blocks: [B(60, 420, 60, 22, 'm'), B(240, 420, 60, 22, 'm')],
+      hint: '방패 쪽은 화살을 튕겨내요. 등 뒤로 돌아가 맞히세요.' },
+    { w: 2, name: '아기 정령', shots: 3, par: 1, guide: 1, bow: [180, 590], mirrors: [M(290, 470, 0)],
+      targets: [T(180, 200), T(180, 290, { avoid: true }), T(110, 230, { avoid: true }), T(250, 230, { avoid: true })],
+      hint: '분홍 아기 정령은 절대 맞히면 안 돼요! 맞히면 그 판은 실패예요.' },
+    { w: 2, name: '갈라지는 화살', shots: 3, par: 1, guide: 1, bow: [180, 590], skills: { split: 1 },
+      walls: [S(120, 84, 120, 230, 'm'), S(240, 84, 240, 230, 'm')], blocks: [B(150, 340, 60, 18)], targets: [T(60, 140), T(180, 130), T(300, 140)],
+      hint: '아래 [분열] 화살을 고르면 첫 번째로 튕길 때 세 갈래로 갈라져요.' },
+    { w: 2, name: '거울 미로', shots: 3, par: 1, guide: 1, bow: [180, 590], edges: MOSS,
+      walls: [S(12, 220, 130, 220, 'm'), S(12, 340, 130, 340, 'm')], mirrors: [M(180, 280, 0, true, 60), M(300, 280, 0, true, 60), M(70, 470, 0, true, 60)], targets: [T(240, 280), T(300, 130)] },
+
+    // ---------------- 월드 3: 수정 ----------------
+    { w: 3, name: '얼음문', shots: 3, par: 1, guide: 1, bow: [180, 590],
+      walls: [S(130, 84, 130, 200, 'm'), S(230, 84, 230, 200, 'm')], blocks: [B(130, 196, 100, 12, 'i')], targets: [T(180, 140)],
+      hint: '얼음은 한 번 튕겨내고 깨져요. 깨진 자리로 다시 들어가게 해 보세요.' },
+    { w: 3, name: '포털', shots: 3, par: 1, guide: 1, bow: [180, 590],
+      walls: [S(12, 230, 150, 230, 'm'), S(150, 84, 150, 230, 'm')], portals: [P(290, 430, 50, 200)], targets: [T(100, 130)],
+      hint: '주황 포털로 들어가면 파란 포털로 같은 방향 그대로 나와요.' },
+    { w: 3, name: '프리즘', shots: 3, par: 1, guide: 1, bow: [180, 590], prisms: [X(180, 360)],
+      blocks: [B(12, 250, 40, 22, 'm'), B(308, 250, 40, 22, 'm')], targets: [T(80, 200), T(180, 170), T(280, 200)],
+      hint: '프리즘에 맞으면 화살이 세 갈래로 갈라져요.' },
+    { w: 3, name: '관통 화살', shots: 3, par: 1, guide: 1, bow: [180, 590], skills: { pierce: 1 },
+      walls: [S(130, 150, 230, 150, 'm'), S(230, 150, 230, 250, 'm'), S(230, 250, 130, 250, 'm'), S(130, 250, 130, 150, 'm')],
+      targets: [T(180, 200), T(60, 120)], hint: '[관통] 화살은 이끼를 뚫고 지나가요.' },
+    { w: 3, name: '수정 정원', shots: 3, par: 1, guide: 1, bow: [180, 590],
+      edges: { top: [[F.x0, F.x1, 'm']] }, prisms: [X(110, 380)], portals: [P(290, 470, 290, 150)], mirrors: [M(200, 250, 1)],
+      blocks: [B(130, 200, 26, 26, 'i')], targets: [T(60, 140), T(240, 120, { shield: 90 }), T(310, 300)] },
+
+    // ---------------- 월드 4: 메아리 ----------------
+    { w: 4, name: '메아리', shots: 4, par: 2, guide: 1, bow: [180, 590], echoIntro: true,
       walls: [S(130, 84, 130, 200), S(230, 84, 230, 200)], gates: [{ x1: 130, y1: 200, x2: 230, y2: 200, dur: 2.2 }],
       switches: [{ x: 50, y: 340, g: [0] }], targets: [T(180, 140)],
       hint: '1발: 스위치를 맞혀 문을 열어요. 2발: 지난 화살(메아리)이 다시 스위치를 맞히는 동안 문으로 쏘세요!' },
-    { name: '한 문, 두 정령', shots: 4, par: 2, guide: 1, bow: [180, 590],
+    { w: 4, name: '쉿!', shots: 4, par: 2, guide: 1, bow: [180, 590],
+      walls: [S(130, 84, 130, 200), S(230, 84, 230, 200)], gates: [{ x1: 130, y1: 200, x2: 230, y2: 200, dur: 2.4 }],
+      switches: [{ x: 300, y: 330, g: [0] }], targets: [T(180, 140), T(240, 460, { avoid: true }), T(180, 290, { avoid: true })],
+      hint: '메아리는 매번 똑같이 날아가요. 아기 정령을 맞히는 메아리를 남기면 계속 실패해요. 그럴 땐 ↻ 다시 시작!' },
+    { w: 4, name: '한 문, 두 정령', shots: 4, par: 2, guide: 1, bow: [180, 590],
       walls: [S(110, 84, 110, 200), S(250, 84, 250, 200)],
       gates: [{ x1: 12, y1: 200, x2: 110, y2: 200, dur: 3 }, { x1: 250, y1: 200, x2: 348, y2: 200, dur: 3 }],
       switches: [{ x: 180, y: 300, g: [0, 1] }], targets: [T(60, 140), T(300, 140)] },
-    { name: '짧은 문', shots: 4, par: 2, guide: 1, bow: [180, 590],
+    { w: 4, name: '짧은 문', shots: 4, par: 2, guide: 1, bow: [180, 590],
       walls: [S(130, 84, 130, 210), S(230, 84, 230, 210), S(250, 160, 348, 160, 'm')], gates: [{ x1: 130, y1: 210, x2: 230, y2: 210, dur: 0.7 }],
-      switches: [{ x: 320, y: 120, g: [0] }], targets: [T(180, 140)],
-      hint: '문이 금방 닫혀요. 메아리가 스위치를 맞히는 순간을 노리세요.' },
-    { name: '이중 문', shots: 5, par: 3, guide: 1, bow: [180, 590],
+      switches: [{ x: 320, y: 120, g: [0] }], targets: [T(180, 140)], hint: '문이 금방 닫혀요. 메아리가 스위치를 맞히는 순간을 노리세요.' },
+    { w: 4, name: '방패의 방', shots: 4, par: 2, guide: 1, bow: [180, 590],
+      walls: [S(110, 84, 110, 230), S(250, 84, 250, 230)], gates: [{ x1: 110, y1: 230, x2: 250, y2: 230, dur: 2.4 }],
+      switches: [{ x: 320, y: 380, g: [0] }], mirrors: [M(60, 300, 0)], targets: [T(180, 170, { shield: 90 })],
+      hint: '방패가 문 쪽을 보고 있어요. 방 안에서 한 번 더 튕겨야 해요.' },
+    { w: 4, name: '거울의 역설', shots: 4, par: 2, guide: 1, bow: [180, 590], edges: { top: [[F.x0, F.x1, 'm']], right: [[F.y0, F.y1, 'm']] },
+      walls: [S(200, 84, 200, 210), S(300, 84, 300, 210)], gates: [{ x1: 200, y1: 210, x2: 300, y2: 210, dur: 2.0 }],
+      switches: [{ x: 40, y: 140, g: [0] }], mirrors: [M(180, 330, 0)], blocks: [B(60, 230, 100, 22, 'm')], targets: [T(250, 140)],
+      hint: '거울을 돌리면 메아리의 길도 바뀌어요. 두 화살 모두에게 맞는 각도를 찾으세요.' },
+    { w: 4, name: '이중 문', shots: 5, par: 3, guide: 1, bow: [180, 590],
       walls: [S(110, 84, 110, 260), S(250, 84, 250, 260)],
       gates: [{ x1: 110, y1: 260, x2: 250, y2: 260, dur: 2.6 }, { x1: 110, y1: 180, x2: 250, y2: 180, dur: 2.6 }],
       switches: [{ x: 45, y: 420, g: [0] }, { x: 315, y: 420, g: [1] }], targets: [T(180, 130)] },
-    { name: '피날레', shots: 5, par: 2, guide: 1, bow: [180, 590],
-      walls: [S(110, 84, 110, 220), S(250, 84, 250, 220)], blocks: [B(250, 380, 98, 22, 'm')],
-      gates: [{ x1: 110, y1: 220, x2: 250, y2: 220, dur: 1.8 }],
-      switches: [{ x: 320, y: 470, g: [0] }], targets: [T(180, 140, 45, 0, 1.8), T(45, 470)] },
+    { w: 4, name: '빛의 갈림길', shots: 4, par: 1, guide: 1, bow: [180, 590],
+      walls: [S(130, 84, 130, 200), S(230, 84, 230, 200)], gates: [{ x1: 130, y1: 200, x2: 230, y2: 200, dur: 2.0 }],
+      prisms: [X(180, 420)], switches: [{ x: 60, y: 280, g: [0] }], targets: [T(180, 140)],
+      hint: '한 발로? 프리즘이 나눈 화살 하나가 문을 열고, 다른 하나가 들어간다면…' },
+    { w: 4, name: '피날레', shots: 5, par: 2, guide: 1, bow: [180, 590],
+      walls: [S(110, 84, 110, 220), S(250, 84, 250, 220)], blocks: [B(250, 380, 98, 22, 'm'), B(40, 330, 26, 26, 'i')],
+      gates: [{ x1: 110, y1: 220, x2: 250, y2: 220, dur: 1.8 }], mirrors: [M(90, 450, 1)], portals: [P(300, 300, 60, 160)],
+      switches: [{ x: 320, y: 470, g: [0] }], targets: [T(180, 140, { mx: 45, per: 1.8 }), T(45, 470), T(60, 250, { shield: 0 })] },
   ];
 
+  // ---- 지오메트리 ----
   function edgeSegs(edges = {}) {
     const out = [];
     const side = (name, a0, a1, mk) => { for (const [a, b, k] of edges[name] || [[a0, a1, 'w']]) out.push(mk(a, b, k)); };
@@ -209,13 +271,19 @@ const SIM = (() => {
     if (L._c) return L._c;
     const segs = edgeSegs(L.edges);
     for (const w of L.walls || []) segs.push({ x1: w[0], y1: w[1], x2: w[2], y2: w[3], k: w[4] || 'w' });
+    let ice = 0;
     for (const [x, y, w, h, k] of L.blocks || []) {
-      segs.push({ x1: x, y1: y, x2: x + w, y2: y, k }, { x1: x + w, y1: y, x2: x + w, y2: y + h, k },
-        { x1: x + w, y1: y + h, x2: x, y2: y + h, k }, { x1: x, y1: y + h, x2: x, y2: y, k });
+      const id = k === 'i' ? ice++ : undefined;
+      for (const s of [{ x1: x, y1: y, x2: x + w, y2: y }, { x1: x + w, y1: y, x2: x + w, y2: y + h }, { x1: x + w, y1: y + h, x2: x, y2: y + h }, { x1: x, y1: y + h, x2: x, y2: y }])
+        segs.push({ ...s, k: k === 'i' ? 'w' : k, ice: id });
     }
     segs.forEach(prep);
     const gates = (L.gates || []).map(g => prep({ ...g, k: 'g' }));
-    return (L._c = { segs, gates });
+    return (L._c = { segs, gates, iceCount: ice });
+  }
+  function mirrorSeg(m, s) {
+    const a = s * 45 * D2R, hx = Math.cos(a) * m.len / 2, hy = Math.sin(a) * m.len / 2;
+    return prep({ x1: m.x - hx, y1: m.y - hy, x2: m.x + hx, y2: m.y + hy, k: 'w', mirror: true });
   }
 
   function hitSeg(s, px, py, dx, dy) {
@@ -223,14 +291,36 @@ const SIM = (() => {
     if (Math.abs(den) < 1e-12) return -1;
     const ax = s.x1 - px, ay = s.y1 - py;
     const t = (ax * s.ey - ay * s.ex) / den, u = (ax * dy - ay * dx) / den;
-    return t > 1e-9 && t <= 1 && u >= -1e-6 && u <= 1 + 1e-6 ? t : -1;
+    return t >= 0 && t <= 1 && u >= -1e-6 && u <= 1 + 1e-6 ? t : -1;
   }
-  // gateOpen: 각 문이 열려 있는 마감 시각 배열
-  function nearest(C, gateOpen, time, px, py, dx, dy) {
-    let best = null, bt = 2;
-    for (const s of C.segs) { const t = hitSeg(s, px, py, dx, dy); if (t >= 0 && t < bt) { bt = t; best = s; } }
-    C.gates.forEach((g, i) => { if (time < gateOpen[i]) return; const t = hitSeg(g, px, py, dx, dy); if (t >= 0 && t < bt) { bt = t; best = g; } });
-    return best ? { s: best, t: bt } : null;
+  function hitCircle(cx, cy, r, px, py, dx, dy) {
+    const fx = px - cx, fy = py - cy, a = dx * dx + dy * dy, b = 2 * (fx * dx + fy * dy), c = fx * fx + fy * fy - r * r;
+    if (b >= 0) return -1;
+    const disc = b * b - 4 * a * c; if (disc < 0) return -1;
+    const t = (-b - Math.sqrt(disc)) / (2 * a);
+    return t >= 0 && t <= 1 ? t : -1;
+  }
+  // 가장 먼저 닿는 면. pierce: 이끼 무시. extra: 레이용(포털/프리즘 원)
+  function nearest(run, time, px, py, dx, dy, pierce, extra) {
+    let bt = 2, h = null;
+    for (const s of run.C.segs) {
+      if (s.k === 'm' && pierce) continue;
+      if (s.ice !== undefined && run.ice[s.ice]) continue;
+      const t = hitSeg(s, px, py, dx, dy);
+      if (t >= 0 && t < bt) { bt = t; h = { nx: s.nx, ny: s.ny, k: s.k, ice: s.ice }; }
+    }
+    for (const s of run.mseg) { const t = hitSeg(s, px, py, dx, dy); if (t >= 0 && t < bt) { bt = t; h = { nx: s.nx, ny: s.ny, k: 'w', mirror: true }; } }
+    run.C.gates.forEach((g, i) => { if (time < run.gateOpen[i]) return; const t = hitSeg(g, px, py, dx, dy); if (t >= 0 && t < bt) { bt = t; h = { nx: g.nx, ny: g.ny, k: 'g' }; } });
+    for (const u of run.L.bumpers || []) {
+      const t = hitCircle(u.x, u.y, u.r, px, py, dx, dy);
+      if (t >= 0 && t < bt) { bt = t; const hx = px + dx * t - u.x, hy = py + dy * t - u.y, l = Math.hypot(hx, hy); h = { nx: hx / l, ny: hy / l, k: 'w', bumper: true }; }
+    }
+    if (extra) {
+      (run.L.portals || []).forEach((p, i) => { for (const [end, c] of [['a', p.a], ['b', p.b]]) { const t = hitCircle(c[0], c[1], PR, px, py, dx, dy); if (t >= 0 && t < bt) { bt = t; h = { k: 'p', i, end }; } } });
+      for (const x of run.L.prisms || []) { const t = hitCircle(x.x, x.y, XR, px, py, dx, dy); if (t >= 0 && t < bt) { bt = t; h = { k: 'x' }; } }
+    }
+    if (h) h.t = bt;
+    return h;
   }
 
   function tpos(tg, time) {
@@ -238,35 +328,48 @@ const SIM = (() => {
     const k = Math.sin((2 * Math.PI * time) / tg.per);
     return [tg.x + tg.mx * k, tg.y + tg.my * k];
   }
+  const defaultMirrors = L => (L.mirrors || []).map(m => m.s);
 
-  function newRun(L, shots) {
+  function newRun(L, shots, mirrors) {
     const C = compile(L);
+    const ms = mirrors || defaultMirrors(L);
     return { L, C, step: 0, shots: shots.map(s => ({ ...s, launched: false })), arrows: [], hit: L.targets.map(() => false),
-      gateOpen: C.gates.map(() => -1), swLit: (L.switches || []).map(() => -1), won: false };
+      gateOpen: C.gates.map(() => -1), ice: new Array(C.iceCount).fill(false), mirrors: ms.slice(),
+      mseg: (L.mirrors || []).map((m, i) => mirrorSeg(m, ms[i])), won: false, spawned: [] };
+  }
+  function spawn(run, from, x, y, ang, extra) {
+    if (run.arrows.length + run.spawned.length >= MAXA) return null;
+    const a = { x, y, vx: Math.cos(ang) * SPEED, vy: Math.sin(ang) * SPEED, idx: from.idx, kind: from.kind === 'split' ? 'n' : from.kind, b: from.b, age: from.age, alive: true, hits: 0, pcd: 0, prisms: from.prisms ? from.prisms.slice() : [], child: true, ...extra };
+    run.spawned.push(a);
+    return a;
   }
 
-  // 화살 이동: 반사/정지 처리. onEvent(type, data)
   function moveArrow(run, a, time, ev) {
     let dx = a.vx * DT, dy = a.vy * DT;
     for (let it = 0; it < 6; it++) {
-      const h = nearest(run.C, run.gateOpen, time, a.x, a.y, dx, dy);
+      const h = nearest(run, time, a.x, a.y, dx, dy, a.kind === 'pierce', false);
       if (!h) { a.x += dx; a.y += dy; return; }
       a.x += dx * h.t; a.y += dy * h.t;
-      const s = h.s;
-      if (s.k === 'w') {
-        let nx = s.nx, ny = s.ny;
+      if (h.k === 'w') {
+        let nx = h.nx, ny = h.ny;
         if (nx * dx + ny * dy > 0) { nx = -nx; ny = -ny; }
-        const rem = 1 - h.t;
-        const vd = a.vx * nx + a.vy * ny;
+        const rem = 1 - h.t, vd = a.vx * nx + a.vy * ny;
         a.vx -= 2 * vd * nx; a.vy -= 2 * vd * ny;
         a.x += nx * 0.05; a.y += ny * 0.05;
         dx = a.vx * DT * rem; dy = a.vy * DT * rem;
         a.b++;
-        if (ev) ev.push({ type: 'bounce', a, x: a.x, y: a.y, b: a.b });
+        if (h.ice !== undefined) { run.ice[h.ice] = true; if (ev) ev.push({ type: 'ice', i: h.ice, x: a.x, y: a.y }); }
+        if (ev) ev.push({ type: 'bounce', a, x: a.x, y: a.y, b: a.b, mirror: h.mirror, bumper: h.bumper });
+        if (a.kind === 'split' && !a.didSplit) {
+          a.didSplit = true; a.kind = 'n';
+          const ang = Math.atan2(a.vy, a.vx);
+          for (const d of [-28, 28]) spawn(run, a, a.x, a.y, ang + d * D2R, { didSplit: true });
+          if (ev) ev.push({ type: 'split', a, x: a.x, y: a.y });
+        }
         if (a.b > MAXB) { a.alive = false; if (ev) ev.push({ type: 'fizzle', a, x: a.x, y: a.y }); return; }
       } else {
-        a.alive = false; a.stuck = s.k;
-        if (ev) ev.push({ type: 'stick', a, x: a.x, y: a.y, k: s.k, ang: Math.atan2(a.vy, a.vx) });
+        a.alive = false; a.stuck = h.k; a.ang = Math.atan2(a.vy, a.vx);
+        if (ev) ev.push({ type: 'stick', a, x: a.x, y: a.y, k: h.k, ang: a.ang });
         return;
       }
     }
@@ -277,7 +380,7 @@ const SIM = (() => {
     for (const s of run.shots) {
       if (!s.launched && s.step <= run.step) {
         s.launched = true;
-        const a = { x: L.bow[0], y: L.bow[1], vx: Math.cos(s.ang) * SPEED, vy: Math.sin(s.ang) * SPEED, idx: s.idx, b: 0, age: 0, alive: true, hits: 0 };
+        const a = { x: L.bow[0], y: L.bow[1], vx: Math.cos(s.ang) * SPEED, vy: Math.sin(s.ang) * SPEED, idx: s.idx, kind: s.kind || 'n', b: 0, age: 0, alive: true, hits: 0, pcd: 0, prisms: [] };
         run.arrows.push(a);
         if (ev) ev.push({ type: 'launch', a, echo: s.echo });
       }
@@ -286,71 +389,120 @@ const SIM = (() => {
       if (!a.alive) continue;
       moveArrow(run, a, time, ev);
       if (!a.alive) continue;
+      if (a.pcd > 0) a.pcd -= DT;
+      // 포털
+      const ps = L.portals || [];
+      for (let i = 0; i < ps.length && a.pcd <= 0; i++) {
+        for (const [from, to] of [[ps[i].a, ps[i].b], [ps[i].b, ps[i].a]]) {
+          if ((a.x - from[0]) ** 2 + (a.y - from[1]) ** 2 < PR * PR) {
+            const sp = Math.hypot(a.vx, a.vy);
+            a.x = to[0] + (a.vx / sp) * (PR + 2); a.y = to[1] + (a.vy / sp) * (PR + 2); a.pcd = 0.15;
+            if (ev) ev.push({ type: 'portal', a, x1: from[0], y1: from[1], x2: to[0], y2: to[1] });
+            break;
+          }
+        }
+      }
+      // 프리즘
+      const xs = L.prisms || [];
+      for (let i = 0; i < xs.length; i++) {
+        const x = xs[i];
+        if (a.prisms.includes(i)) continue;
+        if ((a.x - x.x) ** 2 + (a.y - x.y) ** 2 < XR * XR) {
+          a.alive = false; a.stuck = 'x';
+          const ang = Math.atan2(a.vy, a.vx);
+          for (const d of [-40, 0, 40]) {
+            const na = ang + d * D2R;
+            spawn(run, a, x.x + Math.cos(na) * (XR + 3), x.y + Math.sin(na) * (XR + 3), na, { prisms: [...a.prisms, i] });
+          }
+          if (ev) ev.push({ type: 'prism', a, x: x.x, y: x.y, i });
+          break;
+        }
+      }
+      if (!a.alive) continue;
+      // 스위치
       const sws = L.switches || [];
       for (let i = 0; i < sws.length; i++) {
         const sw = sws[i];
         if ((a.x - sw.x) ** 2 + (a.y - sw.y) ** 2 < (SR + 2) ** 2) {
           a.alive = false; a.stuck = 's';
           for (const g of sw.g) run.gateOpen[g] = time + run.C.gates[g].dur;
-          run.swLit[i] = time;
           if (ev) ev.push({ type: 'switch', a, i, x: sw.x, y: sw.y });
           break;
         }
       }
       if (!a.alive) continue;
-      L.targets.forEach((tg, i) => {
-        if (run.hit[i]) return;
+      // 정령
+      for (let i = 0; i < L.targets.length; i++) {
+        const tg = L.targets[i];
+        if (run.hit[i]) continue;
         const [tx, ty] = tpos(tg, time);
-        if ((a.x - tx) ** 2 + (a.y - ty) ** 2 < (TR + 2) ** 2) {
+        const ddx = a.x - tx, ddy = a.y - ty;
+        if (ddx * ddx + ddy * ddy < (TR + 2) ** 2) {
+          if (tg.avoid) {
+            run.hit[i] = true; run.failed = true; a.alive = false; a.stuck = 'o'; a.ang = Math.atan2(a.vy, a.vx);
+            if (ev) ev.push({ type: 'oops', a, i, x: tx, y: ty });
+            break;
+          }
+          if (tg.shield !== undefined) {
+            const phi = Math.atan2(ddy, ddx), diff = Math.abs(((phi - tg.shield * D2R) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI);
+            if (diff < 75 * D2R) {
+              const l = Math.hypot(ddx, ddy) || 1, nx = ddx / l, ny = ddy / l, vd = a.vx * nx + a.vy * ny;
+              if (vd < 0) { a.vx -= 2 * vd * nx; a.vy -= 2 * vd * ny; a.b++; a.x = tx + nx * (TR + 3); a.y = ty + ny * (TR + 3); if (ev) ev.push({ type: 'shield', a, i, x: a.x, y: a.y, b: a.b }); }
+              continue;
+            }
+          }
           run.hit[i] = true; a.hits++;
           if (ev) ev.push({ type: 'hit', a, i, x: tx, y: ty, b: a.b, multi: a.hits });
         }
-      });
+      }
       a.age += DT;
       if (a.age > LIFE) { a.alive = false; if (ev) ev.push({ type: 'fizzle', a, x: a.x, y: a.y }); }
     }
+    if (run.spawned.length) { for (const a of run.spawned) { run.arrows.push(a); if (ev) ev.push({ type: 'spawn', a }); } run.spawned = []; }
     run.step++;
-    if (!run.won && run.hit.every(Boolean)) { run.won = true; if (ev) ev.push({ type: 'win' }); }
+    if (!run.won && !run.failed && L.targets.every((t, i) => t.avoid || run.hit[i])) { run.won = true; if (ev) ev.push({ type: 'win' }); }
   }
 
-  const done = run => run.shots.every(s => s.launched) && run.arrows.every(a => !a.alive);
+  const done = run => run.failed && run.arrows.every(a => !a.alive) || (run.shots.every(s => s.launched) && run.arrows.every(a => !a.alive));
 
-  // 조준선: 현재 문 상태 기준으로 반사 경로를 계산
-  function ray(run, ang, maxB, maxLen) {
+  // 조준선: 현재 상태 기준 반사 경로 (포털 통과, 프리즘에서 멈춤)
+  function ray(run, ang, maxB, maxLen, pierce) {
     const L = run.L, time = run.step * DT;
     let x = L.bow[0], y = L.bow[1], vx = Math.cos(ang), vy = Math.sin(ang);
-    const pts = [[x, y]];
-    let b = 0, total = 0, end = 'open';
-    while (b <= maxB) {
+    const paths = [[[x, y]]];
+    let pts = paths[0], b = 0, end = 'open', jumps = 0;
+    while (b <= maxB && jumps < 4) {
       const reach = 900;
-      const h = nearest(run.C, run.gateOpen, time, x, y, vx * reach, vy * reach);
+      const h = nearest(run, time, x, y, vx * reach, vy * reach, pierce, true);
       if (!h) { pts.push([x + vx * reach, y + vy * reach]); break; }
-      let d = reach * h.t;
-      if (b === maxB && maxLen && d > maxLen) { pts.push([x + vx * maxLen, y + vy * maxLen]); end = 'cut'; break; }
-      x += vx * d; y += vy * d; total += d; pts.push([x, y]);
-      if (h.s.k !== 'w') { end = h.s.k; break; }
-      let nx = h.s.nx, ny = h.s.ny;
+      const d = reach * h.t;
+      if (b === maxB && maxLen && d > maxLen && h.k !== 'p') { pts.push([x + vx * maxLen, y + vy * maxLen]); end = 'cut'; break; }
+      x += vx * d; y += vy * d; pts.push([x, y]);
+      if (h.k === 'p') {
+        const p = L.portals[h.i], to = h.end === 'a' ? p.b : p.a;
+        x = to[0] + vx * (PR + 2); y = to[1] + vy * (PR + 2); pts = [[x, y]]; paths.push(pts); jumps++; continue;
+      }
+      if (h.k === 'x') { end = 'x'; break; }
+      if (h.k !== 'w') { end = h.k; break; }
+      let nx = h.nx, ny = h.ny;
       if (nx * vx + ny * vy > 0) { nx = -nx; ny = -ny; }
       const vd = vx * nx + vy * ny; vx -= 2 * vd * nx; vy -= 2 * vd * ny;
       x += nx * 0.05; y += ny * 0.05;
       b++;
-      if (b > maxB) break;
     }
-    return { pts, end };
+    return { paths, end };
   }
 
-  // 빠른 판정 (솔버용)
-  function simulate(L, shots, maxSteps = 2400) {
-    const run = newRun(L, shots);
+  function simulate(L, shots, mirrors, maxSteps = 2600) {
+    const run = newRun(L, shots, mirrors);
     while (run.step < maxSteps) {
       step(run, null);
-      if (run.won) return run;
-      if (done(run)) return run;
+      if (run.won || done(run)) return run;
     }
     return run;
   }
 
-  return { DT, SPEED, TR, SR, F, LEVELS, compile, newRun, step, done, ray, tpos, simulate };
+  return { DT, SPEED, TR, SR, PR, XR, F, D2R, LEVELS, compile, newRun, step, done, ray, tpos, simulate, defaultMirrors, mirrorSeg };
 })();
 
 
@@ -364,7 +516,7 @@ const cv = $('cv'), ctx = cv.getContext('2d'), stage = $('stage'), wrap = $('wra
 let scale = 1, pr = 1;
 
 // ---------- 저장 ----------
-const SAVE_KEY = 'echoArrow.v1';
+const SAVE_KEY = 'echoArrow.v2';
 let save = { stars: {}, sound: true };
 try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if (s && s.stars) save = { ...save, ...s }; } catch (e) {}
 const persist = () => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {} };
@@ -404,6 +556,11 @@ const SFX = {
   win() { [523, 659, 784, 1047, 1319].forEach((f, i) => { tone(f, 0.6, 'triangle', 0.14, null, i * 0.07); tone(f / 2, 0.6, 'sine', 0.07, null, i * 0.07); }); },
   fizzle() { noise(0.2, 0.12, 1200, 'bandpass'); },
   click() { tone(900, 0.05, 'square', 0.05); },
+  ice() { noise(0.25, 0.4, 5000, 'highpass'); [1800, 2400, 1500].forEach((f, i) => tone(f, 0.12, 'triangle', 0.07, f * 0.7, i * 0.03)); },
+  portal() { tone(300, 0.25, 'sine', 0.14, 900); tone(900, 0.25, 'sine', 0.06, 300, 0.05); },
+  prism() { [1047, 1319, 1568, 2093].forEach((f, i) => tone(f, 0.3, 'sine', 0.09, null, i * 0.035)); },
+  shield() { tone(1400, 0.12, 'square', 0.06, 900); noise(0.05, 0.3, 7000, 'highpass'); },
+  rotate() { tone(520, 0.08, 'triangle', 0.12, 780); noise(0.06, 0.12, 2500, 'bandpass'); },
   fail() { [392, 330, 262].forEach((f, i) => tone(f, 0.3, 'triangle', 0.14, null, i * 0.12)); },
 };
 const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
@@ -445,23 +602,48 @@ function burst(x, y, col, n = 14, sp = 160, size = 3) {
 const ring = (x, y, col, r1 = 34, life = 0.4, w = 3) => rings.push({ x, y, col, r1, life, t: 0, w });
 const ftext = (x, y, s, col = '#fff', size = 18, life = 1) => texts.push({ x, y, s, col, size, life, t: 0 });
 
+// ---------- 스킬 ----------
+const SKILL = {
+  split: { name: '분열', desc: '분열 화살: 처음 튕길 때 세 갈래로 갈라져요', col: '#ffd36b' },
+  pierce: { name: '관통', desc: '관통 화살: 이끼를 뚫고 지나가요', col: '#8dffb5' },
+};
+const WORLD = ['', '숲', '거울', '수정', '메아리'];
+function skillChips() {
+  return Object.keys(G.L.skills || {}).map((k, i) => ({ k, x: F.x0 + 10 + i * 78, y: F.y1 - 38, w: 72, h: 28 }));
+}
+
 // ---------- 흐름 ----------
 function startLevel(li) {
   G.li = li; G.L = LEVELS[li]; G.shots = []; G.bonus = 0; G.adUsed = false; G.fails = 0;
+  G.iceBlocks = (G.L.blocks || []).filter(b => b[4] === 'i');
+  G.mirrors = SIM.defaultMirrors(G.L); G.skillLeft = { ...(G.L.skills || {}) }; G.kind = 'n';
   seed = 1234 + li * 77; staticLayer = null;
   hideAll(); startTurn(true);
 }
-function startTurn(first) {
+function startTurn(first, quiet) {
   const L = G.L;
-  G.run = SIM.newRun(L, G.shots.map(s => ({ ...s, echo: true })));
+  G.run = SIM.newRun(L, G.shots.map(s => ({ ...s, echo: true })), G.mirrors);
+  G.echoPrev = echoPreview();
   G.mode = 'aim'; G.cur = null; G.acc = 0; G.endT = 0; G.finT = 0; G.slowT = 0; G.hitstop = 0; G.hold = 0;
   G.cam.tz = 1; G.cam.tx = W / 2; G.cam.ty = H / 2;
   G.stats = { maxB: 0, tricks: 0, multi: 0 };
   G.gateVis = G.run.C.gates.map(() => 0); G.gateWas = G.run.C.gates.map(() => false);
   G.trailsFull = false;
+  if (quiet) return;
   if (first && L.hint) toast(L.hint, 0, true);
   else if (G.shots.length) toast(`메아리 ${G.shots.length}개 대기 중 · 누르는 순간 지난 화살이 같은 타이밍에 다시 날아가요`, 0, false, true);
   else hideToast();
+}
+// 메아리 미리보기: 지난 화살들이 지금 거울 상태에서 어떻게 날아갈지
+function echoPreview() {
+  if (!G.shots.length) return [];
+  const run = SIM.newRun(G.L, G.shots, G.mirrors), out = new Map();
+  for (let i = 0; i < 1500 && !SIM.done(run); i++) {
+    SIM.step(run, null);
+    if (i % 3) continue;
+    run.arrows.forEach((a, k) => { if (!a.alive) return; if (!out.has(a)) out.set(a, { idx: a.idx, pts: [] }); out.get(a).pts.push(a.x, a.y); });
+  }
+  return [...out.values()];
 }
 function remaining() { return G.L.shots + G.bonus - G.shots.length - (G.cur ? 1 : 0); }
 function endTurn() {
@@ -478,7 +660,8 @@ function endTurn() {
   }
 }
 function fire() {
-  const shot = { ang: G.aim.ang, step: G.run.step, idx: G.shots.length };
+  const shot = { ang: G.aim.ang, step: G.run.step, idx: G.shots.length, kind: G.kind };
+  if (G.kind !== 'n') { G.skillLeft[G.kind]--; G.kind = 'n'; }
   G.cur = shot;
   G.run.shots.push({ ...shot, launched: false, echo: false });
   G.mode = 'fly';
@@ -488,7 +671,7 @@ function win() {
   const used = G.shots.length + 1;
   const L = G.L;
   const stars = used <= L.par ? 3 : used === L.par + 1 ? 2 : 1;
-  G.lastWin = { shots: [...G.shots, G.cur], stars, used, stats: { ...G.stats } };
+  G.lastWin = { shots: [...G.shots, G.cur], stars, used, stats: { ...G.stats }, mirrors: G.mirrors.slice() };
   const prev = save.stars[G.li] || 0;
   if (stars > prev) { save.stars[G.li] = stars; persist(); }
   G.mode = 'finish'; G.finT = 0;
@@ -507,7 +690,7 @@ function showClear() {
 }
 function startReplay() {
   hideAll();
-  G.run = SIM.newRun(G.L, G.lastWin.shots.map(s => ({ ...s, echo: false })));
+  G.run = SIM.newRun(G.L, G.lastWin.shots.map(s => ({ ...s, echo: false })), G.lastWin.mirrors);
   G.replayIdx = G.lastWin.shots.length - 1;
   G.mode = 'replay'; G.acc = 0; G.finT = 0; G.slowT = 0; G.trailsFull = true;
   G.gateVis = G.run.C.gates.map(() => 0); G.gateWas = G.run.C.gates.map(() => false);
@@ -560,6 +743,37 @@ function onEvents(ev) {
       case 'fizzle':
         SFX.fizzle(); burst(e.x, e.y, '#9aa6d6', 8, 60, 2);
         break;
+      case 'spawn':
+        e.a.tr = [];
+        break;
+      case 'oops':
+        SFX.fail(); buzz([20, 30, 20]); G.shake = 8; G.flash = 0.2;
+        burst(e.x, e.y, '#ff9fc8', 20, 200, 3); ring(e.x, e.y, '#ff7a9a', 48, 0.5, 4);
+        ftext(e.x, e.y - 26, e.a.idx === curIdx ? '앗! 아기 정령이 깼어요' : '메아리가 아기 정령을 깨웠어요', '#ff9fc8', 17, 1.6);
+        if (e.a.idx !== curIdx) toast('지난 화살이 아기 정령을 맞혀요. 거울을 돌리거나 ↻ 다시 시작하세요', 3, false, true);
+        break;
+      case 'ice': {
+        SFX.ice(); G.shake = Math.max(G.shake, 4);
+        const [bx, by, bw, bh] = G.iceBlocks[e.i];
+        for (let k = 0; k < 22; k++) parts.push({ x: bx + rnd() * bw, y: by + rnd() * bh, vx: (rnd() - 0.5) * 260, vy: (rnd() - 0.8) * 220, life: 0.7 + rnd() * 0.5, t: 0, col: rnd() < 0.5 ? '#bff4ff' : '#7fd8ff', size: 2 + rnd() * 3, g: 520, conf: true, rot: rnd() * 6 });
+        ftext(e.x, e.y - 14, '쨍!', '#bff4ff', 18, 0.7);
+        break;
+      }
+      case 'portal':
+        SFX.portal(); ring(e.x1, e.y1, '#ff9f5a', 34, 0.45, 3); ring(e.x2, e.y2, '#5ab8ff', 34, 0.45, 3); burst(e.x2, e.y2, '#9fd4ff', 10, 140, 2.2);
+        if (e.a.tr) e.a.tr.push(NaN, NaN);
+        break;
+      case 'prism':
+        SFX.prism(); G.shake = Math.max(G.shake, 4);
+        ['#ff7a8a', '#ffd36b', '#8dffb5', '#7ef0ff', '#b9a4ff'].forEach(c => burst(e.x, e.y, c, 5, 200, 2.4));
+        ring(e.x, e.y, '#ffffff', 40, 0.5, 3); ftext(e.x, e.y - 22, '분광!', '#ffffff', 18, 0.8);
+        break;
+      case 'split':
+        SFX.prism(); ring(e.x, e.y, '#ffd36b', 30, 0.4, 3); ftext(e.x, e.y - 16, '분열!', '#ffd36b', 18, 0.8);
+        break;
+      case 'shield':
+        SFX.shield(); burst(e.x, e.y, '#dfe8ff', 12, 160, 2.2); ftext(e.x, e.y - 14, '팅!', '#dfe8ff', 16, 0.6); G.shake = Math.max(G.shake, 3);
+        break;
     }
   }
 }
@@ -576,6 +790,14 @@ cv.addEventListener('pointerdown', e => {
   }
   if (G.mode === 'replay') { G.finT = 99; return; }
   if (G.mode !== 'aim' || activePointer !== null) return;
+  for (const c of skillChips()) {
+    if (p.x > c.x && p.x < c.x + c.w && p.y > c.y && p.y < c.y + c.h) {
+      if (G.skillLeft[c.k] > 0) { G.kind = G.kind === c.k ? 'n' : c.k; SFX.click(); toast(G.kind === 'n' ? '기본 화살' : SKILL[c.k].desc, 1.6, true); }
+      return;
+    }
+  }
+  G.mirrorTap = -1;
+  (G.L.mirrors || []).forEach((m, i) => { if (m.rot && Math.hypot(p.x - m.x, p.y - m.y) < 30) G.mirrorTap = i; });
   activePointer = e.pointerId;
   try { cv.setPointerCapture(e.pointerId); } catch (er) {}
   G.mode = 'hold'; G.ds = p; G.aim.pull = 0;
@@ -592,7 +814,11 @@ function release(e) {
   activePointer = null;
   if (G.mode !== 'hold') return;
   if (G.aim.pull >= 22) fire();
-  else { startTurn(false); toast('조금 더 길게 당겼다 놓아야 쏴져요', 1.6); }
+  else if (G.mirrorTap >= 0) {
+    const i = G.mirrorTap; G.mirrors[i] = (G.mirrors[i] + 1) % 4; G.mirrorSpin = { i, t: 0 };
+    SFX.rotate(); buzz(10); startTurn(false, true);
+    if (G.shots.length) toast('거울이 돌면 메아리의 길도 바뀌어요', 1.4, false, true);
+  } else { startTurn(false); toast('조금 더 길게 당겼다 놓아야 쏴져요', 1.6); }
 }
 cv.addEventListener('pointerup', release);
 cv.addEventListener('pointercancel', e => { if (e.pointerId === activePointer) { activePointer = null; if (G.mode === 'hold') startTurn(false); } });
@@ -609,7 +835,7 @@ function buildGrid() {
   const un = unlocked();
   LEVELS.forEach((L, i) => {
     const b = document.createElement('button');
-    b.className = 'lv' + (L.par > 1 ? ' echo' : '') + (i === un && !save.stars[i] ? ' next' : '');
+    b.className = 'lv w' + L.w + (i === un && !save.stars[i] ? ' next' : '');
     b.disabled = i > un;
     const st = save.stars[i] || 0;
     b.innerHTML = `<b>${i + 1}</b><small>${st ? '★'.repeat(st) : ''}</small>`;
@@ -675,7 +901,8 @@ function buildStatic() {
     x.save(); x.setLineDash([3, 7]); x.strokeStyle = 'rgba(200,230,255,0.25)'; x.lineWidth = 2; x.beginPath(); x.moveTo(t.x - t.mx, t.y - t.my); x.lineTo(t.x + t.mx, t.y + t.my); x.stroke(); x.restore();
   }
   // 블록
-  for (const [bx, by, bw, bh, k] of L.blocks || []) drawBlock(x, bx, by, bw, bh, k);
+  G.iceBlocks = (L.blocks || []).filter(b => b[4] === 'i');
+  for (const [bx, by, bw, bh, k] of L.blocks || []) if (k !== 'i') drawBlock(x, bx, by, bw, bh, k);
   // 벽 (테두리 + 내부)
   const C = SIM.compile(L);
   for (const s of C.segs) if (s.edge) drawWall(x, s.x1, s.y1, s.x2, s.y2, s.k, true);
@@ -760,24 +987,102 @@ function drawSwitches(time) {
     ctx.restore();
   });
 }
+function drawDevices(time) {
+  const L = G.L, run = G.run;
+  // 버섯 범퍼
+  for (const u of L.bumpers || []) {
+    ctx.save(); ctx.translate(u.x, u.y);
+    ctx.fillStyle = '#e8d9c8'; rr(ctx, -u.r * 0.35, 0, u.r * 0.7, u.r * 0.9, 4); ctx.fill();
+    const g = ctx.createRadialGradient(-u.r * 0.3, -u.r * 0.4, 2, 0, 0, u.r);
+    g.addColorStop(0, '#ff9fb4'); g.addColorStop(1, '#c2365a');
+    ctx.shadowColor = 'rgba(255,120,150,0.5)'; ctx.shadowBlur = 10;
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, u.r, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,240,240,0.9)';
+    [[-0.4, -0.35, 0.2], [0.35, -0.2, 0.16], [0, 0.35, 0.14], [-0.2, 0.15, 0.1]].forEach(([dx, dy, r]) => { ctx.beginPath(); ctx.arc(dx * u.r, dy * u.r, r * u.r, 0, 7); ctx.fill(); });
+    ctx.restore();
+  }
+  // 얼음
+  G.iceBlocks.forEach(([bx, by, bw, bh], i) => {
+    if (run.ice[i]) return;
+    ctx.save(); rr(ctx, bx, by, bw, bh, 3);
+    const g = ctx.createLinearGradient(bx, by, bx + bw, by + bh); g.addColorStop(0, 'rgba(210,248,255,0.9)'); g.addColorStop(1, 'rgba(110,200,255,0.75)');
+    ctx.shadowColor = '#9fe8ff'; ctx.shadowBlur = 10; ctx.fillStyle = g; ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx + bw * 0.2, by + 2); ctx.lineTo(bx + bw * 0.35, by + bh - 2); ctx.moveTo(bx + bw * 0.6, by + 2); ctx.lineTo(bx + bw * 0.52, by + bh * 0.6); ctx.stroke();
+    ctx.restore();
+  });
+  // 포털
+  (L.portals || []).forEach(pp => {
+    [[pp.a, '#ff9f5a', 1], [pp.b, '#5ab8ff', -1]].forEach(([c, col, dir]) => {
+      ctx.save(); ctx.translate(c[0], c[1]);
+      ctx.shadowColor = col; ctx.shadowBlur = 16;
+      const g = ctx.createRadialGradient(0, 0, 2, 0, 0, SIM.PR + 3); g.addColorStop(0, 'rgba(10,10,30,0.95)'); g.addColorStop(0.7, 'rgba(10,10,30,0.8)'); g.addColorStop(1, col);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, SIM.PR + 3, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+      ctx.rotate(G.t * 3 * dir); ctx.strokeStyle = col; ctx.lineWidth = 2;
+      for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.arc(0, 0, SIM.PR - 2 - k * 4, k, k + 2.2); ctx.stroke(); }
+      ctx.restore();
+    });
+  });
+  // 프리즘
+  for (const x of L.prisms || []) {
+    ctx.save(); ctx.translate(x.x, x.y); ctx.rotate(Math.sin(G.t) * 0.15);
+    const r = SIM.XR + 3;
+    ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 14;
+    const g = ctx.createLinearGradient(-r, -r, r, r);
+    ['#ff7a8a', '#ffd36b', '#8dffb5', '#7ef0ff', '#b9a4ff'].forEach((c, i) => g.addColorStop(i / 4, c));
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * 0.8, 0); ctx.lineTo(0, r); ctx.lineTo(-r * 0.8, 0); ctx.closePath(); ctx.fill();
+    ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.2; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(0, r); ctx.moveTo(-r * 0.8, 0); ctx.lineTo(r * 0.8, 0); ctx.globalAlpha = 0.5; ctx.stroke();
+    ctx.restore();
+  }
+  // 거울
+  (L.mirrors || []).forEach((m, i) => {
+    const sg = run.mseg[i];
+    let ang = Math.atan2(sg.y2 - sg.y1, sg.x2 - sg.x1);
+    if (G.mirrorSpin && G.mirrorSpin.i === i && G.mirrorSpin.t < 1) { G.mirrorSpin.t += 0.12; ang -= (1 - Math.min(1, G.mirrorSpin.t)) * Math.PI / 4; }
+    ctx.save(); ctx.translate(m.x, m.y);
+    if (m.rot) {
+      ctx.strokeStyle = 'rgba(200,220,255,0.35)'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 5]); ctx.lineDashOffset = -G.t * 8;
+      ctx.beginPath(); ctx.arc(0, 0, m.len / 2 + 6, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      if (G.mode === 'aim') { ctx.fillStyle = 'rgba(200,220,255,0.75)'; ctx.font = '700 9px Fredoka, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('TAP', 0, m.len / 2 + 18); }
+    }
+    ctx.rotate(ang);
+    ctx.shadowColor = '#dff3ff'; ctx.shadowBlur = 12;
+    const g = ctx.createLinearGradient(0, -4, 0, 4); g.addColorStop(0, '#ffffff'); g.addColorStop(0.5, '#a9c4e8'); g.addColorStop(1, '#5d7aa8');
+    ctx.fillStyle = g; rr(ctx, -m.len / 2, -3.5, m.len, 7, 3.5); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = m.rot ? '#ffd36b' : '#6b7bb0'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, 7); ctx.fill();
+    const sh = ((G.t * 0.6) % 1.4) - 0.2;
+    if (sh > 0 && sh < 1) { ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillRect(-m.len / 2 + sh * m.len - 3, -3, 6, 6); }
+    ctx.restore();
+  });
+}
 function drawTargets(time) {
   G.L.targets.forEach((tg, i) => {
     const [x, y] = SIM.tpos(tg, time);
     const hit = G.run.hit[i];
     const bob = hit ? 0 : Math.sin(G.t * 2 + i) * 2.5;
     ctx.save(); ctx.translate(x, y + bob);
-    const r = TR * (hit ? 1.08 : 1);
-    ctx.shadowColor = hit ? '#ffd36b' : '#8fd6ff'; ctx.shadowBlur = hit ? 26 : 14;
+    const av = tg.avoid, r = TR * (hit ? 1.08 : 1) * (av ? 0.85 : 1);
+    ctx.shadowColor = av ? '#ff9fc8' : hit ? '#ffd36b' : '#8fd6ff'; ctx.shadowBlur = hit ? 26 : 14;
     const g = ctx.createRadialGradient(-4, -5, 2, 0, 0, r);
-    if (hit) { g.addColorStop(0, '#fffbe6'); g.addColorStop(1, '#ffbf3f'); } else { g.addColorStop(0, '#f2fdff'); g.addColorStop(1, '#6fb7ff'); }
+    if (av) { g.addColorStop(0, '#fff0f6'); g.addColorStop(1, hit ? '#ff3d6e' : '#ff8fb8'); }
+    else if (hit) { g.addColorStop(0, '#fffbe6'); g.addColorStop(1, '#ffbf3f'); } else { g.addColorStop(0, '#f2fdff'); g.addColorStop(1, '#6fb7ff'); }
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, r, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
     // 작은 귀/잎
-    ctx.fillStyle = hit ? '#ffcf5a' : '#9fdcff'; ctx.beginPath(); ctx.ellipse(-7, -r + 1, 3, 6, -0.5, 0, 7); ctx.ellipse(7, -r + 1, 3, 6, 0.5, 0, 7); ctx.fill();
+    ctx.fillStyle = av ? '#ffb3cf' : hit ? '#ffcf5a' : '#9fdcff'; ctx.beginPath(); ctx.ellipse(-7, -r + 1, 3, 6, -0.5, 0, 7); ctx.ellipse(7, -r + 1, 3, 6, 0.5, 0, 7); ctx.fill();
+    if (av && !hit) { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, -r - 6, 4, 0, 7); ctx.fill(); ctx.strokeStyle = '#ff5a86'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, -r - 6, 4, 0, 7); ctx.moveTo(-2.5, -r - 8.5); ctx.lineTo(2.5, -r - 3.5); ctx.stroke(); }
+    if (tg.shield !== undefined && !hit) {
+      const sa = tg.shield * Math.PI / 180;
+      ctx.save(); ctx.rotate(sa); ctx.shadowColor = '#dfe8ff'; ctx.shadowBlur = 8;
+      ctx.strokeStyle = '#c9d6ff'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(0, 0, r + 6, -1.2, 1.2); ctx.stroke();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, r + 6, -1.0, 1.0); ctx.stroke(); ctx.restore();
+    }
     ctx.strokeStyle = '#1b2456'; ctx.lineWidth = 1.8; ctx.lineCap = 'round';
-    if (hit) { ctx.beginPath(); ctx.moveTo(-7, 0); ctx.lineTo(-4.5, -3); ctx.lineTo(-2, 0); ctx.moveTo(2, 0); ctx.lineTo(4.5, -3); ctx.lineTo(7, 0); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 3, 3.2, 0, Math.PI); ctx.stroke(); }
+    if (hit && av) { ctx.beginPath(); ctx.moveTo(-7, -3); ctx.lineTo(-3, 1); ctx.moveTo(-3, -3); ctx.lineTo(-7, 1); ctx.moveTo(3, -3); ctx.lineTo(7, 1); ctx.moveTo(7, -3); ctx.lineTo(3, 1); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 6, 3, Math.PI, 0); ctx.stroke(); }
+    else if (hit) { ctx.beginPath(); ctx.moveTo(-7, 0); ctx.lineTo(-4.5, -3); ctx.lineTo(-2, 0); ctx.moveTo(2, 0); ctx.lineTo(4.5, -3); ctx.lineTo(7, 0); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 3, 3.2, 0, Math.PI); ctx.stroke(); }
     else { ctx.beginPath(); ctx.arc(-4.5, -1, 2.4, 0.1, Math.PI - 0.1); ctx.moveTo(6.9, -1); ctx.arc(4.5, -1, 2.4, 0.1, Math.PI - 0.1); ctx.stroke(); ctx.fillStyle = 'rgba(255,140,170,0.45)'; ctx.beginPath(); ctx.arc(-8, 4, 2.4, 0, 7); ctx.arc(8, 4, 2.4, 0, 7); ctx.fill(); }
     ctx.restore();
-    if (!hit) { const zt = (G.t * 0.6 + i * 0.3) % 1; ctx.save(); ctx.globalAlpha = 1 - zt; ctx.fillStyle = '#cfe6ff'; ctx.font = `${9 + zt * 6}px Fredoka, sans-serif`; ctx.fillText('z', x + 10 + zt * 8, y - 14 - zt * 16); ctx.restore(); }
+    if (!hit && !tg.avoid) { const zt = (G.t * 0.6 + i * 0.3) % 1; ctx.save(); ctx.globalAlpha = 1 - zt; ctx.fillStyle = '#cfe6ff'; ctx.font = `${9 + zt * 6}px Fredoka, sans-serif`; ctx.fillText('z', x + 10 + zt * 8, y - 14 - zt * 16); ctx.restore(); }
   });
 }
 function drawArrowShape(x, y, ang, col, alpha, glow) {
@@ -796,8 +1101,8 @@ function drawArrows() {
     const col = shotCol(a.idx, curIdx);
     ctx.strokeStyle = col; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     const n = tr.length / 2;
-    if (G.trailsFull) { ctx.globalAlpha = 0.5; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(tr[0], tr[1]); for (let i = 2; i < tr.length; i += 2) ctx.lineTo(tr[i], tr[i + 1]); ctx.stroke(); }
-    else for (let i = 1; i < n; i++) { const k = i / n; ctx.globalAlpha = k * (a.alive ? 0.75 : 0.35); ctx.lineWidth = 1 + k * 4; line(ctx, tr[i * 2 - 2], tr[i * 2 - 1], tr[i * 2], tr[i * 2 + 1]); }
+    if (G.trailsFull) { ctx.globalAlpha = 0.5; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(tr[0], tr[1]); let jump = false; for (let i = 2; i < tr.length; i += 2) { if (isNaN(tr[i])) { jump = true; continue; } if (jump) { ctx.moveTo(tr[i], tr[i + 1]); jump = false; } else ctx.lineTo(tr[i], tr[i + 1]); } ctx.stroke(); }
+    else for (let i = 1; i < n; i++) { if (isNaN(tr[i * 2]) || isNaN(tr[i * 2 - 2])) continue; const k = i / n; ctx.globalAlpha = k * (a.alive ? 0.75 : 0.35); ctx.lineWidth = 1 + k * 4; line(ctx, tr[i * 2 - 2], tr[i * 2 - 1], tr[i * 2], tr[i * 2 + 1]); }
   }
   ctx.restore();
   for (const a of G.run.arrows) {
@@ -830,33 +1135,43 @@ function drawArcher() {
 }
 function drawGuide() {
   if (G.mode !== 'hold' || G.aim.pull < 22) return;
-  const r = SIM.ray(G.run, G.aim.ang, G.L.guide || 1, 70);
+  const r = SIM.ray(G.run, G.aim.ang, G.L.guide || 1, 70, G.kind === 'pierce');
+  const gcol = G.kind !== 'n' ? SKILL[G.kind].col : '#ffd36b';
   ctx.save();
-  let d = 0; const gap = 10;
-  for (let i = 1; i < r.pts.length; i++) {
-    const [x1, y1] = r.pts[i - 1], [x2, y2] = r.pts[i], len = Math.hypot(x2 - x1, y2 - y1);
-    for (let s = (gap - (d % gap)) % gap; s < len; s += gap) {
-      const t = s / len, fade = i === r.pts.length - 1 ? 1 - s / len : 1;
-      ctx.globalAlpha = 0.85 * fade * (i === 1 ? 1 : 0.75);
-      ctx.fillStyle = i === 1 ? '#fff4cf' : '#ffd36b';
-      ctx.beginPath(); ctx.arc(lerp(x1, x2, t), lerp(y1, y2, t), i === 1 ? 2.2 : 1.8, 0, 7); ctx.fill();
+  const gap = 10;
+  r.paths.forEach((pts, pi) => {
+    let d = 0;
+    for (let i = 1; i < pts.length; i++) {
+      const [x1, y1] = pts[i - 1], [x2, y2] = pts[i], len = Math.hypot(x2 - x1, y2 - y1);
+      const last = pi === r.paths.length - 1 && i === pts.length - 1, first = pi === 0 && i === 1;
+      for (let s2 = (gap - (d % gap)) % gap; s2 < len; s2 += gap) {
+        const t = s2 / len, fade = last ? 1 - s2 / len : 1;
+        ctx.globalAlpha = 0.85 * fade * (first ? 1 : 0.75);
+        ctx.fillStyle = first ? '#fff4cf' : gcol;
+        ctx.beginPath(); ctx.arc(lerp(x1, x2, t), lerp(y1, y2, t), first ? 2.2 : 1.8, 0, 7); ctx.fill();
+      }
+      d += len;
+      if (i < pts.length - 1) { ctx.globalAlpha = 0.9; ctx.strokeStyle = gcol; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x2, y2, 5, 0, 7); ctx.stroke(); }
     }
-    d += len;
-    if (i < r.pts.length - 1) { ctx.globalAlpha = 0.9; ctx.strokeStyle = '#ffd36b'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x2, y2, 5, 0, 7); ctx.stroke(); }
-  }
-  if (r.end === 'm' || r.end === 'g') { const [ex, ey] = r.pts[r.pts.length - 1]; ctx.globalAlpha = 0.9; ctx.strokeStyle = '#ff7a8a'; ctx.lineWidth = 2.2; line(ctx, ex - 5, ey - 5, ex + 5, ey + 5); line(ctx, ex + 5, ey - 5, ex - 5, ey + 5); }
+  });
+  const lp = r.paths[r.paths.length - 1], [ex, ey] = lp[lp.length - 1];
+  if (r.end === 'm' || r.end === 'g') { ctx.globalAlpha = 0.9; ctx.strokeStyle = '#ff7a8a'; ctx.lineWidth = 2.2; line(ctx, ex - 5, ey - 5, ex + 5, ey + 5); line(ctx, ex + 5, ey - 5, ex - 5, ey + 5); }
+  if (r.end === 'x') { ctx.globalAlpha = 0.9; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(ex, ey, 8, 0, 7); ctx.stroke(); }
   ctx.restore();
 }
 function drawEchoPreview() {
-  if (G.mode !== 'aim' || !G.shots.length) return;
+  if (G.mode !== 'aim' || !G.echoPrev || !G.echoPrev.length) return;
+  ctx.save(); ctx.lineWidth = 2; ctx.setLineDash([3, 6]); ctx.lineDashOffset = -G.t * 16; ctx.lineCap = 'round';
+  for (const e of G.echoPrev) {
+    const pts = e.pts; if (pts.length < 4) continue;
+    ctx.strokeStyle = COL_SHOT[1 + (e.idx % 5)]; ctx.globalAlpha = 0.45;
+    ctx.beginPath(); ctx.moveTo(pts[0], pts[1]);
+    for (let i = 2; i < pts.length; i += 2) { if (Math.hypot(pts[i] - pts[i - 2], pts[i + 1] - pts[i - 1]) > 40) ctx.moveTo(pts[i], pts[i + 1]); else ctx.lineTo(pts[i], pts[i + 1]); }
+    ctx.stroke();
+  }
+  ctx.setLineDash([]); ctx.globalAlpha = 0.95; ctx.font = '700 11px Fredoka, sans-serif'; ctx.textAlign = 'center';
   const [bx, by] = G.L.bow;
-  ctx.save();
-  G.shots.forEach((s, i) => {
-    const col = COL_SHOT[1 + (i % 5)], ex = bx + Math.cos(s.ang) * 90, ey = by + Math.sin(s.ang) * 90;
-    ctx.globalAlpha = 0.25 + 0.15 * Math.sin(G.t * 3 + i); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.setLineDash([4, 6]); line(ctx, bx, by, ex, ey); ctx.setLineDash([]);
-    ctx.globalAlpha = 0.9; ctx.fillStyle = col; ctx.font = '12px Fredoka, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText(`${i + 1}`, bx + Math.cos(s.ang) * 102, by + Math.sin(s.ang) * 102 + 4);
-  });
+  G.shots.forEach((s2, i) => { ctx.fillStyle = COL_SHOT[1 + (i % 5)]; ctx.fillText(`${i + 1}`, bx + Math.cos(s2.ang) * 40, by + Math.sin(s2.ang) * 40 + 4); });
   ctx.restore();
 }
 function drawFx(rdt) {
@@ -889,7 +1204,7 @@ function drawHud(time) {
   btn(328, 42, (x, y) => { ctx.beginPath(); ctx.arc(x, y, 7, -0.3, Math.PI * 1.6); ctx.stroke(); ctx.fillStyle = '#eef2ff'; ctx.beginPath(); ctx.moveTo(x + 9.5, y - 6); ctx.lineTo(x + 5, y - 1); ctx.lineTo(x + 3, y - 7.5); ctx.closePath(); ctx.fill(); });
   ctx.textAlign = 'center';
   ctx.fillStyle = G.L.par > 1 ? '#7ef0ff' : '#9aa6d6'; ctx.font = '700 11px Fredoka, sans-serif';
-  ctx.fillText(`LEVEL ${G.li + 1}${G.L.par > 1 ? ' · ECHO' : ''}`, W / 2, 28);
+  ctx.fillText(`WORLD ${G.L.w} · ${WORLD[G.L.w]} · ${G.li + 1}`, W / 2, 28);
   ctx.fillStyle = '#eef2ff'; ctx.font = '20px Jua, sans-serif'; ctx.fillText(G.L.name, W / 2, 50);
   // 남은 화살
   const total = G.L.shots + G.bonus, used = G.shots.length + (G.cur ? 1 : 0);
@@ -901,6 +1216,16 @@ function drawHud(time) {
     if (i === G.L.par - 1) { ctx.fillStyle = '#ffd36b'; ctx.font = '9px Fredoka, sans-serif'; ctx.fillText('★', x0 + i * 16, 82); }
   }
   ctx.restore();
+  // 스킬 칩
+  for (const c of skillChips()) {
+    const sk = SKILL[c.k], left = G.skillLeft[c.k] || 0, on = G.kind === c.k;
+    ctx.save(); ctx.globalAlpha = left > 0 ? 1 : 0.35;
+    rr(ctx, c.x, c.y, c.w, c.h, 14); ctx.fillStyle = on ? sk.col : 'rgba(20,26,70,0.9)'; ctx.fill();
+    ctx.strokeStyle = sk.col; ctx.lineWidth = on ? 2.5 : 1.5; ctx.stroke();
+    if (on) { ctx.shadowColor = sk.col; ctx.shadowBlur = 14; ctx.stroke(); ctx.shadowBlur = 0; }
+    ctx.fillStyle = on ? '#1b1440' : sk.col; ctx.font = '14px Jua, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(`${sk.name} ×${left}`, c.x + c.w / 2, c.y + 19); ctx.restore();
+  }
   // 메아리 시계
   if ((G.mode === 'hold' || G.mode === 'fly') && G.shots.length) {
     ctx.save(); ctx.font = '700 11px Fredoka, sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = '#7ef0ff'; ctx.globalAlpha = 0.85;
@@ -956,7 +1281,7 @@ function render(rdt) {
   ctx.save();
   ctx.translate(W / 2 + sx, H / 2 + sy); ctx.scale(c.z, c.z); ctx.translate(-c.x, -c.y);
   if (c.z > 1.001) ctx.drawImage(staticLayer, 0, 0, W, H);
-  drawGates(time); drawSwitches(time); drawTargets(time);
+  drawGates(time); drawDevices(time); drawSwitches(time); drawTargets(time);
   drawEchoPreview(); drawArrows(); drawArcher(); drawGuide(); drawFx(rdt);
   ctx.restore();
   // 시간 느려짐 비네트
