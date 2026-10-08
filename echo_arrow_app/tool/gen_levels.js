@@ -402,7 +402,7 @@ const CURRICULUM = {
     P(['portal'], { allow: ['ice', 'mirror', 'shield'] }), { h: '프리즘' }, P(['prism'], { targets: [2, 3], w: [4, 30] }), P(['prism'], { allow: ['baby'] }),
     P([], { allow: ['ice', 'portal', 'prism', 'mirror'], extra: 2, extraP: 1, w: [2, 14] }),
     { h: '갈라지는 화살' }, P(['split'], { targets: [2, 3], w: [3, 30] }), { h: '관통 화살' }, P(['pierce'], { w: [3, 30] }), { h: '되쏘기 고리' },
-    P(['relay'], { targets: [1, 1], w: [3, 30] }), P(['relay'], { allow: ['ice', 'portal', 'lantern'] }), { h: '수정 정원' },
+    P(['relay'], { targets: [1, 1], w: [3, 30] }), P(['relay'], { allow: ['ice', 'portal', 'lantern'] }), P([], { allow: ['ice', 'portal', 'prism', 'relay', 'mirror', 'shield'], extra: 2, extraP: 1, targets: [2, 3], w: [2.5, 20] }),
     P([], { allow: ['ice', 'portal', 'prism', 'relay', 'mirror', 'shield', 'baby'], extra: 3, extraP: 1, w: [1.5, 10] }),
     P(['relay'], { allow: ['ice', 'portal', 'prism', 'mirror', 'shield', 'baby', 'lantern'], extra: 2, extraP: 1, targets: [2, 3], w: [1.2, 8] }),
   ],
