@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
 
+import '../app/art.dart';
 import '../app/economy.dart';
+import '../app/l10n.dart';
 import '../app/profile.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
 import '../services/services.dart';
+import '../widgets/icons.dart';
 import '../widgets/ui.dart';
-import 'sheets.dart';
 
-class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+/// 상점 탭. 위에서부터: 한정 패키지 → 저금통 → 광고 제거 → 코인 → 부스터 → 꾸미기
+class ShopPage extends StatefulWidget {
+  const ShopPage({super.key, this.topInset = 0, this.bottomInset = 0});
+  final double topInset, bottomInset;
   @override
-  State<ShopScreen> createState() => _ShopScreenState();
+  State<ShopPage> createState() => _ShopPageState();
 }
 
-class _ShopScreenState extends State<ShopScreen> {
+class _ShopPageState extends State<ShopPage> with AutomaticKeepAliveClientMixin {
   Profile get p => Profile.instance;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     p.addListener(_r);
-    Analytics.log('shop_open');
   }
 
   void _r() => mounted ? setState(() {}) : null;
@@ -33,124 +39,201 @@ class _ShopScreenState extends State<ShopScreen> {
   }
 
   Future<void> _buy(Product prod) async {
+    Analytics.log('shop_tap', {'id': prod.id});
     if (await StoreService.instance.buy(prod)) Sfx.instance.play('purchase');
   }
 
   @override
   Widget build(BuildContext context) {
-    final pad = MediaQuery.of(context).padding;
-    return Scaffold(
-      body: NightSky(
-        child: Column(
-          children: [
-            SizedBox(height: pad.top + Space.s),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Space.l),
-              child: Row(
-                children: [
-                  RoundBtn(icon: Icons.arrow_back_rounded, label: '뒤로', onTap: () => Navigator.pop(context)),
-                  const SizedBox(width: Space.m),
-                  Text('상점', style: ko(TypeScale.title)),
-                  const Spacer(),
-                  Pill(icon: const CoinIcon(), text: '${p.coins}'),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(Space.l, Space.l, Space.l, pad.bottom + Space.xl),
-                children: [
-                  if (p.starterActive) _Feature(
-                    title: '스타터 팩',
-                    sub: '처음 한 번만 · ${fmtDur(Duration(milliseconds: p.starterUntil - DateTime.now().millisecondsSinceEpoch))} 남음',
-                    lines: Economy.product('starter').reward.lines,
-                    price: Economy.product('starter').priceLabel,
-                    color: Palette.blossom,
-                    icon: Icons.card_giftcard_rounded,
-                    onBuy: () => _buy(Economy.product('starter')),
-                  ),
-                  _Feature(
-                    title: '별빛 저금통',
-                    sub: '깰 때마다 코인이 쌓여요 (${p.piggy} / ${Economy.piggyMax})',
-                    lines: ['지금 깨면 코인 ${p.piggy}'],
-                    price: Economy.product('piggy').priceLabel,
-                    color: Palette.moon,
-                    icon: Icons.savings_rounded,
-                    progress: p.piggy / Economy.piggyMax,
-                    onBuy: p.piggy >= 1000 ? () => _buy(Economy.product('piggy')) : null,
-                    disabledNote: '코인 1000개부터 깰 수 있어요',
-                  ),
-                  if (!p.adsRemoved)
-                    _Feature(
-                      title: '광고 제거',
-                      sub: '판 사이 광고가 사라져요. 원할 때 보는 보상형 광고는 그대로예요.',
-                      lines: const [],
-                      price: Economy.product('noads').priceLabel,
-                      color: Palette.echo,
-                      icon: Icons.block_rounded,
-                      onBuy: () => _buy(Economy.product('noads')),
-                    ),
-                  const SizedBox(height: Space.l),
-                  Text('코인', style: ko(TypeScale.label)),
-                  const SizedBox(height: Space.s),
-                  for (final id in const ['coins_s', 'coins_m', 'coins_l', 'coins_xl', 'coins_xxl']) Padding(padding: const EdgeInsets.only(bottom: Space.s), child: ProductRow(product: Economy.product(id))),
-                  const SizedBox(height: Space.l),
-                  Text('부스터', style: ko(TypeScale.label)),
-                  const SizedBox(height: Space.s),
-                  for (final k in const ['aim', 'extra', 'split']) _BoosterRow(id: k),
-                  const SizedBox(height: Space.l),
-                  Text('화살 궤적', style: ko(TypeScale.label)),
-                  const SizedBox(height: Space.s),
-                  Text('다시보기와 공유 영상에 그대로 보여요', style: ko(TypeScale.caption, color: Palette.inkSoft)),
-                  const SizedBox(height: Space.s),
-                  Row(children: [for (final e in Economy.trails.entries) Expanded(child: _TrailCard(id: e.key, name: e.value))]),
-                ],
-              ),
-            ),
-          ],
+    super.build(context);
+    final starter = Economy.product('starter');
+    return ListView(
+      padding: EdgeInsets.fromLTRB(Space.l, widget.topInset + Space.m, Space.l, widget.bottomInset + Space.xl),
+      children: [
+        Center(child: RibbonTitle(text: tr('shop'))),
+        const SizedBox(height: Space.l),
+        if (p.starterActive)
+          _OfferCard(
+            art: 'shop/starter',
+            fallback: GI.gift,
+            title: starter.name,
+            sub: tr('once_left', {'t': fmtDur(Duration(milliseconds: p.starterUntil - DateTime.now().millisecondsSinceEpoch))}),
+            lines: starter.reward.lines,
+            price: starter.priceLabel,
+            color: Palette.blossom,
+            ribbon: tr('badge_once'),
+            onBuy: () => _buy(starter),
+          ),
+        _OfferCard(
+          art: 'shop/piggy',
+          fallback: GI.coin,
+          title: tr('piggy'),
+          sub: tr('piggy_sub', {'a': p.piggy, 'b': Economy.piggyMax}),
+          lines: [tr('piggy_now', {'n': p.piggy})],
+          price: Economy.product('piggy').priceLabel,
+          color: Palette.moon,
+          progress: p.piggy / Economy.piggyMax,
+          onBuy: p.piggy >= 1000 ? () => _buy(Economy.product('piggy')) : null,
+          disabledNote: tr('piggy_min'),
         ),
-      ),
+        if (!p.adsRemoved)
+          _OfferCard(art: 'shop/noads', fallback: GI.ad, title: tr('noads'), sub: tr('noads_sub'), lines: const [], price: Economy.product('noads').priceLabel, color: Palette.echo, onBuy: () => _buy(Economy.product('noads'))),
+        const SizedBox(height: Space.m),
+        _SectionTitle(tr('coins')),
+        GridView.count(
+          crossAxisCount: 3,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: Space.s,
+          crossAxisSpacing: Space.s,
+          childAspectRatio: 0.72,
+          children: [for (final id in const ['coins_s', 'coins_m', 'coins_l', 'coins_xl', 'coins_xxl']) _CoinTile(product: Economy.product(id), onBuy: () => _buy(Economy.product(id)))],
+        ),
+        const SizedBox(height: Space.l),
+        _SectionTitle(tr('boosters')),
+        for (final k in const ['aim', 'extra', 'split']) _BoosterRow(id: k),
+        const SizedBox(height: Space.l),
+        _SectionTitle(tr('trails')),
+        Text(tr('trails_sub'), style: ko(TypeScale.caption, color: Palette.inkSoft)),
+        const SizedBox(height: Space.s),
+        Row(children: [for (final id in Economy.trailIds) Expanded(child: _TrailCard(id: id))]),
+        const SizedBox(height: Space.l),
+        Center(child: Btn(tr('restore'), style: BtnStyle.ghost, height: 48, expand: false, onTap: () => StoreService.instance.restore())),
+      ],
     );
   }
 }
 
-class _Feature extends StatelessWidget {
-  const _Feature({required this.title, required this.sub, required this.lines, required this.price, required this.color, required this.icon, required this.onBuy, this.progress, this.disabledNote});
-  final String title, sub, price;
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle(this.text);
+  final String text;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: Space.s, left: 4),
+    child: Row(children: [
+      Container(width: 4, height: 18, decoration: BoxDecoration(color: Palette.moon, borderRadius: BorderRadius.circular(2))),
+      const SizedBox(width: Space.s),
+      Text(text, style: ko(TypeScale.label)),
+    ]),
+  );
+}
+
+class _OfferCard extends StatelessWidget {
+  const _OfferCard({required this.art, required this.fallback, required this.title, required this.sub, required this.lines, required this.price, required this.color, required this.onBuy, this.progress, this.disabledNote, this.ribbon});
+  final String art, title, sub, price;
+  final GI fallback;
+  Widget get _fallbackArt => fallback == GI.coin
+      ? const Stack(alignment: Alignment.center, children: [Positioned(left: 8, top: 26, child: CoinIcon(size: 40)), Positioned(right: 6, top: 30, child: CoinIcon(size: 36)), Positioned(top: 8, child: CoinIcon(size: 46))])
+      : Center(child: GameIcon(fallback, size: 64));
   final List<String> lines;
   final Color color;
-  final IconData icon;
   final VoidCallback? onBuy;
   final double? progress;
-  final String? disabledNote;
+  final String? disabledNote, ribbon;
   @override
   Widget build(BuildContext context) => Container(
     margin: const EdgeInsets.only(bottom: Space.m),
-    padding: const EdgeInsets.all(Space.l),
     decoration: BoxDecoration(
-      gradient: LinearGradient(colors: [color.withValues(alpha: 0.22), const Color(0x99141A4A)]),
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: color.withValues(alpha: 0.6)),
+      gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color.withValues(alpha: 0.32), const Color(0xF0161D52)]),
+      borderRadius: BorderRadius.circular(22),
+      border: Border.all(color: color.withValues(alpha: 0.7), width: 1.5),
+      boxShadow: [BoxShadow(color: color.withValues(alpha: 0.18), blurRadius: 18)],
     ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    child: Stack(
+      clipBehavior: Clip.none,
       children: [
-        Row(
-          children: [
-            Icon(icon, color: color, size: 34),
-            const SizedBox(width: Space.m),
-            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: ko(TypeScale.title)), Text(sub, style: ko(TypeScale.caption, color: Palette.inkSoft))])),
-          ],
+        Padding(
+          padding: const EdgeInsets.all(Space.l),
+          child: Row(
+            children: [
+              SizedBox(width: 84, height: 84, child: ArtImage(art, fallback: _fallbackArt)),
+              const SizedBox(width: Space.m),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: ko(TypeScale.title)),
+                    Text(sub, style: ko(TypeScale.caption, color: Palette.inkSoft)),
+                    if (lines.isNotEmpty) ...[const SizedBox(height: 4), Text(lines.join(' · '), style: ko(TypeScale.body))],
+                    if (progress != null) ...[
+                      const SizedBox(height: 6),
+                      ClipRRect(borderRadius: BorderRadius.circular(6), child: LinearProgressIndicator(value: progress!.clamp(0, 1), minHeight: 10, backgroundColor: const Color(0x33FFFFFF), color: color)),
+                    ],
+                    const SizedBox(height: Space.s),
+                    Btn(price, style: BtnStyle.green, onTap: onBuy, height: 46),
+                    if (onBuy == null && disabledNote != null) Padding(padding: const EdgeInsets.only(top: 4), child: Text(disabledNote!, style: ko(TypeScale.caption, color: Palette.inkSoft))),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        if (lines.isNotEmpty) ...[const SizedBox(height: Space.s), Text(lines.join(' · '), style: ko(TypeScale.body))],
-        if (progress != null) ...[
-          const SizedBox(height: Space.s),
-          ClipRRect(borderRadius: BorderRadius.circular(6), child: LinearProgressIndicator(value: progress!.clamp(0, 1), minHeight: 10, backgroundColor: const Color(0x33FFFFFF), color: color)),
-        ],
-        const SizedBox(height: Space.m),
-        Btn(price, onTap: onBuy, height: 48),
-        if (onBuy == null && disabledNote != null) Padding(padding: const EdgeInsets.only(top: 4), child: Text(disabledNote!, style: ko(TypeScale.caption, color: Palette.inkSoft))),
+        if (ribbon != null)
+          Positioned(
+            right: 14,
+            top: -10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(color: Palette.danger, borderRadius: BorderRadius.circular(10), boxShadow: const [BoxShadow(color: Color(0x66000000), blurRadius: 4, offset: Offset(0, 2))]),
+              child: Text(ribbon!, style: ko(TypeScale.caption, color: Colors.white)),
+            ),
+          ),
       ],
+    ),
+  );
+}
+
+class _CoinTile extends StatelessWidget {
+  const _CoinTile({required this.product, required this.onBuy});
+  final Product product;
+  final VoidCallback onBuy;
+  @override
+  Widget build(BuildContext context) => Pressable(
+    onTap: onBuy,
+    semantic: '${product.name} ${product.priceLabel}',
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF2F3B86), Color(0xFF1A2058)]),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0x55A0B4FF)),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            children: [
+              const SizedBox(height: Space.s),
+              Expanded(child: ArtImage('shop/${product.id}', fallback: const Center(child: CoinIcon(size: 44)))),
+              Text('${product.reward.coins}', style: numStyle(TypeScale.label, color: Palette.moon)),
+              const SizedBox(height: 4),
+              Container(
+                margin: const EdgeInsets.fromLTRB(6, 0, 6, 6),
+                height: 34,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFFA8F07A), Color(0xFF4CC24A)]),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [BoxShadow(color: Color(0xFF2B8A33), offset: Offset(0, 3))],
+                ),
+                child: Text(product.priceLabel, style: numStyle(TypeScale.body, color: const Color(0xFF0B2E0E))),
+              ),
+            ],
+          ),
+          if (product.badgeText != null)
+            Positioned(
+              left: 0,
+              right: 0,
+              top: -8,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(color: Palette.danger, borderRadius: BorderRadius.circular(8)),
+                  child: Text(product.badgeText!, style: ko(11, color: Colors.white)),
+                ),
+              ),
+            ),
+        ],
+      ),
     ),
   );
 }
@@ -162,18 +245,21 @@ class _BoosterRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Profile.instance;
     final price = Economy.boosterPrice[id]! * 3;
+    final icon = switch (id) { 'aim' => GI.aim, 'extra' => GI.extra, _ => GI.split };
     return Container(
       margin: const EdgeInsets.only(bottom: Space.s),
       padding: const EdgeInsets.all(Space.m),
-      decoration: BoxDecoration(color: const Color(0x66101640), borderRadius: BorderRadius.circular(16), border: Border.all(color: Palette.line)),
+      decoration: BoxDecoration(color: const Color(0x99141A4A), borderRadius: BorderRadius.circular(18), border: Border.all(color: Palette.line)),
       child: Row(
         children: [
+          Container(width: 52, height: 52, decoration: const BoxDecoration(color: Color(0x33FFD36B), shape: BoxShape.circle), alignment: Alignment.center, child: GameIcon(icon, size: 34)),
+          const SizedBox(width: Space.m),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${Economy.boosterName[id]} ×3', style: ko(TypeScale.label)),
-                Text('${Economy.boosterDesc[id]} · 보유 ${p.boosters[id]}', style: ko(TypeScale.caption, color: Palette.inkSoft)),
+                Text('${Economy.boosterName(id)} ×3', style: ko(TypeScale.label)),
+                Text('${Economy.boosterDesc(id)} · ${tr('own_n', {'n': p.boosters[id]})}', style: ko(TypeScale.caption, color: Palette.inkSoft)),
               ],
             ),
           ),
@@ -196,8 +282,8 @@ class _BoosterRow extends StatelessWidget {
 }
 
 class _TrailCard extends StatelessWidget {
-  const _TrailCard({required this.id, required this.name});
-  final String id, name;
+  const _TrailCard({required this.id});
+  final String id;
   @override
   Widget build(BuildContext context) {
     final p = Profile.instance;
@@ -210,17 +296,17 @@ class _TrailCard extends StatelessWidget {
               p.save();
             }
           : null,
-      semantic: '궤적 $name${owned ? '' : ', 패스 보상'}',
+      semantic: '${Economy.trailName(id)}${owned ? '' : ', ${tr('pass_reward')}'}',
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(vertical: Space.m),
-        decoration: BoxDecoration(color: const Color(0x66101640), borderRadius: BorderRadius.circular(16), border: Border.all(color: on ? col : Palette.line, width: on ? 2 : 1)),
+        decoration: BoxDecoration(color: const Color(0x99141A4A), borderRadius: BorderRadius.circular(16), border: Border.all(color: on ? col : Palette.line, width: on ? 2 : 1)),
         child: Column(
           children: [
             Container(height: 6, width: 54, decoration: BoxDecoration(gradient: LinearGradient(colors: [col.withValues(alpha: 0), col]), borderRadius: BorderRadius.circular(3), boxShadow: [BoxShadow(color: col.withValues(alpha: 0.6), blurRadius: 8)])),
             const SizedBox(height: Space.s),
-            Text(name, style: ko(TypeScale.body)),
-            Text(on ? '사용 중' : (owned ? '선택' : '패스 보상'), style: ko(TypeScale.caption, color: on ? col : Palette.inkSoft)),
+            Text(Economy.trailName(id), style: ko(TypeScale.body)),
+            Text(on ? tr('in_use') : (owned ? tr('equip') : tr('pass_reward')), style: ko(TypeScale.caption, color: on ? col : Palette.inkSoft)),
           ],
         ),
       ),

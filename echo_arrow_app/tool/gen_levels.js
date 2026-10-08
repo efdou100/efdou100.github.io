@@ -208,6 +208,7 @@ const WORLD_GEN = {
   4: { echo: true, durMin: 1.0, durMax: 2.6, avoid: 0.4, mirror: 0.3, shield: 0.15 },
   5: { blocks: [2, 3], moss: 0.55, targets: [2, 3], moving: 0.3, shield: 0.3, avoid: 0.4, skill: 0.3, edgesMoss: 0.3, devices: { mirror: 0.5, mirrorMax: 2, ice: 0.4, portal: 0.4, prism: 0.4, bumper: 0.3 } },
 };
+const EXTRA_NAMES = { 5: ['별똥별 언덕', '은하수 다리', '유성의 길', '하늘섬', '별자리 숲'] };
 const NAMES = {
   1: ['달빛 오솔길', '이끼 계단', '잠든 언덕', '반딧불 길', '나무뿌리 미로', '고요한 숲', '부엉이 둥지', '이슬 웅덩이', '안개 낀 숲', '바람결', '도토리 언덕', '별빛 숲길', '늙은 참나무', '조용한 개울', '버섯 마을'],
   2: ['은빛 회랑', '반사의 방', '두 개의 달', '거울 정원', '비친 그림자', '빛의 각도', '거울 숲', '은빛 호수', '꺾인 빛', '거울 너머', '빛 조각', '새벽 거울', '거울 계단', '반짝이는 길', '은빛 미로'],
@@ -243,7 +244,7 @@ for (let w = 1; w <= 5; w++) {
     if (a.width < lo || a.width > hi) continue;
     if (!cfg.echo && a.ways < 2) continue;
     // 정답이 장치/스킬 없이도 되는지 기록
-    L.name = names.length ? names.splice(Math.floor(rnd() * names.length), 1)[0] : `${w}-${gen.length + 1}`;
+    L.name = names.length ? names.splice(Math.floor(rnd() * names.length), 1)[0] : (EXTRA_NAMES[w] || []).shift() || `${w}-${gen.length + 1}`;
     gen.push({ ...L, ...a });
     process.stderr.write(`W${w} ${gen.length}/${need} (시도 ${tries}, ${((Date.now() - t0) / 1000).toFixed(0)}s) 폭 ${a.width}°\n`);
   }

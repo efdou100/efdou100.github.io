@@ -1,4 +1,5 @@
 import '../game/level.dart';
+import 'l10n.dart';
 import 'profile.dart';
 
 /// 경제 수치와 해금 시점. 숫자는 여기서만 바꾼다. (근거: docs/GDD.md 5장)
@@ -13,6 +14,7 @@ class Economy {
   static const unlockDaily = 12;
   static const unlockPass = 14;
   static const unlockStreak = 19;
+  static const unlockCollection = 10;
   static const interstitialFrom = 15;
 
   static bool unlocked(int threshold) => Profile.instance.cleared >= threshold;
@@ -33,8 +35,8 @@ class Economy {
 
   // ---- 부스터 ----
   static const boosterPrice = {'aim': 250, 'extra': 400, 'split': 350};
-  static const boosterName = {'aim': '긴 조준선', 'extra': '화살 +1', 'split': '분열 화살'};
-  static const boosterDesc = {'aim': '반사 3번까지 조준선이 보여요', 'extra': '이번 판 화살이 하나 늘어나요', 'split': '처음 튕길 때 세 갈래로 갈라지는 화살 1개'};
+  static String boosterName(String id) => tr('b_$id');
+  static String boosterDesc(String id) => tr('b_${id}_d');
 
   // ---- 연승 ----
   /// 연승 수에 따라 판 시작 시 무료로 켜지는 부스터
@@ -71,15 +73,15 @@ class Economy {
 
   // ---- 상점 상품 (가격은 스토어 연결 전 표시용) ----
   static const products = [
-    Product('starter', '스타터 팩', 1.99, Reward(coins: 2000, boosters: {'aim': 3, 'extra': 3, 'split': 3}, infinite: Duration(hours: 1)), badge: '한 번만'),
-    Product('noads', '광고 제거', 3.99, Reward(), badge: '보상형 광고는 유지'),
-    Product('piggy', '별빛 저금통 깨기', 2.99, Reward()),
-    Product('pass', '화살 패스 프리미엄', 4.99, Reward()),
-    Product('coins_s', '코인 한 줌', 0.99, Reward(coins: 500)),
-    Product('coins_m', '코인 주머니', 4.99, Reward(coins: 3000), badge: '+20%'),
-    Product('coins_l', '코인 상자', 9.99, Reward(coins: 7000), badge: '+40%'),
-    Product('coins_xl', '코인 궤짝', 19.99, Reward(coins: 16000), badge: '인기'),
-    Product('coins_xxl', '코인 보물고', 49.99, Reward(coins: 45000), badge: '+80%'),
+    Product('starter', 1.99, Reward(coins: 2000, boosters: {'aim': 3, 'extra': 3, 'split': 3}, infinite: Duration(hours: 1)), badge: 'badge_once'),
+    Product('noads', 3.99, Reward(), badge: 'badge_rewarded'),
+    Product('piggy', 2.99, Reward()),
+    Product('pass', 4.99, Reward()),
+    Product('coins_s', 0.99, Reward(coins: 500)),
+    Product('coins_m', 4.99, Reward(coins: 3000), badge: '+20%'),
+    Product('coins_l', 9.99, Reward(coins: 7000), badge: '+40%'),
+    Product('coins_xl', 19.99, Reward(coins: 16000), badge: 'badge_popular'),
+    Product('coins_xxl', 49.99, Reward(coins: 45000), badge: '+80%'),
   ];
   static Product product(String id) => products.firstWhere((p) => p.id == id);
 
@@ -92,7 +94,8 @@ class Economy {
     return p.clearsSinceAd >= every && gap > 120000;
   }
 
-  static const trails = {'moon': '달빛', 'ember': '불씨', 'aurora': '오로라'};
+  static const trailIds = ['moon', 'ember', 'aurora'];
+  static String trailName(String id) => tr('trail_$id');
 }
 
 class Reward {
@@ -121,18 +124,20 @@ class Reward {
 
   /// 짧은 설명 목록 (화면 표시용)
   List<String> get lines => [
-    if (coins > 0) '코인 $coins',
-    for (final e in boosters.entries) '${Economy.boosterName[e.key]} ×${e.value}',
-    if (hints > 0) '힌트 ×$hints',
-    if (hearts > 0) '하트 ×$hearts',
-    if (infinite > Duration.zero) '무한 하트 ${infinite.inMinutes >= 60 ? '${infinite.inHours}시간' : '${infinite.inMinutes}분'}',
-    if (trail != null) '궤적 「${Economy.trails[trail]}」',
+    if (coins > 0) tr('rw_coins', {'n': coins}),
+    for (final e in boosters.entries) tr('rw_booster', {'x': Economy.boosterName(e.key), 'n': e.value}),
+    if (hints > 0) tr('rw_hints', {'n': hints}),
+    if (hearts > 0) tr('rw_hearts', {'n': hearts}),
+    if (infinite > Duration.zero) infinite.inMinutes >= 60 ? tr('rw_inf_h', {'n': infinite.inHours}) : tr('rw_inf_m', {'n': infinite.inMinutes}),
+    if (trail != null) tr('rw_trail', {'x': Economy.trailName(trail!)}),
   ];
 }
 
 class Product {
-  const Product(this.id, this.name, this.price, this.reward, {this.badge});
-  final String id, name;
+  const Product(this.id, this.price, this.reward, {this.badge});
+  final String id;
+  String get name => tr('p_$id');
+  String? get badgeText => badge == null ? null : tr(badge!);
   final double price;
   final Reward reward;
   final String? badge;

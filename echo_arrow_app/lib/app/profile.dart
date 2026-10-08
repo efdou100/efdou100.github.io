@@ -55,6 +55,7 @@ class Profile extends ChangeNotifier {
   bool sound = true;
   bool haptics = true;
   bool reduceMotion = false;
+  String lang = ''; // '' = 기기 언어
 
   static const maxHearts = 5;
   static const heartRegenMs = 30 * 60 * 1000;
@@ -194,6 +195,7 @@ class Profile extends ChangeNotifier {
     'sound': sound,
     'haptics': haptics,
     'reduceMotion': reduceMotion,
+    'lang': lang,
   };
 
   void _fromJson(Map<String, dynamic> j) {
@@ -228,6 +230,7 @@ class Profile extends ChangeNotifier {
     sound = j['sound'] as bool? ?? true;
     haptics = j['haptics'] as bool? ?? true;
     reduceMotion = j['reduceMotion'] as bool? ?? false;
+    lang = j['lang'] as String? ?? '';
   }
 
   @visibleForTesting

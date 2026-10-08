@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
+import '../app/l10n.dart';
 import '../app/profile.dart';
 import '../app/sfx.dart';
 import '../app/theme.dart';
@@ -85,6 +86,9 @@ class GameController extends ChangeNotifier {
   List<bool> gateWas = [];
   int maxB = 0, tricks = 0;
   WinResult? result;
+  final Map<int, double> wakeAt = {}; // 정령이 깬 시각(clock) → 깨어나는 애니메이션
+  double fireAt = -9; // 마지막 발사 시각 → 궁수 반동
+  double winAt = -9;
 
   final List<Particle> parts = [];
   final List<RingFx> rings = [];
@@ -116,8 +120,9 @@ class GameController extends ChangeNotifier {
     gateVis = List.filled(run.c.gates.length, 0);
     gateWas = List.filled(run.c.gates.length, false);
     trailsFull = false;
+    wakeAt.clear();
     if (quiet) return;
-    if (!first && shots.isNotEmpty) onToast?.call('메아리 ${shots.length}개 대기 중 · 누르는 순간 지난 화살이 같은 타이밍에 다시 날아가요');
+    if (!first && shots.isNotEmpty) onToast?.call(tr('t_echo_wait', {'n': shots.length}));
   }
 
   List<({int idx, List<double> pts})> _buildEchoPreview() {
@@ -156,7 +161,7 @@ class GameController extends ChangeNotifier {
     bonus += n;
     continues++;
     _startTurn(quiet: true);
-    onToast?.call('+$n발! 메아리는 그대로 남아 있어요', gold: true);
+    onToast?.call(tr('t_plus', {'n': n}), gold: true);
     notifyListeners();
   }
 
@@ -182,6 +187,7 @@ class GameController extends ChangeNotifier {
     cur = shot;
     run.shots.add(shot.copy());
     mode = Mode.fly;
+    fireAt = clock;
   }
 
   void _win() {
@@ -208,6 +214,7 @@ class GameController extends ChangeNotifier {
     mode = Mode.replay;
     acc = finT = slowT = 0;
     trailsFull = true;
+    wakeAt.clear();
     gateVis = List.filled(run.c.gates.length, 0);
     gateWas = List.filled(run.c.gates.length, false);
     camTz = 1;
@@ -252,10 +259,10 @@ class GameController extends ChangeNotifier {
       Sfx.instance.play('rotate');
       Sfx.instance.haptic();
       _startTurn(quiet: true);
-      if (shots.isNotEmpty) onToast?.call('거울이 돌면 메아리의 길도 바뀌어요');
+      if (shots.isNotEmpty) onToast?.call(tr('t_mirror'));
     } else {
       _startTurn(quiet: true);
-      onToast?.call('조금 더 길게 당겼다 놓아야 쏴져요');
+      onToast?.call(tr('t_pull'));
     }
   }
 
@@ -267,7 +274,7 @@ class GameController extends ChangeNotifier {
     if (mode != Mode.aim || (skillLeft[k] ?? 0) <= 0) return;
     kind = kind == k ? 'n' : k;
     Sfx.instance.play('click');
-    onToast?.call(kind == 'n' ? '기본 화살' : (k == 'split' ? '분열 화살: 처음 튕길 때 세 갈래로 갈라져요' : '관통 화살: 이끼를 뚫고 지나가요'), gold: true);
+    onToast?.call(kind == 'n' ? tr('t_basic') : (k == 'split' ? tr('t_split') : tr('t_pierce')), gold: true);
     notifyListeners();
   }
 
@@ -443,20 +450,22 @@ class GameController extends ChangeNotifier {
           flash = math.max(flash, 0.25);
           String? label;
           if (e.multi == 2) {
-            label = '더블!';
+            label = tr('f_double');
           } else if (e.multi == 3) {
-            label = '트리플!';
+            label = tr('f_triple');
           } else if (e.multi > 3) {
-            label = '${e.multi}연속!';
+            label = tr('f_combo', {'n': e.multi});
           }
           if (e.b >= 2) {
-            label = label == null ? '트릭샷!' : '트릭샷 $label';
+            label = label == null ? tr('f_trick') : tr('f_trick_x', {'x': label});
             if (mode != Mode.replay) tricks++;
           }
-          if (!mine && label == null) label = '메아리 명중';
+          if (!mine && label == null) label = tr('f_echo');
           if (label != null) _text(e.x, e.y - 26, label, e.b >= 2 ? 0xFFFFD36B : 0xFFFFFFFF, 22, 1.1);
           lastHit = (e.x, e.y);
+          wakeAt[e.i] = clock;
         case Ev.win:
+          winAt = clock;
           sfx.play('win');
           sfx.haptic(strong: true);
           slowT = 1.1;
@@ -481,14 +490,15 @@ class GameController extends ChangeNotifier {
         case Ev.spawn:
           break;
         case Ev.oops:
+          wakeAt[e.i] = clock;
           sfx.play('oops');
           sfx.haptic(strong: true);
           shake = 8;
           flash = 0.2;
           _burst(e.x, e.y, 0xFFFF9FC8, 20, 200, 3);
           _ring(e.x, e.y, 0xFFFF7A9A, 48, 0.5, 4);
-          _text(e.x, e.y - 26, mine ? '앗! 아기 정령이 깼어요' : '메아리가 아기 정령을 깨웠어요', 0xFFFF9FC8, 17, 1.6);
-          if (!mine) onToast?.call('지난 화살이 아기 정령을 맞혀요. 거울을 돌리거나 처음부터 다시 하세요');
+          _text(e.x, e.y - 26, mine ? tr('f_oops_me') : tr('f_oops_echo'), 0xFFFF9FC8, 17, 1.6);
+          if (!mine) onToast?.call(tr('t_baby_echo'));
         case Ev.ice:
           sfx.play('ice');
           shake = math.max(shake, 4);
@@ -497,7 +507,7 @@ class GameController extends ChangeNotifier {
             parts.add(Particle(ib.x + _rnd.nextDouble() * ib.w, ib.y + _rnd.nextDouble() * ib.h, (_rnd.nextDouble() - 0.5) * 260, (_rnd.nextDouble() - 0.8) * 220, 0.7 + _rnd.nextDouble() * 0.5,
                 _rnd.nextBool() ? 0xFFBFF4FF : 0xFF7FD8FF, 2 + _rnd.nextDouble() * 3, g: 520, confetti: true, rot: _rnd.nextDouble() * 6));
           }
-          _text(e.x, e.y - 14, '쨍!', 0xFFBFF4FF, 18, 0.7);
+          _text(e.x, e.y - 14, tr('f_ice'), 0xFFBFF4FF, 18, 0.7);
         case Ev.portal:
           sfx.play('portal', volume: 0.6);
           _ring(e.x, e.y, 0xFFFF9F5A, 34, 0.45, 3);
@@ -511,15 +521,15 @@ class GameController extends ChangeNotifier {
             _burst(e.x, e.y, c, 5, 200, 2.4);
           }
           _ring(e.x, e.y, 0xFFFFFFFF, 40, 0.5, 3);
-          _text(e.x, e.y - 22, '분광!', 0xFFFFFFFF, 18, 0.8);
+          _text(e.x, e.y - 22, tr('f_prism'), 0xFFFFFFFF, 18, 0.8);
         case Ev.split:
           sfx.play('prism', volume: 0.6);
           _ring(e.x, e.y, 0xFFFFD36B, 30, 0.4, 3);
-          _text(e.x, e.y - 16, '분열!', 0xFFFFD36B, 18, 0.8);
+          _text(e.x, e.y - 16, tr('f_split'), 0xFFFFD36B, 18, 0.8);
         case Ev.shield:
           sfx.play('shield');
           _burst(e.x, e.y, 0xFFDFE8FF, 12, 160, 2.2);
-          _text(e.x, e.y - 14, '팅!', 0xFFDFE8FF, 16, 0.6);
+          _text(e.x, e.y - 14, tr('f_shield'), 0xFFDFE8FF, 16, 0.6);
           shake = math.max(shake, 3);
       }
     }

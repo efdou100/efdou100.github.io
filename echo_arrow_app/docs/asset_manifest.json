@@ -1,0 +1,822 @@
+{
+ "version": 1,
+ "style": "hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark",
+ "assets": [
+  {
+   "id": "char/archer_idle",
+   "path": "assets/images/char/archer_idle.png",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "group": "캐릭터",
+   "prompt": "a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch, standing calmly facing the viewer, holding a glowing golden crescent-moon bow at the side. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "char/archer_draw",
+   "path": "assets/images/char/archer_draw.png",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "group": "캐릭터",
+   "prompt": "a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch, seen from behind three-quarter view, pulling a glowing golden crescent-moon bow upward, determined. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "char/archer_cheer",
+   "path": "assets/images/char/archer_cheer.png",
+   "size": [
+    512,
+    512
+   ],
+   "transparent": true,
+   "group": "캐릭터",
+   "prompt": "a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch, jumping with joy, arms up, sparkles around. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "클리어 화면"
+  },
+  {
+   "id": "char/bow",
+   "path": "assets/images/char/bow.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "캐릭터",
+   "prompt": "a glowing golden crescent-moon shaped bow, horizontal, string on the left, bow curve opening to the right, magical soft gold glow. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "오른쪽을 향한 활. 코드가 조준 방향으로 회전"
+  },
+  {
+   "id": "char/arrow",
+   "path": "assets/images/char/arrow.png",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "group": "캐릭터",
+   "prompt": "a slim magical arrow pointing right, golden shaft, glowing star-shaped tip, small feather fletching. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "오른쪽을 향한 화살"
+  },
+  {
+   "id": "spirit/sleep",
+   "path": "assets/images/spirit/sleep.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "정령",
+   "prompt": "a palm-sized round glowing forest spirit called Dozy, perfectly round soft body, two tiny leaf ears like bunny ears on top, pale sky blue glowing body, eyes closed as gentle curved lines, pink blush cheeks, peacefully sleeping. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "spirit/awake",
+   "path": "assets/images/spirit/awake.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "정령",
+   "prompt": "a palm-sized round glowing forest spirit called Dozy, perfectly round soft body, two tiny leaf ears like bunny ears on top, bright warm golden glowing body, happy smiling eyes shaped like ^ ^, small sparkles around, delighted. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "spirit/baby_sleep",
+   "path": "assets/images/spirit/baby_sleep.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "정령",
+   "prompt": "a palm-sized round glowing forest spirit called Dozy, perfectly round soft body, two tiny leaf ears like bunny ears on top but smaller and baby-like, pastel pink glowing body, sleeping, a small red 'do not touch' prohibition circle sign floating above its head. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "spirit/baby_cry",
+   "path": "assets/images/spirit/baby_cry.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "정령",
+   "prompt": "a palm-sized round glowing forest spirit called Dozy, perfectly round soft body, two tiny leaf ears like bunny ears on top but smaller and baby-like, pastel pink body, woken up and crying with big tears, upset. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "spirit/shield",
+   "path": "assets/images/spirit/shield.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "정령",
+   "prompt": "a silver half-moon shaped shield, curved like a crescent arc, polished metal with soft blue highlights, front view, the arc opens to the left. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "방패 정령에 겹쳐 그림. 오른쪽이 방패 앞면"
+  },
+  {
+   "id": "tile/wood",
+   "path": "assets/images/tile/wood.png",
+   "size": [
+    512,
+    64
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a horizontal mossy-free wooden log beam, tileable left to right, warm brown bark with light grain, side view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "나무 벽. 가로로 반복"
+  },
+  {
+   "id": "tile/moss",
+   "path": "assets/images/tile/moss.png",
+   "size": [
+    512,
+    64
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a horizontal strip of thick fluffy glowing green moss, tileable left to right, side view, small dew drops. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "이끼 벽. 가로로 반복"
+  },
+  {
+   "id": "tile/wood_block",
+   "path": "assets/images/tile/wood_block.png",
+   "size": [
+    256,
+    128
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a rectangular wooden plank block, rounded corners, warm brown wood with grain, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "tile/moss_block",
+   "path": "assets/images/tile/moss_block.png",
+   "size": [
+    256,
+    128
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a rectangular block completely covered in fluffy glowing green moss, rounded corners, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "tile/ice",
+   "path": "assets/images/tile/ice.png",
+   "size": [
+    256,
+    64
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a horizontal slab of translucent pale blue ice, crystal clear with small cracks, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/mirror",
+   "path": "assets/images/device/mirror.png",
+   "size": [
+    256,
+    48
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a long thin magical mirror bar, polished silver surface reflecting light, ornate thin gold frame ends, horizontal. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/bumper",
+   "path": "assets/images/device/bumper.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a round bouncy forest mushroom cap seen from above-front, glossy pink red cap with cream white spots, short cream stem. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/portal_a",
+   "path": "assets/images/device/portal_a.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a swirling magical portal ring, warm orange spiral energy around a dark center, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/portal_b",
+   "path": "assets/images/device/portal_b.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a swirling magical portal ring, cool blue spiral energy around a dark center, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/prism",
+   "path": "assets/images/device/prism.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a floating diamond-shaped rainbow prism crystal, faceted, refracting rainbow light, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/switch_off",
+   "path": "assets/images/device/switch_off.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a round ancient stone rune button, dark slate with a faint cyan triangle rune, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/switch_on",
+   "path": "assets/images/device/switch_on.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a round ancient stone rune button glowing bright cyan, triangle rune shining, energy sparkles, front view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "device/gate",
+   "path": "assets/images/device/gate.png",
+   "size": [
+    512,
+    48
+   ],
+   "transparent": true,
+   "group": "장치",
+   "prompt": "a horizontal magical barrier bar of violet energy with flowing runes, tileable left to right. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "bg/world1_game",
+   "path": "assets/images/bg/world1_game.png",
+   "size": [
+    1080,
+    1920
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "vertical mobile game background, an enchanted night forest with old oak trees at the left and right edges, fireflies, mossy rocks at the bottom, a huge full moon behind clouds at the top. The center 70% of the image is dark, calm and empty for gameplay, decorations only near the edges and bottom, a small flat grassy ledge at the bottom center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "게임 화면"
+  },
+  {
+   "id": "bg/world1_map",
+   "path": "assets/images/bg/world1_map.png",
+   "size": [
+    1080,
+    2700
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "tall vertical world map background for a level select screen, an enchanted night forest with old oak trees at the left and right edges, fireflies, mossy rocks at the bottom, a huge full moon behind clouds at the top, a winding dirt path area in the middle left empty, lush scenery along both sides, seamless top and bottom edges. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "홈 지도. 세로로 이어 붙임"
+  },
+  {
+   "id": "bg/world2_game",
+   "path": "assets/images/bg/world2_game.png",
+   "size": [
+    1080,
+    1920
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "vertical mobile game background, a silver misty birch forest at night with floating mirror shards glinting at the edges, pale blue fog. The center 70% of the image is dark, calm and empty for gameplay, decorations only near the edges and bottom, a small flat grassy ledge at the bottom center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "게임 화면"
+  },
+  {
+   "id": "bg/world2_map",
+   "path": "assets/images/bg/world2_map.png",
+   "size": [
+    1080,
+    2700
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "tall vertical world map background for a level select screen, a silver misty birch forest at night with floating mirror shards glinting at the edges, pale blue fog, a winding dirt path area in the middle left empty, lush scenery along both sides, seamless top and bottom edges. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "홈 지도. 세로로 이어 붙임"
+  },
+  {
+   "id": "bg/world3_game",
+   "path": "assets/images/bg/world3_game.png",
+   "size": [
+    1080,
+    1920
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "vertical mobile game background, a glowing crystal cave with purple and teal crystal pillars at the edges, sparkling ore on the dark ceiling like stars. The center 70% of the image is dark, calm and empty for gameplay, decorations only near the edges and bottom, a small flat grassy ledge at the bottom center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "게임 화면"
+  },
+  {
+   "id": "bg/world3_map",
+   "path": "assets/images/bg/world3_map.png",
+   "size": [
+    1080,
+    2700
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "tall vertical world map background for a level select screen, a glowing crystal cave with purple and teal crystal pillars at the edges, sparkling ore on the dark ceiling like stars, a winding dirt path area in the middle left empty, lush scenery along both sides, seamless top and bottom edges. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "홈 지도. 세로로 이어 붙임"
+  },
+  {
+   "id": "bg/world4_game",
+   "path": "assets/images/bg/world4_game.png",
+   "size": [
+    1080,
+    1920
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "vertical mobile game background, a deep valley at night with flowing green and violet aurora in the sky, floating ancient rune stones and an old stone arch at the edges. The center 70% of the image is dark, calm and empty for gameplay, decorations only near the edges and bottom, a small flat grassy ledge at the bottom center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "게임 화면"
+  },
+  {
+   "id": "bg/world4_map",
+   "path": "assets/images/bg/world4_map.png",
+   "size": [
+    1080,
+    2700
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "tall vertical world map background for a level select screen, a deep valley at night with flowing green and violet aurora in the sky, floating ancient rune stones and an old stone arch at the edges, a winding dirt path area in the middle left empty, lush scenery along both sides, seamless top and bottom edges. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "홈 지도. 세로로 이어 붙임"
+  },
+  {
+   "id": "bg/world5_game",
+   "path": "assets/images/bg/world5_game.png",
+   "size": [
+    1080,
+    1920
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "vertical mobile game background, floating islands in outer space, a bright milky way, shooting stars, golden starlight. The center 70% of the image is dark, calm and empty for gameplay, decorations only near the edges and bottom, a small flat grassy ledge at the bottom center. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "게임 화면"
+  },
+  {
+   "id": "bg/world5_map",
+   "path": "assets/images/bg/world5_map.png",
+   "size": [
+    1080,
+    2700
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "tall vertical world map background for a level select screen, floating islands in outer space, a bright milky way, shooting stars, golden starlight, a winding dirt path area in the middle left empty, lush scenery along both sides, seamless top and bottom edges. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "홈 지도. 세로로 이어 붙임"
+  },
+  {
+   "id": "bg/home_sky",
+   "path": "assets/images/bg/home_sky.png",
+   "size": [
+    1080,
+    1920
+   ],
+   "transparent": false,
+   "group": "배경",
+   "prompt": "a calm deep indigo night sky with soft clouds, many tiny stars and a big glowing crescent moon at the upper right. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": ""
+  },
+  {
+   "id": "map/node_open",
+   "path": "assets/images/map/node_open.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "지도",
+   "prompt": "a round stepping-stone medallion for a level select map, smooth blue-grey stone with a soft silver rim, top-down slightly tilted. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "map/node_current",
+   "path": "assets/images/map/node_current.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "지도",
+   "prompt": "a round stepping-stone medallion glowing warm gold, magical light rising from it, slightly tilted top view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "map/node_locked",
+   "path": "assets/images/map/node_locked.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "지도",
+   "prompt": "a round dark mossy stepping-stone with a small iron padlock, dim, slightly tilted top view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "map/node_boss",
+   "path": "assets/images/map/node_boss.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "지도",
+   "prompt": "a large ornate round stone medallion with a golden crown emblem and moon carvings, glowing, slightly tilted top view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "map/node_hard",
+   "path": "assets/images/map/node_hard.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "지도",
+   "prompt": "a round stepping-stone medallion with a red magical flame ring around it, slightly tilted top view. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/coin",
+   "path": "assets/images/ui/coin.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a shiny gold coin with an engraved crescent moon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/heart",
+   "path": "assets/images/ui/heart.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a glossy plump red heart with a white highlight. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/heart_inf",
+   "path": "assets/images/ui/heart_inf.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a glossy plump cyan heart with an infinity symbol glow. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/star",
+   "path": "assets/images/ui/star.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a plump glowing golden star. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/chest",
+   "path": "assets/images/ui/chest.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a small wooden treasure chest with gold trim, closed, glowing light leaking from the seams. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/chest_open",
+   "path": "assets/images/ui/chest_open.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a small wooden treasure chest with gold trim, open, bright golden light and coins bursting out. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/booster_aim",
+   "path": "assets/images/ui/booster_aim.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a magical golden dotted guiding line with three bounce sparkles, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/booster_extra",
+   "path": "assets/images/ui/booster_extra.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a single golden glowing arrow with a plus sparkle, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/booster_split",
+   "path": "assets/images/ui/booster_split.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a golden arrow splitting into three glowing branches, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/hint",
+   "path": "assets/images/ui/hint.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a glowing lightbulb made of moonlight, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_checkin",
+   "path": "assets/images/ui/icon_checkin.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a cute calendar page with a red ribbon and a gold star sticker, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_daily",
+   "path": "assets/images/ui/icon_daily.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a small sunrise over a hill with a single arrow, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_streak",
+   "path": "assets/images/ui/icon_streak.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a cute magical cyan flame, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_shop",
+   "path": "assets/images/ui/icon_shop.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a cute merchant bag full of gold coins, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_pass",
+   "path": "assets/images/ui/icon_pass.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a golden medal ribbon with a moon emblem, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_gift",
+   "path": "assets/images/ui/icon_gift.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a wrapped gift box with a gold ribbon, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/icon_settings",
+   "path": "assets/images/ui/icon_settings.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "a cute brass gear, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "ui/logo",
+   "path": "assets/images/ui/logo.png",
+   "size": [
+    1024,
+    512
+   ],
+   "transparent": true,
+   "group": "UI",
+   "prompt": "game logo text 'ECHO ARROW' in rounded bold golden letters with a glowing cyan O shaped like a ripple, a crescent moon bow behind the text. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "로고만 글자 허용. 한국어판은 코드 글자 사용"
+  },
+  {
+   "id": "shop/starter",
+   "path": "assets/images/shop/starter.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a bundle of a gold coin pile, three magical arrows and a small heart, gift ribbon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/noads",
+   "path": "assets/images/shop/noads.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a cute scroll with a crossed-out play button, icon. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/piggy",
+   "path": "assets/images/shop/piggy.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a cute round glass jar shaped like a sleeping spirit, filled with glowing gold coins. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/pass",
+   "path": "assets/images/shop/pass.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a golden ticket with a crescent moon and arrow emblem. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/coins_s",
+   "path": "assets/images/shop/coins_s.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a small handful of gold moon coins. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/coins_m",
+   "path": "assets/images/shop/coins_m.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a cloth pouch of gold moon coins. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/coins_l",
+   "path": "assets/images/shop/coins_l.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a wooden box full of gold moon coins. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/coins_xl",
+   "path": "assets/images/shop/coins_xl.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a big treasure chest overflowing with gold moon coins. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "shop/coins_xxl",
+   "path": "assets/images/shop/coins_xxl.png",
+   "size": [
+    256,
+    256
+   ],
+   "transparent": true,
+   "group": "상점",
+   "prompt": "a huge mountain of gold moon coins with gems, glowing. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": ""
+  },
+  {
+   "id": "icon/app_icon",
+   "path": "assets/images/icon/app_icon.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": false,
+   "group": "아이콘",
+   "prompt": "app icon, a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch drawing a glowing golden crescent-moon bow, a glowing cyan arrow trail echo behind, deep indigo background, bold readable silhouette. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. full-bleed scene, no border",
+   "note": "flutter_launcher_icons 원본"
+  },
+  {
+   "id": "icon/app_icon_fg",
+   "path": "assets/images/icon/app_icon_fg.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "transparent": true,
+   "group": "아이콘",
+   "prompt": "app icon foreground only, a tiny chibi forest archer named Lumi, two heads tall, wearing a navy blue hooded cloak whose hood tips look like small cat ears, cream colored round face with two big black dot eyes and pink blush, a small crescent moon brooch drawing a glowing golden crescent-moon bow, centered with generous padding. hand-painted storybook illustration, soft painterly brush texture, cute rounded shapes, warm golden moonlight rim light from the upper left, deep indigo shadows, gentle glow, mobile puzzle game asset, high quality, clean silhouette, no text, no watermark. isolated, centered, on a solid pure green (#00FF00) background, no shadow on the background",
+   "note": "안드로이드 적응형 아이콘 전경(가운데 66%만 보임)"
+  }
+ ]
+}

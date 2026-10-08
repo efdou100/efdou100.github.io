@@ -61,6 +61,15 @@ flutter:
   assets:
     - assets/levels/
     - assets/audio/
+    - assets/images/char/
+    - assets/images/spirit/
+    - assets/images/tile/
+    - assets/images/device/
+    - assets/images/bg/
+    - assets/images/map/
+    - assets/images/ui/
+    - assets/images/shop/
+    - assets/images/icon/
   fonts:
     - family: Jua
       fonts:

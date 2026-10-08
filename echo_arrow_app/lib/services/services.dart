@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../app/economy.dart';
+import '../app/l10n.dart';
 import '../app/profile.dart';
 import '../app/theme.dart';
 
@@ -36,7 +37,7 @@ class MockAdService implements AdService {
   @override
   Future<bool> rewarded(String placement) async {
     Analytics.log('ad_rewarded_show', {'placement': placement});
-    final ok = await _fakeAd('보상형 광고', placement, canSkip: false);
+    final ok = await _fakeAd(tr('ad_rewarded'), placement, canSkip: false);
     Analytics.log(ok ? 'ad_rewarded_done' : 'ad_rewarded_cancel', {'placement': placement});
     return ok;
   }
@@ -48,7 +49,7 @@ class MockAdService implements AdService {
     p.lastInterstitial = DateTime.now().millisecondsSinceEpoch;
     p.save();
     Analytics.log('ad_interstitial', {'placement': placement});
-    await _fakeAd('전면 광고', placement, canSkip: true);
+    await _fakeAd(tr('ad_inter'), placement, canSkip: true);
   }
 
   Future<bool> _fakeAd(String kind, String placement, {required bool canSkip}) async {
@@ -106,8 +107,8 @@ class _FakeAdState extends State<_FakeAd> {
             child: Text(left > 0 ? '$left' : '✓', style: numStyle(TypeScale.hero, color: Palette.inkSoft)),
           ),
           const SizedBox(height: Space.m),
-          Text('개발용 가짜 광고예요. 출시 빌드에서는 실제 광고가 나와요.', style: ko(TypeScale.caption, color: Palette.inkSoft), textAlign: TextAlign.center),
-          if (widget.canSkip) TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('닫기', style: ko(TypeScale.body, color: Palette.inkSoft))),
+          Text(tr('ad_fake'), style: ko(TypeScale.caption, color: Palette.inkSoft), textAlign: TextAlign.center),
+          if (widget.canSkip) TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(tr('close'), style: ko(TypeScale.body, color: Palette.inkSoft))),
         ],
       ),
     ),
@@ -118,9 +119,15 @@ class _FakeAdState extends State<_FakeAd> {
 abstract class StoreService {
   static StoreService instance = MockStoreService();
   Future<bool> buy(Product p);
+
+  /// 광고 제거·패스 같은 비소모성 구매 복원
+  Future<void> restore();
 }
 
 class MockStoreService implements StoreService {
+  @override
+  Future<void> restore() async => Analytics.log('iap_restore');
+
   @override
   Future<bool> buy(Product p) async {
     final ctx = navigatorKey.currentContext;
@@ -131,10 +138,10 @@ class MockStoreService implements StoreService {
       builder: (c) => AlertDialog(
         backgroundColor: Palette.dusk,
         title: Text(p.name, style: ko(TypeScale.title)),
-        content: Text('개발용 테스트 결제예요. 실제로 돈이 나가지 않아요.\n${p.priceLabel}', style: ko(TypeScale.body, color: Palette.inkSoft)),
+        content: Text(tr('iap_test', {'p': p.priceLabel}), style: ko(TypeScale.body, color: Palette.inkSoft)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c, false), child: Text('취소', style: ko(TypeScale.body, color: Palette.inkSoft))),
-          TextButton(onPressed: () => Navigator.pop(c, true), child: Text('${p.priceLabel} 결제', style: ko(TypeScale.body, color: Palette.moon))),
+          TextButton(onPressed: () => Navigator.pop(c, false), child: Text(tr('cancel'), style: ko(TypeScale.body, color: Palette.inkSoft))),
+          TextButton(onPressed: () => Navigator.pop(c, true), child: Text(tr('pay', {'p': p.priceLabel}), style: ko(TypeScale.body, color: Palette.moon))),
         ],
       ),
     );
