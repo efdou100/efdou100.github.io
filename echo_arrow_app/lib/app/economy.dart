@@ -17,6 +17,8 @@ class Economy {
   static const unlockStreak = 19;
   static const unlockCollection = 10;
   static const unlockStarChest = 5;
+  static const unlockTrickMedal = 3; // 판 시작 팝업에 보너스 목표(트릭 메달) 표시
+  static const trickMedalCoins = 50;
   static const interstitialFrom = 15;
 
   static bool unlocked(int threshold) => Profile.instance.cleared >= threshold;

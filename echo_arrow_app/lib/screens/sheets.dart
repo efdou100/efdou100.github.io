@@ -18,8 +18,9 @@ import 'home_screen.dart' show AvatarPainter;
 
 /// 클리어 축하 (전체 화면): 빛줄기 → 별이 하나씩 박힘 → 코인이 세어짐 → 버튼
 class WinScreen extends StatefulWidget {
-  const WinScreen({super.key, required this.level, required this.result, required this.coins, required this.streak, required this.isLast, this.replayed = false, this.missions = const []});
+  const WinScreen({super.key, required this.level, required this.result, required this.coins, required this.streak, required this.isLast, this.replayed = false, this.missions = const [], this.newMedal = false});
   final List<String> missions;
+  final bool newMedal;
   final LevelData level;
   final WinResult result;
   final int coins, streak;
@@ -139,6 +140,7 @@ class _WinScreenState extends State<WinScreen> with TickerProviderStateMixin {
                         if (r.tricks > 0) _Chip(tr('r_tricks', {'n': r.tricks}), color: Palette.moon),
                         if (r.used > 1) _Chip(tr('r_echo', {'n': r.used - 1}), color: Palette.echo),
                         if (widget.streak >= 2 && Economy.unlocked(Economy.unlockStreak)) _Chip(tr('streak_n', {'n': widget.streak}), color: Palette.echo),
+                        if (widget.newMedal) _Chip(tr('r_medal'), color: Palette.moon),
                         for (final m in widget.missions) _Chip(tr('m_done', {'x': m}), color: Palette.moss),
                       ],
                     ),

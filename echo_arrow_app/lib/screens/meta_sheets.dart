@@ -63,6 +63,14 @@ class _LevelStartSheetState extends State<LevelStartSheet> {
               Flexible(child: Text(tr('shots_info', {'s': l.shots, 'p': l.par}), style: ko(TypeScale.body, color: Palette.ink))),
             ]),
           ),
+          if (Economy.unlocked(Economy.unlockTrickMedal)) ...[
+            const SizedBox(height: Space.s),
+            Row(mainAxisSize: MainAxisSize.min, children: [
+              Opacity(opacity: p.trickMedals.contains(l.id) ? 1 : 0.45, child: const GameIcon(GI.medal, size: 22)),
+              const SizedBox(width: 6),
+              Flexible(child: Text(p.trickMedals.contains(l.id) ? tr('bonus_done') : tr('bonus_trick', {'n': Economy.trickMedalCoins}), style: ko(TypeScale.caption + 1, color: p.trickMedals.contains(l.id) ? Palette.moon : Palette.inkSoft))),
+            ]),
+          ],
           if (Economy.unlocked(Economy.unlockBoosters)) ...[
             const SizedBox(height: Space.l),
             Row(children: [

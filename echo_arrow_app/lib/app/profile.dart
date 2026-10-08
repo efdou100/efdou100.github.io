@@ -40,6 +40,7 @@ class Profile extends ChangeNotifier {
   int missionClaimed = 0; // 비트마스크
   bool missionChest = false;
   Set<String> starChests = {}; // '월드-단계'
+  Set<int> trickMedals = {}; // 트릭샷으로 깬 판 (보너스 목표)
 
   // 수익
   bool adsRemoved = false;
@@ -192,6 +193,7 @@ class Profile extends ChangeNotifier {
     'missionClaimed': missionClaimed,
     'missionChest': missionChest,
     'starChests': starChests.toList(),
+    'trickMedals': trickMedals.toList(),
     'adsRemoved': adsRemoved,
     'spent': spent,
     'starterUntil': starterUntil,
@@ -234,6 +236,7 @@ class Profile extends ChangeNotifier {
     missionClaimed = j['missionClaimed'] as int? ?? 0;
     missionChest = j['missionChest'] as bool? ?? false;
     starChests = {for (final v in j['starChests'] as List? ?? []) v as String};
+    trickMedals = {for (final v in j['trickMedals'] as List? ?? []) v as int};
     adsRemoved = j['adsRemoved'] as bool? ?? false;
     spent = (j['spent'] as num? ?? 0).toDouble();
     starterUntil = j['starterUntil'] as int? ?? 0;

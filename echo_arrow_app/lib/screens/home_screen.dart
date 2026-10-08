@@ -179,6 +179,7 @@ class _MapNode extends StatelessWidget {
             child: node,
           ),
           if (!locked && stars > 0) Positioned(top: 64 - size / 2 - 17, child: IgnorePointer(child: _StarArc(stars: stars))),
+          if (!locked && p.trickMedals.contains(level.id)) Positioned(left: 64 + size / 2 - 16, top: 64 + size / 2 - 18, child: const IgnorePointer(child: GameIcon(GI.medal, size: 22))),
           if (boss && !locked) Positioned(top: 64 - size / 2 - (stars > 0 ? 36 : 22), child: const IgnorePointer(child: GameIcon(GI.crown, size: 26))),
           if (isCur)
             Positioned(

@@ -115,7 +115,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     final p = Profile.instance;
     final prev = p.stars[level.id] ?? 0;
     final gainedStars = math.max(0, r.stars - prev);
-    final coins = Economy.clearCoins(level, r.stars) + (gainedStars > 0 ? 20 : 0);
+    final newMedal = r.tricks > 0 && !p.trickMedals.contains(level.id) && p.cleared >= Economy.unlockTrickMedal;
+    if (newMedal) p.trickMedals.add(level.id);
+    final coins = Economy.clearCoins(level, r.stars) + (gainedStars > 0 ? 20 : 0) + (newMedal ? Economy.trickMedalCoins : 0);
     final firstClear = prev == 0;
     if (r.stars > prev) p.stars[level.id] = r.stars;
     p.coins += coins;
@@ -131,7 +133,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     var replayed = false;
     while (true) {
       if (!mounted) return;
-      final action = await showFullscreen<String>(context, WinScreen(level: level, result: r, coins: coins, streak: p.streak, isLast: widget.index >= LevelRepo.instance.count - 1, replayed: replayed, missions: replayed ? const [] : missionsDone));
+      final action = await showFullscreen<String>(context, WinScreen(level: level, result: r, coins: coins, streak: p.streak, isLast: widget.index >= LevelRepo.instance.count - 1, replayed: replayed, missions: replayed ? const [] : missionsDone, newMedal: newMedal && !replayed));
       if (!mounted) return;
       if (action == 'replay') {
         replayed = true;
