@@ -190,11 +190,11 @@ class _StarChestSheetState extends State<StarChestSheet> {
                 Positioned(
                   left: 0,
                   top: 84,
-                  child: Container(width: w * (s / 60).clamp(0.0, 1.0), height: 12, decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFFFE08A), Color(0xFFE09A2E)]), borderRadius: BorderRadius.circular(8))),
+                  child: Container(width: s <= 0 ? 0 : (34 + (w - 68) * (s / 60)).clamp(0.0, w), height: 12, decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFFFFE08A), Color(0xFFE09A2E)]), borderRadius: BorderRadius.circular(8))),
                 ),
                 for (var k = 0; k < 3; k++)
                   Positioned(
-                    left: w * StarChests.marks[k] / 60 - 34,
+                    left: (w - 68) * StarChests.marks[k] / 60,
                     top: 0,
                     child: _ChestNode(mark: StarChests.marks[k], claimed: StarChests.claimed(world, k), ready: StarChests.ready(world, k), onTap: () => _claim(k)),
                   ),
