@@ -53,6 +53,7 @@ class Profile extends ChangeNotifier {
   // 온보딩·설정
   Set<String> seen = {};
   bool sound = true;
+  bool music = true;
   bool haptics = true;
   bool reduceMotion = false;
   String lang = ''; // '' = 기기 언어
@@ -193,6 +194,7 @@ class Profile extends ChangeNotifier {
     'trails': trails.toList(),
     'seen': seen.toList(),
     'sound': sound,
+    'music': music,
     'haptics': haptics,
     'reduceMotion': reduceMotion,
     'lang': lang,
@@ -228,6 +230,7 @@ class Profile extends ChangeNotifier {
     trails = {for (final v in j['trails'] as List? ?? ['moon']) v as String};
     seen = {for (final v in j['seen'] as List? ?? []) v as String};
     sound = j['sound'] as bool? ?? true;
+    music = j['music'] as bool? ?? true;
     haptics = j['haptics'] as bool? ?? true;
     reduceMotion = j['reduceMotion'] as bool? ?? false;
     lang = j['lang'] as String? ?? '';

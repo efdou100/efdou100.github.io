@@ -448,6 +448,10 @@ class SettingsToggles extends StatelessWidget {
     return Column(
       children: [
         row(tr('sound'), p.sound, (v) => p.sound = v),
+        row(tr('music'), p.music, (v) {
+          p.music = v;
+          Sfx.instance.refreshMusic();
+        }),
         row(tr('haptics'), p.haptics, (v) => p.haptics = v),
         row(tr('reduce_motion'), p.reduceMotion, (v) => p.reduceMotion = v),
         if (showLanguage) ...[

@@ -23,9 +23,15 @@ flutter test           # 시뮬레이션 패리티 테스트 (레벨 100개 정�
 | `lib/app/profile.dart` | 저장 데이터(진행, 코인, 하트, 부스터, 출석, 패스, 설정) |
 | `lib/app/economy.dart` | 모든 경제 수치와 해금 시점 |
 | `lib/services/services.dart` | 광고·결제·분석 인터페이스와 개발용 가짜 구현 |
-| `lib/screens/` | 홈(지도), 게임, 시트(클리어/이어하기/힌트/판 시작/하트/출석…), 상점, 패스 |
+| `lib/screens/` | 메인 틀(shell: 탭·재화 바), 홈 지도, 게임, 팝업(판 시작/이어하기/힌트/하트/출석…), 클리어 화면, 상점, 패스, 도감 |
+| `lib/app/art.dart` | 이미지 교체 시스템 (assets/images 에 파일이 있으면 이미지, 없으면 코드 그림) |
+| `lib/app/l10n.dart` | 한국어/영어 문구 |
+| `lib/services/ads_admob.dart`, `iap_store.dart` | 애드몹·인앱결제 실연동 (지금은 구글 테스트 ID) |
+| `docs/ART_DIRECTION.md`, `docs/ASSETS.md` | 아트 기준과 Gemini 프롬프트 68종 |
+| `docs/RELEASE_CHECKLIST.md` | 집에서 이어서 할 일 (에뮬레이터 → 이미지 → 광고/결제 → 서명 → 스토어) |
 | `tool/gen_levels.js` | 레벨 생성·솔버 검증·월드 배치 → `assets/levels/levels.json` |
-| `tool/gen_sfx.py` | 효과음 합성 → `assets/audio/*.wav` |
+| `tool/gen_sfx.py`, `tool/gen_bgm.py` | 효과음·배경음 합성 → `assets/audio/*.wav` |
+| `tool/process_assets.py`, `check_assets.py` | Gemini 이미지 배경 제거·크기 맞춤·배치, 누락 점검 |
 
 ## 레벨 추가하기
 
@@ -33,9 +39,6 @@ flutter test           # 시뮬레이션 패리티 테스트 (레벨 100개 정�
 2. `node tool/gen_levels.js` 실행 → 솔버가 풀이 가능 여부·난이도(성공 각도 폭)·정답을 계산해 월드별 20판으로 배치.
 3. `flutter test`로 Flutter 쪽에서도 정답이 통하는지 확인.
 
-## 출시 전에 바꿀 것
+## 출시까지 남은 일
 
-- `AdService.instance`를 google_mobile_ads 구현으로 교체(광고 단위 ID 필요).
-- `StoreService.instance`를 in_app_purchase 구현으로 교체(스토어 상품 ID는 `Economy.products`의 id 사용).
-- `Analytics.log`를 Firebase Analytics 등에 연결.
-- 효과음은 `assets/audio/<이름>.wav`를 같은 이름의 파일로 바꾸면 교체됨.
+[docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md) 순서대로: 에뮬레이터 확인 → Gemini 이미지 → 애드몹/스토어 ID 교체 → 서명 → 스토어 등록.

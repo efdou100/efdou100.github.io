@@ -56,6 +56,7 @@ class _MainShellState extends State<MainShell> with TickerProviderStateMixin {
       p.tickHearts();
       if (mounted) setState(() {});
     });
+    Sfx.instance.music('bgm_home');
     WidgetsBinding.instance.addPostFrameCallback((_) => _afterFirstFrame());
   }
 

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import '../app/economy.dart';
 import '../app/l10n.dart';
 import '../app/profile.dart';
+import '../app/sfx.dart';
 import '../app/theme.dart';
 import '../game/controller.dart';
 import '../game/level.dart';
@@ -52,6 +53,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _last = d;
       g.update(dt);
     })..start();
+    Sfx.instance.music('bgm_game');
     Analytics.log('level_start', {'id': level.id, 'boosters': widget.boosters.join(',')});
     if (level.hint != null) Future<void>.delayed(const Duration(milliseconds: 1500), () => _showToast(levelHint(level.hint!), gold: true, sticky: true));
   }

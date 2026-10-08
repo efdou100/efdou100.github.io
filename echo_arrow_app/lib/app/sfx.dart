@@ -23,10 +23,15 @@ class Sfx {
   final Map<String, int> _last = {};
   int _lastHaptic = 0;
   bool _ready = false;
+  final AudioPlayer _bgm = AudioPlayer();
+  String? _bgmName;
+  bool _paused = false;
+  static const _bgmExt = 'wav';
 
   Future<void> init() async {
     try {
       AudioCache.instance = AudioCache(prefix: 'assets/audio/');
+      _bgm.audioCache = AudioCache.instance;
       await AudioCache.instance.loadAll([for (final n in names) '$n.$_ext']);
       for (final n in names) {
         final count = _poolSize[n] ?? (n.startsWith('bounce') || n.startsWith('hit') ? 2 : 1);
@@ -55,6 +60,35 @@ class Sfx {
     try {
       list[i].play(AssetSource('$name.$_ext'), volume: volume);
     } catch (_) {}
+  }
+
+  /// 배경음 (bgm_home / bgm_game). 같은 곡이면 그대로 둔다.
+  Future<void> music(String name) async {
+    if (_bgmName == name && _bgm.state == PlayerState.playing) return;
+    _bgmName = name;
+    if (!_ready || !Profile.instance.music || _paused) {
+      await _bgm.stop();
+      return;
+    }
+    try {
+      await _bgm.setReleaseMode(ReleaseMode.loop);
+      await _bgm.play(AssetSource('$name.$_bgmExt'), volume: 0.4);
+    } catch (_) {}
+  }
+
+  /// 설정 변경·앱 전환 시 다시 맞춤
+  Future<void> refreshMusic({bool? paused}) async {
+    if (paused != null) _paused = paused;
+    final n = _bgmName;
+    if (n == null) return;
+    if (!Profile.instance.music || _paused) {
+      await _bgm.pause();
+    } else if (_bgm.state == PlayerState.paused) {
+      await _bgm.resume();
+    } else {
+      _bgmName = null;
+      await music(n);
+    }
   }
 
   void bounce(int b) => play('bounce_${b.clamp(0, 9)}', volume: 0.6);

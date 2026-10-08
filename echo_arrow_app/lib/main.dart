@@ -35,8 +35,37 @@ Future<void> main() async {
   runApp(const EchoArrowApp());
 }
 
-class EchoArrowApp extends StatelessWidget {
+class EchoArrowApp extends StatefulWidget {
   const EchoArrowApp({super.key});
+  @override
+  State<EchoArrowApp> createState() => _EchoArrowAppState();
+}
+
+class _EchoArrowAppState extends State<EchoArrowApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// 앱이 뒤로 가면 배경음을 멈추고 저장, 돌아오면 하트 시간 갱신
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final away = state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.hidden;
+    Sfx.instance.refreshMusic(paused: away);
+    if (away) {
+      Profile.instance.save();
+    } else {
+      Profile.instance.tickHearts();
+    }
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp(
     onGenerateTitle: (_) => tr('app_title'),
