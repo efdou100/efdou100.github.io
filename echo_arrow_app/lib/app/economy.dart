@@ -1,4 +1,5 @@
 import '../game/level.dart';
+import '../services/services.dart';
 import 'l10n.dart';
 import 'profile.dart';
 
@@ -141,5 +142,5 @@ class Product {
   final double price;
   final Reward reward;
   final String? badge;
-  String get priceLabel => '\$${price.toStringAsFixed(2)}';
+  String get priceLabel => StoreService.instance.priceOf(id) ?? '\$${price.toStringAsFixed(2)}';
 }

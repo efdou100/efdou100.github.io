@@ -122,11 +122,17 @@ abstract class StoreService {
 
   /// 광고 제거·패스 같은 비소모성 구매 복원
   Future<void> restore();
+
+  /// 스토어에 등록된 현지 가격 (없으면 null → 기본 표시 가격)
+  String? priceOf(String id) => null;
 }
 
 class MockStoreService implements StoreService {
   @override
   Future<void> restore() async => Analytics.log('iap_restore');
+
+  @override
+  String? priceOf(String id) => null;
 
   @override
   Future<bool> buy(Product p) async {
@@ -149,14 +155,15 @@ class MockStoreService implements StoreService {
       Analytics.log('iap_cancel', {'id': p.id});
       return false;
     }
-    _deliver(p);
+    deliver(p);
     Analytics.log('iap_success', {'id': p.id, 'price': p.price});
     return true;
   }
 
-  void _deliver(Product p) {
+  /// 결제 완료 → 상품 지급 (실제 스토어 구현도 이 함수를 쓴다)
+  static void deliver(Product p, {bool restored = false}) {
     final pr = Profile.instance;
-    pr.spent += p.price;
+    if (!restored) pr.spent += p.price;
     switch (p.id) {
       case 'noads':
         pr.adsRemoved = true;
@@ -168,7 +175,7 @@ class MockStoreService implements StoreService {
       case 'pass':
         pr.passPremium = true;
     }
-    p.reward.grant();
+    if (!restored) p.reward.grant();
     pr.save();
   }
 }

@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.6
   audioplayers: ^6.8.1
+  google_mobile_ads: ^9.1.0
+  in_app_purchase: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +49,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -109,3 +112,18 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# 앱 아이콘: Gemini 로 만든 icon/app_icon(.png) 이 assets/images/icon/ 에 생기면 image_path 를 그 경로로 바꾸고
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "tool/icon/app_icon.png"
+  adaptive_icon_background: "#10163F"
+  adaptive_icon_foreground: "tool/icon/app_icon_fg.png"
+  web:
+    generate: true
+    image_path: "tool/icon/app_icon.png"
+    background_color: "#10163F"
+    theme_color: "#10163F"

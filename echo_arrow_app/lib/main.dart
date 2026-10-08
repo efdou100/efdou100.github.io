@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +12,8 @@ import 'app/theme.dart';
 import 'game/level.dart';
 import 'screens/game_screen.dart';
 import 'screens/shell.dart';
+import 'services/ads_admob.dart';
+import 'services/iap_store.dart';
 import 'services/services.dart';
 
 Future<void> main() async {
@@ -17,6 +22,15 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   await Future.wait([Profile.instance.load(), LevelRepo.instance.load()]);
   await Future.wait([Sfx.instance.init(), Art.instance.init()]);
+  // 휴대폰에서는 실제 광고·결제, 웹(개발 확인용)에서는 가짜 구현
+  if (!kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS)) {
+    final ads = AdMobService();
+    final store = PlayStoreService();
+    AdService.instance = ads;
+    StoreService.instance = store;
+    unawaited(ads.init());
+    unawaited(store.init());
+  }
   Analytics.log('app_open', {'cleared': Profile.instance.cleared});
   runApp(const EchoArrowApp());
 }
