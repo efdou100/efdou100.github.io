@@ -257,4 +257,11 @@ class Profile extends ChangeNotifier {
 
   @visibleForTesting
   void resetForTest() => _fromJson({});
+
+  /// 개발용(디버그 빌드에서만 노출): 처음 설치한 상태로
+  void resetAll() {
+    _fromJson({});
+    heartStamp = DateTime.now().millisecondsSinceEpoch;
+    save();
+  }
 }

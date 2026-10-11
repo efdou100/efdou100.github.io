@@ -1,7 +1,7 @@
 # 메아리 화살 (ECHO ARROW)
 
 과거의 화살과 함께 쏘는 한 발 조준 퍼즐. 세로 화면, 한 손가락.
-기획 전체는 [docs/GDD.md](docs/GDD.md) 참고.
+기획 전체는 [docs/GDD.md](docs/GDD.md) 참고. 집 PC에서 에뮬레이터로 실행하는 법은 [docs/HOME_SETUP.md](docs/HOME_SETUP.md).
 
 ## 실행
 

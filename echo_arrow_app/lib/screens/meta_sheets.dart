@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
 import '../app/economy.dart';
@@ -10,7 +11,9 @@ import '../game/painter.dart' show WorldTheme;
 import '../services/services.dart';
 import '../widgets/icons.dart';
 import '../widgets/ui.dart';
+import 'game_screen.dart';
 import 'sheets.dart';
+import 'shell.dart';
 
 /// 판 시작 팝업: 레벨 리본 + 목표 + 부스터 3칸 + 큰 플레이 버튼
 class LevelStartSheet extends StatefulWidget {
@@ -464,6 +467,60 @@ class _SettingsSheetState extends State<SettingsSheet> {
         Btn(tr('restore'), style: BtnStyle.dusk, height: 48, onTap: () => StoreService.instance.restore()),
         const SizedBox(height: Space.m),
         Text(tr('version', {'v': '1.0.0'}), style: ko(TypeScale.caption, color: Palette.inkSoft)),
+        if (kDebugMode) const _DevTools(),
+      ],
+    ),
+  );
+}
+
+/// 개발용 도구 (디버그 빌드에서만 보임): 원하는 판까지 바로 열기, 초기화, 코인
+class _DevTools extends StatelessWidget {
+  const _DevTools();
+
+  void _restart(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute<void>(builder: (_) => const MainShell()), (_) => false);
+  }
+
+  void _openUpTo(BuildContext context, int level) {
+    final p = Profile.instance, repo = LevelRepo.instance;
+    p.stars.clear();
+    for (var i = 0; i < repo.count && repo[i].id < level; i++) {
+      p.stars[repo[i].id] = 3;
+    }
+    p.checkinLast = Profile.today();
+    p.save();
+    _restart(context);
+  }
+
+  @override
+  Widget build(BuildContext context) => Container(
+    margin: const EdgeInsets.only(top: Space.m),
+    padding: const EdgeInsets.all(Space.m),
+    decoration: BoxDecoration(color: const Color(0x33FF6F86), borderRadius: BorderRadius.circular(14), border: Border.all(color: Palette.danger)),
+    child: Column(
+      children: [
+        Text('개발용 (디버그 빌드에서만 보임)', style: ko(TypeScale.caption, color: Palette.danger)),
+        const SizedBox(height: Space.s),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          alignment: WrapAlignment.center,
+          children: [
+            for (final (lv, label) in const [(15, '등불'), (21, '거울'), (35, '째깍'), (55, '고리'), (61, '메아리'), (71, '유리'), (81, '5월드'), (101, '전부')])
+              ActionChip(label: Text('$lv $label', style: ko(12, color: Palette.night)), onPressed: () => _openUpTo(context, lv)),
+          ],
+        ),
+        const SizedBox(height: Space.s),
+        Row(children: [
+          Expanded(child: Btn('코인 +10000', height: 40, style: BtnStyle.ghost, onTap: () => Profile.instance.earn(10000))),
+          const SizedBox(width: Space.s),
+          Expanded(
+            child: Btn('처음부터', height: 40, style: BtnStyle.ghost, onTap: () {
+              Profile.instance.resetAll();
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute<void>(builder: (_) => const GameScreen(index: 0)), (_) => false);
+            }),
+          ),
+        ]),
       ],
     ),
   );
