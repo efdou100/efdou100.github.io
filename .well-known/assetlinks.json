@@ -1,0 +1,17 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.babyassistant.baby_assistant",
+      "sha256_cert_fingerprints": [
+        "1E:5F:26:D5:20:97:BF:D2:36:E1:4A:DB:0A:81:AA:93:C1:BE:A0:F7:B3:C4:8D:EF:70:2D:02:DF:90:90:1E:A9",
+        "87:72:A4:F7:99:8C:F4:69:45:50:65:F9:32:7F:AC:F8:65:A7:0B:7D:15:E3:A1:A1:05:AA:AF:A2:33:B2:8F:8C",
+        "5C:4F:44:98:72:A2:69:AF:48:F2:A4:9D:FB:0E:B3:12:E6:6A:E1:60:2E:84:16:87:08:25:02:58:7A:86:8C:E6"
+      ]
+    }
+  }
+]
