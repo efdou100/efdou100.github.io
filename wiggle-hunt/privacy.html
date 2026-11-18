@@ -21,9 +21,9 @@
 </head>
 <body>
 <main>
-<header><img src="icon.png" alt=""><div><h1>Wiggle Hunt</h1><div class="muted">Privacy Policy · Effective November 17, 2026</div></div></header>
+<header><img src="icon.png" alt=""><div><h1>Wiggle Hunt</h1><div class="muted">Privacy Policy · Effective November 18, 2026</div></div></header>
 
-<p class="box"><b>Short version:</b> Wiggle Hunt has no accounts and saves your progress only on your device. It shows ads through Google AdMob and offers optional in-app purchases through Google Play Billing. We run no servers and collect no personal data ourselves.</p>
+<p class="box"><b>Short version:</b> Wiggle Hunt has no accounts of its own and saves your progress on your device (and, if you sign in to Google Play Games, in Play Games saved games). It shows ads through Google AdMob and offers optional in-app purchases through Google Play Billing. It uses Google Firebase for play statistics and crash reports (section 3). We run no servers of our own.</p>
 
 <h2>1. Who we are</h2>
 <p>Wiggle Hunt (package com.wigglehunt.game) is a single-player puzzle game made by Biseo Studio. Contact: <a href="mailto:efdou100@gmail.com">efdou100@gmail.com</a>.</p>
@@ -32,64 +32,71 @@
 <p>The game uses the Google Mobile Ads SDK to show banner ads and ads between stages (from stage 11), and optional rewarded videos that you choose to watch (an extra heart, or a hint that opens one cell). The SDK may collect and share with Google: the device advertising ID and app set ID, approximate location derived from your IP address, ad interactions, and diagnostic/crash data. This is used to show and measure ads, prevent fraud, and for analytics. See <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use its services</a>.</p>
 <p>In the EEA, UK and Switzerland you are asked for consent before personalised ads, and you can change your choice any time in Settings › Privacy choices. You can reset or delete your advertising ID in your device settings. Ad content is limited to a general (PG) rating.</p>
 
-<h2>3. In-app purchase (Google Play Billing)</h2>
+<h2>3. Play statistics and crash reports (Google Firebase)</h2>
+<p>To see where the game is too hard or confusing and to fix crashes, the app uses Google Analytics for Firebase and Firebase Crashlytics (operated by Google as our service provider). They collect: how you use the game (stages started, cleared, lost or left, with time taken, mistakes, hints and continues used; check-in, daily puzzle, tutorial and leaderboard taps; which ad reward was chosen and when an ad between stages was shown; which product was bought — never payment details), the screens viewed, an app instance ID, device model, OS and app version, language and country, and crash and error reports (stack traces, the stage being played). Firebase may also use the advertising ID (see section 2); the app tells Analytics not to use this data for ads or ad personalisation. In the EEA, UK and Switzerland, analytics storage follows the consent choice you make for ads. We see these only as statistics and crash reports in the Firebase console, not linked to your name or account. Google keeps Analytics data for up to 14 months and Crashlytics reports for 90 days. See <a href="https://firebase.google.com/support/privacy">Privacy and Security in Firebase</a>.</p>
+
+<h2>4. In-app purchase (Google Play Billing)</h2>
 <p>You can optionally buy:</p>
 <ul>
 <li><b>Remove ads (forever)</b> and <b>No mistake limit (forever)</b>: one-time purchases. Remove ads turns off banner ads and ads between stages (rewarded videos stay available only when you choose to watch them). No mistake limit keeps your hearts from going down when you make a mistake.</li>
-<li><b>Continue tickets (5 or 20)</b>: consumable purchases. Each ticket lets you keep playing a stage once after running out of hearts. Tickets are stored only on your device; a used ticket is gone, and tickets cannot be restored after you uninstall the app or clear its data.</li>
+<li><b>Continue tickets (5 or 20)</b>: consumable purchases. Each ticket lets you keep playing a stage once after running out of hearts. Tickets are stored on your device (and in your cloud save if you are signed in to Google Play Games, section 7); a used ticket is gone, and without a cloud save tickets cannot be restored after you uninstall the app or clear its data.</li>
 </ul>
 <p>Payments are processed entirely by Google Play under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. We never see your card or payment details; the app only receives from Google Play which product was bought (and a purchase token so the same ticket purchase is not counted twice), and stores that on your device. Restore purchases asks Google Play again for your one-time purchases.</p>
 
-<h2>4. What we do not collect</h2>
-<p>We (the developer) run no servers and receive no personal data from the app: no name, email, contacts, photos, precise location or files. The app has no account of its own (Google Play Games sign-in is optional, see section 6).</p>
+<h2>5. What we do not collect</h2>
+<p>We (the developer) run no servers and receive no personal data from the app: no name, email, contacts, photos, precise location or files. Play statistics and crash reports (section 3) reach us only as statistics and reports in the Firebase console. The app has no account of its own (Google Play Games sign-in is optional, see section 7).</p>
 
-<h2>5. Data stored on your device</h2>
-<p>Your progress (current stage, caterpillars found, remaining free hints, continue tickets and today's continue count, whether you removed ads or the mistake limit, check-in calendar days and daily puzzle days, reminder settings, tutorial flags, sound, voice and vibration settings) is saved only on your device. Uninstalling the app or clearing its data deletes it permanently (Remove ads and No mistake limit can be restored from Google Play; continue tickets cannot).</p>
+<h2>6. Data stored on your device</h2>
+<p>Your progress (current stage, caterpillars found, remaining free hints, continue tickets and today's continue count, whether you removed ads or the mistake limit, check-in calendar days and daily puzzle days, reminder settings, tutorial flags, sound, voice and vibration settings) is saved on your device. Uninstalling the app or clearing its data deletes it from the device (Remove ads and No mistake limit can be restored from Google Play). If you sign in to Google Play Games, a copy of your progress is also kept in Play Games saved games (section 7), so it can come back on a new phone. Android's own backup (your Google account backup, if turned on in your phone settings) may also back up the game's save file.</p>
 
-<h2>6. Google Play features</h2>
+<h2>7. Google Play features</h2>
 <p>The app may ask Google Play to show its in-app review window or an in-app update. These are handled by Google Play under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>; we do not receive your review or account details through the app.</p>
 <p>Leaderboards (Google Play Games): if you are signed in to Google Play Games, the app sends your best stage and your number of stages cleared without losing a heart to Google Play Games leaderboards. Google processes your Play Games profile (nickname and avatar) and these scores and shows them to other players under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. We do not receive your profile or account details. You can manage your Play Games profile and its visibility in the Google Play Games settings.</p>
+<p>Cloud save (Google Play Games saved games): if you are signed in to Google Play Games, the app stores your game progress (stage, caterpillars found, stages cleared without losing a heart, hints and continue tickets, check-in and daily puzzle days, tutorial flags, sound settings) in Google Play Games saved games in your Google account, and reads it back to continue on another phone. Purchases, ad settings and reminders are not included. This copy is kept by Google under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>; we do not run a server and cannot see it.</p>
 <p>If you turn on reminders, the app schedules a daily reminder on your device (local notifications). Reminders are made and kept on your device only; nothing is sent to us or to any server. You can turn them off in the app settings or in your phone settings.</p>
 
-<h2>7. Children</h2>
+<h2>8. Children</h2>
 <p>The game is not directed at children under 13.</p>
 
-<h2>8. Your choices and deletion</h2>
-<p>We hold no personal data to access or delete. Game data lives on your device (remove it via Android Settings › Apps › Wiggle Hunt › Storage › Clear data). Ad data is controlled by Google — use the in-app Privacy choices and your device’s Ads settings. Purchase history is kept by Google Play in your Google account.</p>
+<h2>9. Your choices and deletion</h2>
+<p>We hold no personal data to access or delete. Game data lives on your device (remove it via Android Settings › Apps › Wiggle Hunt › Storage › Clear data); the cloud save copy can be deleted in the Google Play Games app or settings (delete this game's data). Ad, statistics and crash data are controlled by Google — use the in-app Privacy choices and your device’s Ads settings (resetting your advertising ID also separates future statistics). Purchase history is kept by Google Play in your Google account.</p>
 
-<h2>9. Changes</h2>
+<h2>10. Changes</h2>
 <p>If this policy changes, we will update this page and the effective date above.</p>
 
 <hr>
 
 <h1 lang="ko">개인정보처리방침</h1>
-<div class="muted" lang="ko">시행일 2026년 11월 17일</div>
+<div class="muted" lang="ko">시행일 2026년 11월 18일</div>
 <div lang="ko">
-<p class="box"><b>요약:</b> 꿈틀 애벌레 찾기(Wiggle Hunt)는 앱 자체 계정이 없고(Google Play 게임즈 순위표 로그인은 선택) 진행 상황을 기기에만 저장합니다. Google AdMob 광고를 보여 주며, Google Play 결제로 인앱 상품을 선택해 살 수 있습니다. 개발자는 서버를 운영하지 않고 개인정보를 직접 수집하지 않습니다.</p>
+<p class="box"><b>요약:</b> 꿈틀 애벌레 찾기(Wiggle Hunt)는 자체 계정이 없고 진행 상황을 기기에 저장합니다(Google Play 게임즈에 로그인하면 Play 게임즈 저장된 게임에도). Google AdMob 광고를 보여 주며, Google Play 결제로 인앱 상품을 선택해 살 수 있습니다. 플레이 통계·오류 기록에 Google Firebase를 씁니다(3절). 개발자는 자체 서버를 운영하지 않습니다.</p>
 <h2>1. 운영자</h2>
 <p>꿈틀 애벌레 찾기(Wiggle Hunt, com.wigglehunt.game)는 비서 스튜디오가 만든 1인용 퍼즐 게임입니다. 문의: <a href="mailto:efdou100@gmail.com">efdou100@gmail.com</a></p>
 <h2>2. 광고(Google AdMob)가 수집하는 정보</h2>
 <p>배너 광고와 단계 사이 광고(11단계부터), 사용자가 고를 때만 보는 보상형 광고(하트 +1, 칸 하나 여는 힌트)를 위해 Google 모바일 광고 SDK를 씁니다. SDK는 광고 ID·앱 세트 ID, IP로 추정한 대략적 위치, 광고 상호작용, 진단·비정상 종료 정보를 수집해 Google과 공유할 수 있으며, 광고 게재·측정, 사기 방지, 분석에 쓰입니다. 유럽경제지역·영국·스위스에서는 맞춤 광고 전에 동의를 묻고, 설정 › 개인정보 선택에서 언제든 바꿀 수 있습니다. 광고 ID는 기기 설정에서 재설정·삭제할 수 있습니다. 광고 내용은 전체 이용가(PG) 수준으로 제한합니다.</p>
-<h2>3. 인앱 결제(Google Play 결제)</h2>
+<h2>3. 플레이 통계·오류 기록(Google Firebase)</h2>
+<p>어느 단계가 너무 어렵거나 헷갈리는지 보고 앱이 꺼지는 문제를 고치려고 Google 애널리틱스(Firebase)와 Firebase Crashlytics를 씁니다(Google이 개발자를 대신해 처리). 수집하는 것: 게임을 어떻게 했는지(단계를 시작·성공·실패·그만둔 것과 걸린 시간·실수·힌트·이어 하기 수, 출석·오늘의 판·안내·순위표 누름, 고른 광고 보상과 단계 사이 광고가 나온 때, 산 상품 — 결제 정보는 아님), 본 화면, 앱 인스턴스 ID, 기기 모델·OS·앱 버전, 언어·국가, 비정상 종료·오류 보고(스택, 하던 단계). Firebase가 광고 ID(2절)를 쓸 수도 있으며, 앱은 이 정보를 광고·맞춤 광고에 쓰지 않도록 설정합니다. 유럽경제지역·영국·스위스에서는 광고에 대해 고른 동의에 따라 통계 저장 여부가 정해집니다. 개발자는 Firebase 콘솔에서 이름·계정과 연결되지 않은 통계와 오류 보고로만 봅니다. Google은 애널리틱스 데이터를 최대 14개월, Crashlytics 보고를 90일 보관합니다. <a href="https://firebase.google.com/support/privacy">Firebase 개인정보 보호 및 보안</a>을 참고하세요.</p>
+<h2>4. 인앱 결제(Google Play 결제)</h2>
 <p>다음 상품을 선택해 살 수 있습니다.</p>
 <ul>
 <li><b>광고 제거 (영구)</b>, <b>실수 제한 없애기 (영구)</b>: 한 번 구매. 광고 제거를 사면 배너 광고와 단계 사이 광고가 나오지 않습니다(보상형 광고는 사용자가 고를 때만 그대로). 실수 제한 없애기를 사면 틀려도 하트가 줄지 않습니다.</li>
-<li><b>이어 하기권 5장·20장</b>: 소모성 구매. 하트를 다 쓴 판을 한 장에 한 번 이어 할 수 있습니다. 이어 하기권은 기기에만 저장되며, 쓴 것은 사라지고, 앱을 지우거나 데이터를 삭제하면 복원되지 않습니다.</li>
+<li><b>이어 하기권 5장·20장</b>: 소모성 구매. 하트를 다 쓴 판을 한 장에 한 번 이어 할 수 있습니다. 이어 하기권은 기기에 저장되며(Google Play 게임즈에 로그인했다면 클라우드 저장에도, 7절), 쓴 것은 사라지고, 클라우드 저장이 없으면 앱을 지우거나 데이터를 삭제할 때 복원되지 않습니다.</li>
 </ul>
 <p>결제는 Google 개인정보처리방침에 따라 Google Play가 전부 처리하며, 개발자는 카드·결제 정보를 보지 않습니다. 앱은 Google Play로부터 어떤 상품을 샀는지(같은 이어 하기권 구매를 두 번 세지 않도록 구매 토큰 포함)만 받아 기기에 저장합니다. 구매 복원은 Google Play에 한 번 구매 상품 내역을 다시 묻습니다.</p>
-<h2>4. 개발자가 수집하지 않는 정보</h2>
-<p>개발자는 서버를 운영하지 않으며 앱에서 개인정보(이름, 이메일, 연락처, 사진, 정확한 위치, 파일)를 받지 않습니다. 앱 자체 계정은 없습니다(Google Play 게임즈 로그인은 선택, 6절).</p>
-<h2>5. 기기에 저장되는 정보</h2>
-<p>현재 단계, 찾은 애벌레, 남은 무료 힌트, 이어 하기권과 오늘 이어 한 횟수, 광고 제거·실수 제한 없애기 여부, 출석 달력·오늘의 판을 깬 날, 알림 설정, 안내를 봤는지, 소리·목소리·진동 설정은 기기 안에만 저장되며 앱 삭제나 데이터 삭제로 영구히 지워집니다(광고 제거·실수 제한 없애기는 Google Play에서 복원할 수 있고, 이어 하기권은 복원되지 않습니다).</p>
-<h2>6. Google Play 기능</h2>
+<h2>5. 개발자가 수집하지 않는 정보</h2>
+<p>개발자는 서버를 운영하지 않으며 앱에서 개인정보(이름, 이메일, 연락처, 사진, 정확한 위치, 파일)를 받지 않습니다. 플레이 통계·오류 기록(3절)은 Firebase 콘솔의 통계와 보고로만 봅니다. 앱 자체 계정은 없습니다(Google Play 게임즈 로그인은 선택, 7절).</p>
+<h2>6. 기기에 저장되는 정보</h2>
+<p>현재 단계, 찾은 애벌레, 남은 무료 힌트, 이어 하기권과 오늘 이어 한 횟수, 광고 제거·실수 제한 없애기 여부, 출석 달력·오늘의 판을 깬 날, 알림 설정, 안내를 봤는지, 소리·목소리·진동 설정은 기기에 저장되며 앱 삭제나 데이터 삭제로 기기에서 지워집니다(광고 제거·실수 제한 없애기는 Google Play에서 복원할 수 있습니다). Google Play 게임즈에 로그인하면 진행 기록 사본이 Play 게임즈 저장된 게임에도 보관되어(7절) 새 휴대폰에서 이어 할 수 있습니다. 휴대폰 설정에서 Google 계정 백업을 켜 두었다면 Android 백업이 게임 저장 파일을 백업할 수도 있습니다.</p>
+<h2>7. Google Play 기능</h2>
 <p>앱이 Google Play에 앱 안 리뷰 창이나 앱 안 업데이트를 요청할 수 있습니다. 이는 Google 개인정보처리방침에 따라 Google Play가 처리하며, 개발자는 앱을 통해 리뷰 내용이나 계정 정보를 받지 않습니다.</p>
 <p>순위표(Google Play 게임즈): Google Play 게임즈에 로그인되어 있으면 앱이 최고 단계와 하트를 잃지 않고 깬 단계 수를 Google Play 게임즈 순위표로 보냅니다. Google은 <a href="https://policies.google.com/privacy?hl=ko">Google 개인정보처리방침</a>에 따라 Play 게임즈 프로필(닉네임·아바타)과 이 점수를 처리하고 다른 플레이어에게 보여 줍니다. 개발자는 프로필이나 계정 정보를 받지 않습니다. Play 게임즈 프로필과 공개 범위는 Google Play 게임즈 설정에서 관리할 수 있습니다.</p>
+<p>클라우드 저장(Google Play 게임즈 저장된 게임): Google Play 게임즈에 로그인되어 있으면 앱이 게임 진행 기록(단계, 찾은 애벌레, 하트를 잃지 않고 깬 단계, 힌트·이어 하기권, 출석·오늘의 판 날, 안내를 봤는지, 소리 설정)을 Google 계정의 Play 게임즈 저장된 게임에 저장하고, 다른 휴대폰에서 이어 하도록 다시 읽습니다. 구매·광고 설정·알림은 넣지 않습니다. 이 사본은 Google 개인정보처리방침에 따라 Google이 보관하며, 개발자는 서버를 운영하지 않아 볼 수 없습니다.</p>
 <p>알림을 켜면 앱이 기기 안에서 하루 한 번 알림을 예약합니다(로컬 알림). 알림은 기기 안에서만 만들고 보관하며, 개발자나 서버로 아무것도 보내지 않습니다. 앱 설정이나 휴대폰 설정에서 끌 수 있습니다.</p>
-<h2>7. 아동</h2>
+<h2>8. 아동</h2>
 <p>13세 미만 아동을 대상으로 하지 않습니다.</p>
-<h2>8. 선택과 삭제</h2>
-<p>개발자가 보유한 개인정보가 없습니다. 게임 데이터는 설정 › 앱 › 꿈틀 애벌레 찾기 › 저장공간 › 데이터 삭제로, 광고 데이터는 앱 안 개인정보 선택과 기기 광고 설정으로 관리하세요. 구매 내역은 Google 계정의 Google Play에 남습니다.</p>
-<h2>9. 변경</h2>
+<h2>9. 선택과 삭제</h2>
+<p>개발자가 보유한 개인정보가 없습니다. 게임 데이터는 설정 › 앱 › 꿈틀 애벌레 찾기 › 저장공간 › 데이터 삭제로(클라우드 저장 사본은 Google Play 게임즈 앱·설정에서 이 게임 데이터 삭제로), 광고·통계·오류 데이터는 Google이 관리하며 앱 안 개인정보 선택과 기기 광고 설정으로 관리하세요. 구매 내역은 Google 계정의 Google Play에 남습니다.</p>
+<h2>10. 변경</h2>
 <p>방침이 바뀌면 이 페이지와 시행일을 갱신합니다.</p>
 </div>
 </main>

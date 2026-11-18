@@ -21,67 +21,77 @@
 </head>
 <body>
 <main>
-<header><img src="icon.png" alt=""><div><h1>Pup Path</h1><div class="muted">Privacy Policy · Effective November 14, 2026</div></div></header>
+<header><img src="icon.png" alt=""><div><h1>Pup Path</h1><div class="muted">Privacy Policy · Effective November 18, 2026</div></div></header>
 
-<p class="box"><b>Short version:</b> Pup Path has no accounts and saves your progress only on your device. It shows ads through Google AdMob and offers optional in-app purchases (remove ads, hint packs) through Google Play Billing. We run no servers and collect no personal data ourselves.</p>
+<p class="box"><b>Short version:</b> Pup Path has no accounts and saves your progress on your device (and, if you sign in to Google Play Games, as a cloud copy in your Google account). It shows ads through Google AdMob and offers optional in-app purchases (remove ads, hint packs) through Google Play Billing. It uses Google Firebase for play statistics and crash reports that are not linked to your name or account. We run no servers and collect no personal data ourselves.</p>
 
 <h2>1. Who we are</h2>
 <p>Pup Path (package com.puppath.game) is a single-player puzzle game made by Biseo Studio. Contact: <a href="mailto:efdou100@gmail.com">efdou100@gmail.com</a>.</p>
 
 <h2>2. Information collected by advertising (Google AdMob)</h2>
-<p>The game uses the Google Mobile Ads SDK to show banner ads and ads between stages (after the first 10 stages), and optional rewarded videos that you choose to watch for an extra hint. The SDK may collect and share with Google: the device advertising ID and app set ID, approximate location derived from your IP address, ad interactions, and diagnostic/crash data. This is used to show and measure ads, prevent fraud, and for analytics. See <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use its services</a>.</p>
+<p>The game uses the Google Mobile Ads SDK to show banner ads and ads between stages (after the first few stages), and optional rewarded videos that you choose to watch for an extra hint. The SDK may collect and share with Google: the device advertising ID and app set ID, approximate location derived from your IP address, ad interactions, and diagnostic/crash data. This is used to show and measure ads, prevent fraud, and for analytics. See <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use its services</a>.</p>
 <p>In the EEA, UK and Switzerland you are asked for consent before personalised ads, and you can change your choice any time in Settings › Privacy choices. You can reset or delete your advertising ID in your device settings. Ad content is limited to a general (PG) rating.</p>
 
-<h2>3. In-app purchases (Google Play Billing)</h2>
+<h2>3. Play statistics and crash reports (Google Firebase)</h2>
+<p>The app uses Google Firebase Analytics, Crashlytics and Remote Config (provided by Google as our service provider). Analytics records how the game is played: stages started, cleared or left (with time spent and hints used), hints and rewarded ads used, check-ins and the daily puzzle, tutorial steps, purchases started or completed (product only), and which screens are opened. Crashlytics sends a report when the app crashes or hits an error (the error and stack trace, current stage, app version, device model and Android version). Firebase also uses a random app-instance / installation ID, and Google may derive an approximate country from your IP address. None of this includes your name, email, contacts, Google account or precise location, and Analytics does not collect your advertising ID or use the data for personalised ads. Remote Config only downloads game settings (such as ad frequency and daily hint limits) from Google; nothing about you is uploaded for it.</p>
+<p>We use this data only to find stages that are too hard, fix crashes and tune the game. In the EEA, UK and Switzerland, analytics storage follows your answer in the consent form (Settings › Privacy choices). Analytics data is kept by Google for up to 14 months and crash reports for 90 days, linked only to the random ID. See <a href="https://firebase.google.com/support/privacy">Privacy and security in Firebase</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+
+<h2>4. In-app purchases (Google Play Billing)</h2>
 <p>You can optionally buy the Remove ads item (one-time) or hint packs (5, 20 or 100 hints). Payments are processed entirely by Google Play under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. We never see your card or payment details; the app only receives from Google Play which product was bought, and stores that result on your device. The Restore purchases button asks Google Play again for your purchases.</p>
 
-<h2>4. What we do not collect</h2>
-<p>We (the developer) run no servers and receive no personal data from the app: no name, email, contacts, photos, precise location or files. The app has no login.</p>
+<h2>5. What we do not collect</h2>
+<p>We (the developer) run no servers and receive no personal data from the app: no name, email, contacts, photos, precise location or files. The app has no login. We only see the statistics and crash reports described in section 3, which are not linked to you.</p>
 
-<h2>5. Data stored on your device</h2>
-<p>Your progress (current stage, hints left, whether you removed ads, stages cleared without hints, check-in calendar and daily puzzle days, reminder settings, tip flags, sound, voice and vibration settings) is saved only on your device. Uninstalling the app or clearing its data deletes it permanently (a Remove ads purchase can be restored from Google Play).</p>
+<h2>6. Data stored on your device</h2>
+<p>Your progress (current stage, hints left, whether you removed ads, stages cleared without hints, check-in calendar and daily puzzle days, reminder settings, tip flags, sound, voice and vibration settings) is saved on your device (see section 7 for the optional cloud copy). Uninstalling the app or clearing its data deletes it permanently (a Remove ads purchase can be restored from Google Play).</p>
 
-<h2>6. Google Play features</h2>
+<h2>7. Google Play features</h2>
 <p>The app may ask Google Play to show its in-app review window or an in-app update. To check whether an update is required, the app downloads a small public settings file (app_config.json) from this website; this request sends no personal data beyond what any web request includes (such as your IP address, handled by GitHub Pages). These features are handled under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>; we do not receive your review or account details through the app.</p>
 <p>If you turn on reminders, the app schedules a daily reminder on your device (local notifications). Reminders are made and kept on your device only; nothing is sent to us or to any server. You can turn them off in the app settings or in your phone settings.</p>
 
 <p><b>Google Play Games leaderboards.</b> If you are signed in to Google Play Games, the app sends two scores to Google Play Games leaderboards: your best stage and the number of stages cleared without hints. Google processes these scores together with your Play Games profile (nickname and avatar) and shows them to other players on the leaderboards, under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. You can change your Play Games profile visibility or sign out in the Google Play Games settings. We do not receive your Google account details.</p>
 
-<h2>7. Children</h2>
+<p><b>Cloud save (Google Play Games saved games) and Android backup.</b> If you are signed in to Google Play Games, the app also keeps a copy of your game progress (current stage, stages cleared without hints, hints received and used, check-in calendar and daily puzzle days, tip flags, and sound, music, voice and vibration settings) in Google Play Games saved games, so you can continue on another phone. This copy is stored by Google in your Google account under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>; we do not receive it and run no server. Purchases and ad settings are not included. Android may also back up the app's saved progress to your Google account (Android backup) and restore it when you reinstall the app. You can delete the saved game in Google Play Games (Settings › Delete Play Games account and data) and turn off backup in your phone's Google backup settings.</p>
+
+<h2>8. Children</h2>
 <p>The game is not directed at children under 13.</p>
 
-<h2>8. Your choices and deletion</h2>
-<p>We hold no personal data to access or delete. Game data lives on your device (remove it via Android Settings › Apps › Pup Path › Storage › Clear data). Ad data is controlled by Google — use the in-app Privacy choices and your device’s Ads settings. Purchase history is kept by Google Play in your Google account.</p>
+<h2>9. Your choices and deletion</h2>
+<p>We hold no personal data to access or delete. Game data lives on your device (remove it via Android Settings › Apps › Pup Path › Storage › Clear data). Ad data is controlled by Google — use the in-app Privacy choices and your device’s Ads settings. Firebase statistics and crash reports are deleted automatically (section 3); clearing the app’s data also resets the random ID. Purchase history is kept by Google Play in your Google account.</p>
 
-<h2>9. Changes</h2>
+<h2>10. Changes</h2>
 <p>If this policy changes, we will update this page and the effective date above.</p>
 
 <hr>
 
 <h1 lang="ko">개인정보처리방침</h1>
-<div class="muted" lang="ko">시행일 2026년 11월 14일</div>
+<div class="muted" lang="ko">시행일 2026년 11월 18일</div>
 <div lang="ko">
-<p class="box"><b>요약:</b> 댕댕 산책길(Pup Path)은 앱 자체 계정이 없고(Google Play 게임즈 순위표 로그인은 선택) 진행 상황을 기기에만 저장합니다. Google AdMob 광고를 보여 주며, Google Play 결제로 광고 제거·힌트 묶음을 선택해 살 수 있습니다. 개발자는 서버를 운영하지 않고 개인정보를 직접 수집하지 않습니다.</p>
+<p class="box"><b>요약:</b> 댕댕 산책길(Pup Path)은 계정이 없고 진행 상황을 기기에 저장합니다(Google Play 게임즈에 로그인하면 Google 계정에 클라우드 사본도 둡니다). Google AdMob 광고를 보여 주며, Google Play 결제로 광고 제거·힌트 묶음을 선택해 살 수 있습니다. 이름·계정과 연결되지 않는 플레이 통계와 오류 기록에 Google Firebase를 씁니다. 개발자는 서버를 운영하지 않고 개인정보를 직접 수집하지 않습니다.</p>
 <h2>1. 운영자</h2>
 <p>댕댕 산책길(Pup Path, com.puppath.game)은 비서 스튜디오가 만든 1인용 퍼즐 게임입니다. 문의: <a href="mailto:efdou100@gmail.com">efdou100@gmail.com</a></p>
 <h2>2. 광고(Google AdMob)가 수집하는 정보</h2>
-<p>배너 광고와 단계 사이 광고(처음 10단계 이후), 사용자가 고를 때만 보는 보상형 광고(힌트 +1)를 위해 Google 모바일 광고 SDK를 씁니다. SDK는 광고 ID·앱 세트 ID, IP로 추정한 대략적 위치, 광고 상호작용, 진단·비정상 종료 정보를 수집해 Google과 공유할 수 있으며, 광고 게재·측정, 사기 방지, 분석에 쓰입니다. 유럽경제지역·영국·스위스에서는 맞춤 광고 전에 동의를 묻고, 설정 › 개인정보 선택에서 언제든 바꿀 수 있습니다. 광고 ID는 기기 설정에서 재설정·삭제할 수 있습니다. 광고 내용은 전체 이용가(PG) 수준으로 제한합니다.</p>
-<h2>3. 인앱 결제(Google Play 결제)</h2>
+<p>배너 광고와 단계 사이 광고(처음 몇 단계 이후), 사용자가 고를 때만 보는 보상형 광고(힌트 +1)를 위해 Google 모바일 광고 SDK를 씁니다. SDK는 광고 ID·앱 세트 ID, IP로 추정한 대략적 위치, 광고 상호작용, 진단·비정상 종료 정보를 수집해 Google과 공유할 수 있으며, 광고 게재·측정, 사기 방지, 분석에 쓰입니다. 유럽경제지역·영국·스위스에서는 맞춤 광고 전에 동의를 묻고, 설정 › 개인정보 선택에서 언제든 바꿀 수 있습니다. 광고 ID는 기기 설정에서 재설정·삭제할 수 있습니다. 광고 내용은 전체 이용가(PG) 수준으로 제한합니다.</p>
+<h2>3. 플레이 통계와 오류 기록(Google Firebase)</h2>
+<p>앱은 Google Firebase의 Analytics·Crashlytics·Remote Config를 씁니다(Google이 서비스 제공업체로 처리). Analytics는 게임을 어떻게 하는지 기록합니다: 시작·깬·그만둔 단계(걸린 시간, 쓴 힌트 수), 힌트와 보상형 광고 사용, 출석과 오늘의 판, 안내(코치) 진행, 결제 시작·완료(상품 이름만), 연 화면. Crashlytics는 앱이 꺼지거나 오류가 나면 보고를 보냅니다(오류 내용과 위치, 그때 단계, 앱 버전, 기기 모델과 안드로이드 버전). Firebase는 무작위 앱 인스턴스·설치 ID를 쓰며, Google이 IP 주소로 대략적인 국가를 추정할 수 있습니다. 이름, 이메일, 연락처, Google 계정, 정확한 위치는 들어가지 않고, Analytics는 광고 ID를 모으지 않으며 맞춤 광고에 쓰지 않습니다. Remote Config는 게임 설정(광고 빈도, 하루 힌트 한도 등)을 Google에서 받아 오기만 하고 사용자 정보를 올리지 않습니다.</p>
+<p>이 정보는 너무 어려운 단계를 찾고, 오류를 고치고, 게임을 조정하는 데만 씁니다. 유럽경제지역·영국·스위스에서는 분석 저장이 동의 창(설정 › 개인정보 선택)의 답을 따릅니다. Analytics 데이터는 최대 14개월, 오류 보고는 90일 동안 무작위 ID에만 연결되어 Google에 보관됩니다. <a href="https://firebase.google.com/support/privacy">Firebase 개인정보 보호 및 보안</a>과 <a href="https://policies.google.com/privacy">Google 개인정보처리방침</a>을 참고하세요.</p>
+<h2>4. 인앱 결제(Google Play 결제)</h2>
 <p>광고 제거(한 번 구매)와 힌트 묶음(5·20·100개)을 선택해 살 수 있습니다. 결제는 Google 개인정보처리방침에 따라 Google Play가 전부 처리하며, 개발자는 카드·결제 정보를 보지 않습니다. 앱은 Google Play로부터 어떤 상품을 샀는지만 받아 기기에 저장합니다. 구매 복원 단추는 Google Play에 구매 내역을 다시 묻습니다.</p>
-<h2>4. 개발자가 수집하지 않는 정보</h2>
-<p>개발자는 서버를 운영하지 않으며 앱에서 개인정보(이름, 이메일, 연락처, 사진, 정확한 위치, 파일)를 받지 않습니다. 로그인이 없습니다.</p>
-<h2>5. 기기에 저장되는 정보</h2>
-<p>현재 단계, 남은 힌트, 광고 제거 여부, 힌트 없이 깬 단계, 출석 달력·오늘의 판을 깬 날, 알림 설정, 안내를 봤는지, 소리·목소리·진동 설정은 기기 안에만 저장되며 앱 삭제나 데이터 삭제로 영구히 지워집니다(광고 제거 구매는 Google Play에서 복원할 수 있습니다).</p>
-<h2>6. Google Play 기능</h2>
+<h2>5. 개발자가 수집하지 않는 정보</h2>
+<p>개발자는 서버를 운영하지 않으며 앱에서 개인정보(이름, 이메일, 연락처, 사진, 정확한 위치, 파일)를 받지 않습니다. 로그인이 없습니다. 개발자가 보는 것은 3항의 통계와 오류 보고뿐이며, 사용자와 연결되지 않습니다.</p>
+<h2>6. 기기에 저장되는 정보</h2>
+<p>현재 단계, 남은 힌트, 광고 제거 여부, 힌트 없이 깬 단계, 출석 달력·오늘의 판을 깬 날, 알림 설정, 안내를 봤는지, 소리·목소리·진동 설정은 기기 안에 저장되며(선택 클라우드 사본은 7항) 앱 삭제나 데이터 삭제로 영구히 지워집니다(광고 제거 구매는 Google Play에서 복원할 수 있습니다).</p>
+<h2>7. Google Play 기능</h2>
 <p>앱이 Google Play에 앱 안 리뷰 창이나 앱 안 업데이트를 요청할 수 있습니다. 꼭 필요한 업데이트가 있는지 보려고 이 사이트의 공개 설정 파일(app_config.json)을 내려받으며, 이때 일반 웹 요청이 담는 정보(IP 주소 등, GitHub Pages가 처리) 외에는 보내지 않습니다. 이 기능들은 Google 개인정보처리방침에 따라 처리되며, 개발자는 앱을 통해 리뷰 내용이나 계정 정보를 받지 않습니다.</p>
 <p>알림을 켜면 앱이 기기 안에서 하루 한 번 알림을 예약합니다(로컬 알림). 알림은 기기 안에서만 만들고 보관하며, 개발자나 서버로 아무것도 보내지 않습니다. 앱 설정이나 휴대폰 설정에서 끌 수 있습니다.</p>
 <p><b>Google Play 게임즈 순위표.</b> Google Play 게임즈에 로그인되어 있으면 앱이 최고 단계와 힌트 없이 깬 단계 수, 두 점수를 Google Play 게임즈 순위표로 보냅니다. Google은 이 점수를 Play 게임즈 프로필(닉네임·아바타)과 함께 처리해 순위표에서 다른 플레이어에게 보여 주며, <a href="https://policies.google.com/privacy">Google 개인정보처리방침</a>을 따릅니다. 프로필 공개 범위나 로그아웃은 Google Play 게임즈 설정에서 바꿀 수 있습니다. 개발자는 Google 계정 정보를 받지 않습니다.</p>
+<p><b>클라우드 저장(Google Play 게임즈 저장된 게임)과 안드로이드 백업.</b> Google Play 게임즈에 로그인되어 있으면 앱이 게임 진행 기록(현재 단계, 힌트 없이 깬 단계, 받은·쓴 힌트 수, 출석 달력·오늘의 판을 깬 날, 안내를 봤는지, 소리·음악·목소리·진동 설정)의 사본을 Google Play 게임즈 저장된 게임에 보관해 다른 휴대폰에서도 이어 할 수 있게 합니다. 이 사본은 <a href="https://policies.google.com/privacy">Google 개인정보처리방침</a>에 따라 Google이 사용자의 Google 계정에 보관하며, 개발자는 받지 않고 서버도 운영하지 않습니다. 구매와 광고 설정은 들어가지 않습니다. 안드로이드가 앱의 진행 기록을 Google 계정에 백업(안드로이드 백업)했다가 앱을 다시 설치할 때 되살릴 수도 있습니다. 저장된 게임은 Google Play 게임즈 설정(Play 게임즈 계정 및 데이터 삭제)에서, 백업은 휴대폰의 Google 백업 설정에서 지우거나 끌 수 있습니다.</p>
 
-<h2>7. 아동</h2>
+<h2>8. 아동</h2>
 <p>13세 미만 아동을 대상으로 하지 않습니다.</p>
-<h2>8. 선택과 삭제</h2>
-<p>개발자가 보유한 개인정보가 없습니다. 게임 데이터는 설정 › 앱 › 댕댕 산책길 › 저장공간 › 데이터 삭제로, 광고 데이터는 앱 안 설정의 개인정보 선택과 기기 광고 설정으로 관리하세요. 구매 내역은 Google 계정의 Google Play에 남습니다.</p>
-<h2>9. 변경</h2>
+<h2>9. 선택과 삭제</h2>
+<p>개발자가 보유한 개인정보가 없습니다. 게임 데이터는 설정 › 앱 › 댕댕 산책길 › 저장공간 › 데이터 삭제로, 광고 데이터는 앱 안 설정의 개인정보 선택과 기기 광고 설정으로 관리하세요. Firebase 통계와 오류 보고는 3항의 기간이 지나면 자동으로 지워지며, 앱 데이터를 지우면 무작위 ID도 새로 바뀝니다. 구매 내역은 Google 계정의 Google Play에 남습니다.</p>
+<h2>10. 변경</h2>
 <p>방침이 바뀌면 이 페이지와 시행일을 갱신합니다.</p>
 </div>
 </main>
